@@ -1,8 +1,43 @@
 # Resonance
 
-2D top-down action RPG roguelite dengan mekanik serap kemampuan monster (Echo).
+2D top-down action roguelite in Godot where players absorb and use the abilities of defeated monsters.
 
-## Struktur Folder
+## Overview
+
+Resonance is an arena-based action roguelite built around a modular Echo system. Players fight through compact combat rooms, collect Echoes dropped by defeated enemies, and equip those Echoes as active skills or dash modifiers to adapt their build during each run.
+
+## Core Pillars
+
+- Fast adaptation through changing Echo loadouts
+- Tight and readable top-down combat
+- Room-based progression with replayable runs
+- Realistic production scope for an MVP
+
+## Core Gameplay Loop
+
+1. Fight through waves of enemies in a closed arena.
+2. Collect Echo orbs dropped by defeated monsters.
+3. Equip Echoes into 2 active skill slots and 1 dash slot.
+4. Move to the next room with stronger enemy combinations.
+5. Repeat until the run ends in victory or defeat.
+
+## MVP Scope
+
+- 1 playable character
+- 3 enemy archetypes
+- 1 dungeon biome
+- 8-12 room variations
+- 6-8 total Echo abilities
+- 1 complete run loop with clear win/lose conditions
+
+## Tech Stack
+
+- Engine: Godot 4.x
+- Genre: 2D Top-Down Action RPG / Roguelite
+- Platform: PC (Windows, Linux)
+- Visual Style: Pixel art
+
+## Project Structure
 
 ```text
 Resonance/
@@ -38,9 +73,22 @@ Resonance/
 |  |- ui/
 |  `- utils/
 |- tests/
-`- GDD_Resonance.md
+|- .gitignore
+|- GDD_Resonance.md
+`- README.md
 ```
 
-## Catatan
-- Folder kosong dipertahankan dengan file `.gitkeep` agar ikut ter-commit.
-- Dokumen desain tersedia di root dan salinan di `docs/`.
+## Documentation
+
+- Main design document: [GDD_Resonance.md](GDD_Resonance.md)
+- Reference copy: [docs/GDD_Resonance.md](docs/GDD_Resonance.md)
+- Production checklist: [docs/ASSET_CHECKLIST_MVP.md](docs/ASSET_CHECKLIST_MVP.md)
+
+## Status
+
+Pre-production / project structure setup.
+
+## Notes
+
+- Empty folders are kept with `.gitkeep` so they can be tracked by Git.
+- The repository is structured to support Godot-based development and future asset organization.
