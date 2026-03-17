@@ -1,0 +1,24 @@
+# Godot 4+
+.import/
+.godot/
+*.import
+export_presets.cfg
+
+# Mono / C# (jika nanti dipakai)
+.mono/
+*.csproj
+*.sln
+
+# Build outputs
+build/
+dist/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+a*.log
+logs/
