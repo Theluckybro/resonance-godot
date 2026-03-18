@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cxmj82xvrd4ls"]
+
+[ext_resource type="Script" path="res://scripts/systems/vestige_pickup.gd" id="1_k6v14"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0un7f"]
+radius = 6.0
+
+[node name="VestigePickup" type="Area2D" unique_id=1806531260]
+script = ExtResource("1_k6v14")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1668813693]
+shape = SubResource("CircleShape2D_0un7f")
+
+[node name="OrbGlow" type="Sprite2D" parent="." unique_id=1003439611]
+modulate = Color(1, 1, 1, 0.45)
+z_index = -1
+scale = Vector2(1.8, 1.8)
+
+[node name="OrbSprite" type="Sprite2D" parent="." unique_id=1920630082]
