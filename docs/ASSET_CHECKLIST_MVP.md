@@ -13,12 +13,12 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 ### 1. Visual Character dan Combat
 
 - [ ] Finalisasi ukuran sprite player dan grid pixel art
-- [ ] Buat sprite sheet player `idle`
-- [ ] Buat sprite sheet player `run`
+- [x] Buat sprite sheet player `idle`
+- [x] Buat sprite sheet player `run`
 - [ ] Buat sprite sheet player `basic_attack`
-- [ ] Buat sprite sheet player `dash`
-- [ ] Buat sprite sheet player `hit`
-- [ ] Buat sprite sheet player `death`
+- [x] Buat sprite sheet player `dash`
+- [x] Buat sprite sheet player `hit`
+- [x] Buat sprite sheet player `death`
 - [ ] Buat efek tebasan pedang
 - [ ] Buat efek dash trail dasar
 - [ ] Buat efek hit spark umum
@@ -46,16 +46,16 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 - [ ] Buat animasi enemy ranged `death`
 - [ ] Buat sprite proyektil enemy ranged
 
-### 3. Visual Echo dan Ability
+### 3. Visual Vestige dan Ability
 
-- [ ] Tentukan daftar 6-8 Echo MVP
-- [ ] Buat ikon untuk semua Echo MVP
-- [ ] Buat sprite orb pickup Echo
-- [ ] Buat efek absorb Echo
-- [ ] Buat efek cast untuk Echo aktif tipe melee
-- [ ] Buat efek cast untuk Echo aktif tipe projectile
-- [ ] Buat efek dash Echo tipe blink atau phase
-- [ ] Buat efek dash Echo tipe fire trail
+- [ ] Tentukan daftar 6-8 Vestige MVP
+- [ ] Buat ikon untuk semua Vestige MVP
+- [ ] Buat sprite orb pickup Vestige
+- [ ] Buat efek absorb Vestige
+- [ ] Buat efek cast untuk Vestige aktif tipe melee
+- [ ] Buat efek cast untuk Vestige aktif tipe projectile
+- [ ] Buat efek dash Vestige tipe blink atau phase
+- [ ] Buat efek dash Vestige tipe fire trail
 - [ ] Buat indikator cooldown di HUD
 
 ### 4. Environment dan Room
@@ -76,8 +76,8 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 
 - [ ] Pilih font utama UI
 - [ ] Buat health bar player
-- [ ] Buat 2 slot Echo aktif
-- [ ] Buat 1 slot Echo dash
+- [ ] Buat 2 slot Vestige aktif
+- [ ] Buat 1 slot Vestige dash
 - [ ] Buat overlay cooldown skill
 - [ ] Buat indikator room clear
 - [ ] Buat panel pause menu
@@ -98,16 +98,16 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 - [ ] Siapkan SFX enemy ranged attack
 - [ ] Siapkan SFX projectile hit
 - [ ] Siapkan SFX enemy death
-- [ ] Siapkan SFX absorb Echo
-- [ ] Siapkan SFX equip Echo
-- [ ] Siapkan SFX activate Echo
+- [ ] Siapkan SFX absorb Vestige
+- [ ] Siapkan SFX equip Vestige
+- [ ] Siapkan SFX activate Vestige
 - [ ] Siapkan SFX UI hover dan click
 
 ### 7. Design dan Data
 
 - [ ] Buat daftar nama semua enemy MVP
 - [ ] Buat sheet statistik enemy MVP
-- [ ] Buat sheet statistik Echo MVP
+- [ ] Buat sheet statistik Vestige MVP
 - [ ] Buat tabel damage, cooldown, dan scaling
 - [ ] Buat daftar 8-12 layout room
 - [ ] Buat referensi art direction
@@ -118,14 +118,14 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 
 - [ ] Kunci versi Godot yang dipakai tim
 - [ ] Tetapkan resolusi target dan pixel scale
-- [ ] Siapkan input map keyboard
+- [x] Siapkan input map keyboard
 - [ ] Siapkan scene dasar `Player`
 - [ ] Siapkan scene dasar `EnemyBase`
 - [ ] Siapkan scene dasar `Room`
 - [ ] Siapkan scene dasar `HUD`
-- [ ] Siapkan struktur data untuk Echo
-- [ ] Tetapkan collision layer dan mask
-- [ ] Siapkan `autoload` inti jika diperlukan
+- [ ] Siapkan struktur data untuk Vestige
+- [x] Tetapkan collision layer dan mask
+- [x] Siapkan `autoload` inti jika diperlukan
 - [ ] Siapkan export preset Windows
 - [ ] Siapkan export preset Linux
 - [ ] Tetapkan aturan naming file dan folder
@@ -144,15 +144,15 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 | Enemy | Enemy ranged | 1 archetype | P0 | Wajib untuk zoning |
 | Enemy | Sprite proyektil ranged | 1 | P0 | Bisa reuse palette musuh |
 | Enemy | Animasi per enemy | 5 per enemy | P0 | Idle, move, attack, hit, death |
-| Echo | Echo aktif | 4 | P1 | Kombinasi serangan jarak dekat dan jarak jauh |
-| Echo | Echo dash modifier | 2-4 | P1 | Minimal 2 untuk variasi movement |
-| Echo | Ikon Echo | 6-8 | P1 | Satu ikon per Echo |
-| Echo | Orb pickup Echo | 1 | P0 | Recolor bisa dipakai untuk variasi |
-| Echo | Efek absorb Echo | 1 | P0 | Penting untuk feedback loot |
-| Echo | Efek cast Echo melee | 1 | P1 | Bisa dipakai ulang untuk beberapa Echo |
-| Echo | Efek cast Echo projectile | 1 | P1 | Bisa dipakai ulang untuk beberapa Echo |
-| Echo | Efek dash fire trail | 1 | P1 | Untuk utility Echo contoh |
-| Echo | Efek blink atau phase | 1 | P1 | Untuk dash menembus obstacle tipis |
+| Vestige | Vestige aktif | 4 | P1 | Kombinasi serangan jarak dekat dan jarak jauh |
+| Vestige | Vestige dash modifier | 2-4 | P1 | Minimal 2 untuk variasi movement |
+| Vestige | Ikon Vestige | 6-8 | P1 | Satu ikon per Vestige |
+| Vestige | Orb pickup Vestige | 1 | P0 | Recolor bisa dipakai untuk variasi |
+| Vestige | Efek absorb Vestige | 1 | P0 | Penting untuk feedback loot |
+| Vestige | Efek cast Vestige melee | 1 | P1 | Bisa dipakai ulang untuk beberapa Vestige |
+| Vestige | Efek cast Vestige projectile | 1 | P1 | Bisa dipakai ulang untuk beberapa Vestige |
+| Vestige | Efek dash fire trail | 1 | P1 | Untuk utility Vestige contoh |
+| Vestige | Efek blink atau phase | 1 | P1 | Untuk dash menembus obstacle tipis |
 | Environment | Tileset lantai dungeon | 1 set | P0 | Dasar biome pertama |
 | Environment | Tileset dinding dungeon | 1 set | P0 | Termasuk sudut dan variasi minimal |
 | Environment | Obstacle kecil | 3-5 | P1 | Batu, peti, pilar kecil |
@@ -161,11 +161,11 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 | Environment | Dekorasi ringan | 5-8 | P2 | Tulang, lumut, retakan, obor |
 | Room | Layout room combat | 6-8 | P0 | Inti run |
 | Room | Layout room transition | 1-2 | P1 | Napas antar combat |
-| Room | Layout room reward | 1-2 | P1 | Tempat pilihan upgrade atau Echo |
+| Room | Layout room reward | 1-2 | P1 | Tempat pilihan upgrade atau Vestige |
 | Room | Portal, door, atau reward pedestal | 2-3 | P1 | Asset interaksi ruang |
 | UI | Health bar player | 1 | P0 | HUD minimum |
-| UI | Slot Echo aktif | 2 | P0 | Dua slot skill utama |
-| UI | Slot Echo dash | 1 | P0 | Slot utility movement |
+| UI | Slot Vestige aktif | 2 | P0 | Dua slot skill utama |
+| UI | Slot Vestige dash | 1 | P0 | Slot utility movement |
 | UI | Overlay cooldown | 1 system | P0 | Bisa berupa radial atau fill sederhana |
 | UI | Panel pause | 1 | P1 | Untuk flow bermain dasar |
 | UI | Panel game over | 1 | P1 | Untuk loop selesai |
@@ -182,11 +182,11 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 | Audio | SFX enemy ranged attack | 1 | P0 | Penting untuk telegraph |
 | Audio | SFX projectile hit | 1 | P0 | Bisa dipakai umum |
 | Audio | SFX enemy death | 1-3 | P1 | Variasi kecil cukup |
-| Audio | SFX absorb Echo | 1 | P0 | Inti identitas sistem Echo |
-| Audio | SFX equip atau activate Echo | 2 | P1 | Equip dan cast |
+| Audio | SFX absorb Vestige | 1 | P0 | Inti identitas sistem Vestige |
+| Audio | SFX equip atau activate Vestige | 2 | P1 | Equip dan cast |
 | Audio | SFX UI hover dan click | 2 | P2 | Boleh tahap belakangan |
 | Design Data | Sheet statistik enemy | 1 dokumen | P0 | Basis balancing dan AI |
-| Design Data | Sheet statistik Echo | 1 dokumen | P0 | Basis balancing skill |
+| Design Data | Sheet statistik Vestige | 1 dokumen | P0 | Basis balancing skill |
 | Design Data | Sheet layout room | 1 dokumen | P0 | Room count dan isi spawn |
 | Design Data | Art direction board | 1 dokumen | P1 | Menjaga konsistensi visual |
 | Design Data | Audio direction board | 1 dokumen | P2 | Bisa ringkas di awal |
@@ -204,5 +204,5 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 ## Catatan Eksekusi
 
 - Untuk prototype pertama, placeholder art lebih penting daripada asset final.
-- Jangan produksi semua Echo sekaligus; buat 2 Echo aktif dan 1 Echo dash lebih dulu sebagai jalur validasi sistem.
+- Jangan produksi semua Vestige sekaligus; buat 2 Vestige aktif dan 1 Vestige dash lebih dulu sebagai jalur validasi sistem.
 - Jika bekerja solo, target yang realistis adalah menyelesaikan `P0` dalam 1 sprint, lalu `P1` per kategori.

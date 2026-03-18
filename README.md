@@ -4,11 +4,11 @@
 
 ## Overview
 
-Resonance is an arena-based action roguelite built around a modular Echo system. Players fight through compact combat rooms, collect Echoes dropped by defeated enemies, and equip those Echoes as active skills or dash modifiers to adapt their build during each run.
+Resonance is an arena-based action roguelite built around a modular Vestige system. Players fight through compact combat rooms, collect Vestiges dropped by defeated enemies, and equip those Vestiges as active skills or dash modifiers to adapt their build during each run.
 
 ## Core Pillars
 
-- Fast adaptation through changing Echo loadouts
+- Fast adaptation through changing Vestige loadouts
 - Tight and readable top-down combat
 - Room-based progression with replayable runs
 - Realistic production scope for an MVP
@@ -16,8 +16,8 @@ Resonance is an arena-based action roguelite built around a modular Echo system.
 ## Core Gameplay Loop
 
 1. Fight through waves of enemies in a closed arena.
-2. Collect Echo orbs dropped by defeated monsters.
-3. Equip Echoes into 2 active skill slots and 1 dash slot.
+2. Collect Vestige orbs dropped by defeated monsters.
+3. Equip Vestiges into 2 active skill slots and 1 dash slot.
 4. Move to the next room with stronger enemy combinations.
 5. Repeat until the run ends in victory or defeat.
 
@@ -27,7 +27,7 @@ Resonance is an arena-based action roguelite built around a modular Echo system.
 - 3 enemy archetypes
 - 1 dungeon biome
 - 8-12 room variations
-- 6-8 total Echo abilities
+- 6-8 total Vestige abilities
 - 1 complete run loop with clear win/lose conditions
 
 ## Tech Stack
@@ -54,7 +54,7 @@ Resonance/
 |  `- tilesets/
 |- data/
 |  |- balance/
-|  |- echoes/
+|  |- vestiges/
 |  |- enemies/
 |  `- rooms/
 |- docs/

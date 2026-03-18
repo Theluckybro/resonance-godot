@@ -1,24 +1,3 @@
-# Godot 4+
-.import/
+# Godot 4+ specific ignores
 .godot/
-*.import
-export_presets.cfg
-
-# Mono / C# (jika nanti dipakai)
-.mono/
-*.csproj
-*.sln
-
-# Build outputs
-build/
-dist/
-
-# Editor / OS
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-logs/
+/android/
