@@ -1,7 +1,7 @@
 extends CharacterBody2D
-class_name EnemyMeleeFast
+class_name Enemy
 
-signal enemy_died(enemy: EnemyMeleeFast)
+signal enemy_died(enemy: Enemy)
 
 @export var max_health: int = 8
 @export var move_speed: float = 70.0
@@ -19,6 +19,9 @@ const STATE_IDLE: StringName = &"idle"
 const STATE_CHASE: StringName = &"chase"
 const STATE_HIT_STUN: StringName = &"hit_stun"
 const STATE_DEAD: StringName = &"dead"
+
+const ANIM_IDLE: StringName = &"idle"
+const ANIM_RUN: StringName = &"run"
 
 var current_state_name: StringName = &""
 var current_health: int = 0
@@ -42,7 +45,7 @@ func _ready() -> void:
 	_refresh_player_target()
 
 	if state_machine == null:
-		push_error("EnemyMeleeFast is missing StateMachine node.")
+		push_error("Enemy is missing StateMachine node.")
 		return
 
 	state_machine.set_context(self)
@@ -168,10 +171,33 @@ func request_state(state_name: StringName) -> void:
 
 func set_visual_state(state_name: StringName) -> void:
 	current_state_name = state_name
+	_sync_visual_animation()
 
 
 func is_dead_state() -> bool:
 	return current_state_name == STATE_DEAD
+
+
+func _sync_visual_animation() -> void:
+	if body_visual == null:
+		return
+	if body_visual.sprite_frames == null:
+		return
+
+	var target_animation := ANIM_IDLE
+	if current_state_name == STATE_CHASE:
+		target_animation = ANIM_RUN
+
+	if not body_visual.sprite_frames.has_animation(target_animation):
+		if body_visual.sprite_frames.has_animation(ANIM_IDLE):
+			target_animation = ANIM_IDLE
+		elif body_visual.sprite_frames.has_animation(ANIM_RUN):
+			target_animation = ANIM_RUN
+		else:
+			return
+
+	if body_visual.animation != target_animation or not body_visual.is_playing():
+		body_visual.play(target_animation)
 
 
 func _update_visual_state(delta: float) -> void:
@@ -199,7 +225,7 @@ func _update_visual_state(delta: float) -> void:
 			target_scale = Vector2(0.75, 0.75)
 			target_modulate = Color(1.0, 1.0, 1.0, 0.35)
 
-	if hit_flash_left > 0.0 and current_state != State.DEAD:
+	if hit_flash_left > 0.0 and current_state_name != STATE_DEAD:
 		target_modulate = Color.WHITE
 
 	var blend_speed := clampf(delta * 18.0, 0.0, 1.0)

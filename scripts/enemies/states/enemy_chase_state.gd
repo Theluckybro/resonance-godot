@@ -1,5 +1,5 @@
-extends "res://scripts/enemies/states/melee_fast_state.gd"
-class_name MeleeFastChaseState
+extends "res://scripts/enemies/states/enemy_state.gd"
+class_name EnemyChaseState
 
 @export var idle_state: StringName = &"idle"
 
@@ -8,7 +8,7 @@ func enter(_from_state: Node) -> void:
 	var enemy := get_enemy()
 	if enemy == null:
 		return
-	enemy.set_visual_state(EnemyMeleeFast.STATE_CHASE)
+	enemy.set_visual_state(&"chase")
 
 
 func physics_update(delta: float) -> void:

@@ -204,12 +204,7 @@ func start_attack() -> void:
 		push_error("Player AnimationPlayer node is missing.")
 		return
 
-	if not is_zero_approx(input_vector.x):
-		attack_facing_left = input_vector.x < 0.0
-	elif not is_zero_approx(last_nonzero_direction.x):
-		attack_facing_left = last_nonzero_direction.x < 0.0
-	elif animated_sprite:
-		attack_facing_left = animated_sprite.flip_h
+	attack_facing_left = _resolve_attack_facing_from_mouse()
 
 	var attack_animation_name := _resolve_attack_animation_name()
 	if attack_animation_name == StringName():
@@ -271,6 +266,23 @@ func _resolve_attack_animation_name() -> StringName:
 		return ATTACK_ANIM_LEGACY
 
 	return StringName()
+
+
+func _resolve_attack_facing_from_mouse() -> bool:
+	var reference_x := global_position.x
+	if animated_sprite:
+		reference_x = animated_sprite.global_position.x
+
+	var mouse_position := get_global_mouse_position()
+	if mouse_position.x < reference_x:
+		return true
+	if mouse_position.x > reference_x:
+		return false
+
+	# If click is exactly on center line, keep current facing.
+	if animated_sprite:
+		return animated_sprite.flip_h
+	return attack_facing_left
 
 
 func _is_attack_animation_name(animation_name: StringName) -> bool:

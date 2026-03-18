@@ -3,7 +3,7 @@ class_name RoomManager
 
 signal room_cleared
 
-@export var enemy_scene: PackedScene = preload("res://scenes/enemies/melee_fast.tscn")
+@export var enemy_scene: PackedScene = preload("res://scenes/enemies/enemy.tscn")
 @export var player_scene: PackedScene = preload("res://scenes/player/player.tscn")
 @export var enemies_per_wave: int = 2
 @export var auto_spawn_on_ready: bool = true

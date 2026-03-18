@@ -1,18 +1,18 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://d06aej0o7o0rd"]
 
-[ext_resource type="Script" path="res://scripts/systems/room_manager.gd" id="1_wn31p"]
+[ext_resource type="Script" uid="uid://c2nnuvy1bkpyj" path="res://scripts/systems/room_manager.gd" id="1_wn31p"]
 
-[node name="RoomCombat01" type="Node2D"]
+[node name="RoomCombat01" type="Node2D" unique_id=1376762998]
 script = ExtResource("1_wn31p")
 
-[node name="PlayerSpawn" type="Marker2D" parent="."]
-position = Vector2(0, 0)
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1255822014]
+position = Vector2(320, 180)
 
-[node name="SpawnPointA" type="Marker2D" parent="."]
-position = Vector2(90, -24)
+[node name="SpawnPointA" type="Marker2D" parent="." unique_id=8868068]
+position = Vector2(441, 108)
 
-[node name="SpawnPointB" type="Marker2D" parent="."]
-position = Vector2(-90, 24)
+[node name="SpawnPointB" type="Marker2D" parent="." unique_id=1899939370]
+position = Vector2(218, 284)
 
-[node name="SpawnPointC" type="Marker2D" parent="."]
-position = Vector2(0, -90)
+[node name="SpawnPointC" type="Marker2D" parent="." unique_id=1249506909]
+position = Vector2(203, 126)
