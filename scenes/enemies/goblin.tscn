@@ -1,13 +1,13 @@
-[gd_scene format=3 uid="uid://den35p0ppxf7g"]
+[gd_scene format=3 uid="uid://bp2w3qc2toglp"]
 
-[ext_resource type="Script" uid="uid://dginhpvq3kqc5" path="res://scripts/enemies/enemy.gd" id="1_oth3g"]
+[ext_resource type="Script" path="res://scripts/enemies/melee_fast.gd" id="1_oth3g"]
 [ext_resource type="Texture2D" uid="uid://dk5hmxo1nrwhl" path="res://assets/Sprites/Enemies/Goblin.png" id="2_s0g86"]
 [ext_resource type="Texture2D" uid="uid://d1jt1n7fmdu7c" path="res://assets/Reference/Packs/0x72_DungeonTilesetII_v1.7/0x72_DungeonTilesetII_v1.7.png" id="2_xkrhs"]
 [ext_resource type="Script" uid="uid://ds8816i0msfcp" path="res://scripts/systems/fsm/state_machine.gd" id="3_s0g86"]
-[ext_resource type="Script" uid="uid://di35mrlycn4jx" path="res://scripts/enemies/states/enemy_idle_state.gd" id="4_ddai1"]
-[ext_resource type="Script" uid="uid://h7bn6v3p4uc8" path="res://scripts/enemies/states/enemy_chase_state.gd" id="5_0k1hm"]
-[ext_resource type="Script" uid="uid://pq2sds4cwrmv" path="res://scripts/enemies/states/enemy_hit_stun_state.gd" id="6_ec05t"]
-[ext_resource type="Script" uid="uid://dg4082i2hw3p8" path="res://scripts/enemies/states/enemy_dead_state.gd" id="7_kqqlc"]
+[ext_resource type="Script" path="res://scripts/enemies/states/melee_fast_idle_state.gd" id="4_ddai1"]
+[ext_resource type="Script" path="res://scripts/enemies/states/melee_fast_chase_state.gd" id="5_0k1hm"]
+[ext_resource type="Script" path="res://scripts/enemies/states/melee_fast_hit_stun_state.gd" id="6_ec05t"]
+[ext_resource type="Script" path="res://scripts/enemies/states/melee_fast_dead_state.gd" id="7_kqqlc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ddai1"]
 atlas = ExtResource("2_s0g86")
@@ -152,12 +152,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_txv6m"]
 radius = 6.0
 
-[node name="Enemy" type="CharacterBody2D" unique_id=344969062]
+[node name="Goblin" type="CharacterBody2D" unique_id=344969062]
 script = ExtResource("1_oth3g")
-hit_spark_particle_count = 20
-hit_spark_radius = 16.0
-hit_spark_lifetime = 0.4
-hit_spark_color = Color(1, 0.27058825, 0, 1)
+max_health = 1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1052270600]
 sprite_frames = SubResource("SpriteFrames_h0m4p")

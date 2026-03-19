@@ -11,6 +11,10 @@ signal enemy_died(enemy: Enemy)
 @export var hit_stun_duration: float = 0.08
 @export var hit_freeze_duration: float = 0.035
 @export var knockback_impulse: float = 110.0
+@export var hit_spark_particle_count: int = 6
+@export var hit_spark_radius: float = 12.0
+@export var hit_spark_lifetime: float = 0.1
+@export var hit_spark_color: Color = Color(1.0, 0.92, 0.85, 0.95)
 
 @onready var body_visual: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
 @onready var state_machine: StateMachine = $StateMachine
@@ -97,13 +101,17 @@ func receive_hit(damage: int, source_position: Vector2 = Vector2.ZERO) -> void:
 
 	local_freeze_left = maxf(local_freeze_left, hit_freeze_duration)
 	hit_stun_left = hit_stun_duration
-	_spawn_feedback_burst(Color(1.0, 0.92, 0.92, 0.95), 8, 16.0, 0.16)
+	_spawn_hit_spark()
 
 	if current_health == 0:
 		request_state(STATE_DEAD)
 		return
 
 	request_state(STATE_HIT_STUN)
+
+
+func _spawn_hit_spark() -> void:
+	_spawn_feedback_burst(hit_spark_color, hit_spark_particle_count, hit_spark_radius, hit_spark_lifetime)
 
 
 func on_enter_dead_state() -> void:

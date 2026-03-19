@@ -86,7 +86,14 @@ Resonance/
 
 ## Status
 
-Pre-production / project structure setup.
+Early prototype in progress (snapshot: March 2026).
+
+- Core baseline sudah ada: scene Player, EnemyBase, dan Room combat awal.
+- Combat dasar aktif: move, dash, basic attack, dan serangan player sudah bisa damage enemy.
+- Preset statistik enemy MVP sudah terdokumentasi di [data/enemies/EnemyArchetypePresets.json](data/enemies/EnemyArchetypePresets.json).
+- Orb pickup Vestige dan scene pickup dasar sudah tersedia.
+- Detail progres produksi ada di [docs/ASSET_CHECKLIST_MVP.md](docs/ASSET_CHECKLIST_MVP.md).
+- Fokus berikutnya: UI HUD, audio, variasi room, dan data Vestige.
 
 ## Notes
 

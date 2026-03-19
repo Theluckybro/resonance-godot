@@ -92,3 +92,75 @@ $PlayerBody.collision_mask = PhysicsLayers.MASK_PLAYER_BODY
 2. Buka Project Settings > Layer Names > 2D Physics, pastikan 8 layer sudah bernama.
 3. Jalankan project lalu test input: move, attack, dash, vestige_1, vestige_2.
 4. Aktifkan Visible Collision Shapes dan cek behavior layer-mask sesuai tabel.
+
+## 7. Standar Final Pixel Art (Player dan Grid)
+
+Spesifikasi ini dikunci sebagai standar tim untuk MVP saat ini:
+
+- Player frame: 16x32 px.
+- Tile grid world: 16x16 px.
+- Scaling runtime: integer only.
+
+Konfigurasi engine yang harus dipertahankan:
+
+- window/stretch/mode = viewport
+- window/stretch/scale_mode = integer
+- textures/canvas_textures/default_texture_filter = Nearest
+- 2d/snap/snap_2d_transforms_to_pixel = true
+- 2d/snap/snap_2d_vertices_to_pixel = true
+
+## 8. Aturan Ekspor Asset Player Baru
+
+Setiap aset baru player wajib mengikuti aturan berikut:
+
+1. Satu frame karakter harus align ke grid 16x32.
+2. Ukuran spritesheet harus kelipatan frame (width kelipatan 16, height kelipatan 32).
+3. Hindari offset subpixel saat slicing frame (jangan ada frame yang bergeser pecahan pixel).
+4. Simpan file baru ke assets/Sprites/Player/Final16x32 dan biarkan file .import terbuat otomatis oleh Godot.
+5. Gunakan filter nearest (tanpa blur) dan jangan override ke linear.
+
+Catatan:
+
+- File PNG lama di assets/Sprites/Player root diperlakukan sebagai legacy/reference.
+- Validator akan menolak PNG baru yang disimpan di root assets/Sprites/Player.
+
+## 9. Verifikasi Otomatis Spesifikasi Player
+
+Gunakan script berikut setiap kali ada perubahan aset player atau scene player:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; .\scripts\utils\validate_player_pixel_spec.ps1
+```
+
+Script memverifikasi:
+
+- Setting pixel-art penting di project.godot.
+- Semua region frame player di scenes/player/player.tscn tetap 16x32.
+- Tidak ada track animasi yang mengubah AnimatedSprite2D position/offset secara acak.
+- Semua PNG baru di assets/Sprites/Player/Final16x32 sesuai grid 16x32.
+- PNG legacy di assets/Sprites/Player root hanya diperingatkan (warning), bukan dijadikan blocker.
+
+## 10. Playtest Cepat Pixel Readability (1 Menit)
+
+Checklist playtest manual:
+
+1. Jalankan project, masuk ke scene combat.
+2. Uji run selama 10-15 detik sambil ubah arah cepat.
+3. Uji dash berulang ke 4 arah.
+4. Uji attack kiri dan kanan beberapa kali.
+5. Aktifkan Visible Collision Shapes dan pastikan kapsul collider tetap pas ke badan player.
+
+Kriteria lulus:
+
+- Tidak ada wobble pixel pada badan player saat run/dash/attack.
+- Tidak ada blur pada sprite saat camera bergerak normal.
+- Collider player tetap align dan tidak tampak meleset dari visual utama.
+
+## 11. Status Verifikasi Saat Ini
+
+Snapshot 2026-03-19:
+
+- Validasi otomatis spesifikasi player: PASS via scripts/utils/validate_player_pixel_spec.ps1.
+- Aset PNG lama di assets/Sprites/Player root diperlakukan legacy dan tidak memblokir standar baru.
+- Jalur aset baru sudah dikunci ke assets/Sprites/Player/Final16x32.
+- Playtest visual interaktif tetap direkomendasikan saat sesi QA di Godot Editor.

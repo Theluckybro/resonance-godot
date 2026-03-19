@@ -12,124 +12,139 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 
 ### 1. Visual Character dan Combat
 
-- [ ] Finalisasi ukuran sprite player dan grid pixel art
-- [x] Buat sprite sheet player `idle`
-- [x] Buat sprite sheet player `run`
-- [ ] Buat sprite sheet player `basic_attack`
-- [x] Buat sprite sheet player `dash`
-- [x] Buat sprite sheet player `hit`
-- [x] Buat sprite sheet player `death`
-- [ ] Buat efek tebasan pedang
-- [ ] Buat efek dash trail dasar
-- [ ] Buat efek hit spark umum
-- [ ] Buat efek damage flash untuk player dan enemy
+- [x] Finalisasi ukuran sprite player dan grid pixel art [P0]
+- [x] Buat sprite sheet player `idle` [P0]
+- [x] Buat sprite sheet player `run` [P0]
+- [x] Buat sprite sheet player `basic_attack` [P0]
+- [x] Buat sprite sheet player `dash` [P0]
+- [x] Buat sprite sheet player `hit` [P0]
+- [x] Buat sprite sheet player `death` [P0]
+- [x] Buat efek tebasan pedang [P0]
+- [x] Buat efek dash trail dasar [P0]
+- [x] Buat efek hit spark umum [P0]
+- [ ] Buat efek damage flash untuk player dan enemy [P1]
 
 ### 2. Visual Enemy
 
-- [ ] Desain enemy melee cepat
-- [ ] Buat animasi enemy melee cepat `idle`
-- [ ] Buat animasi enemy melee cepat `move`
-- [ ] Buat animasi enemy melee cepat `attack`
-- [ ] Buat animasi enemy melee cepat `hit`
-- [ ] Buat animasi enemy melee cepat `death`
-- [ ] Desain enemy melee berat
-- [ ] Buat animasi enemy melee berat `idle`
-- [ ] Buat animasi enemy melee berat `move`
-- [ ] Buat animasi enemy melee berat `attack`
-- [ ] Buat animasi enemy melee berat `hit`
-- [ ] Buat animasi enemy melee berat `death`
-- [ ] Desain enemy ranged
-- [ ] Buat animasi enemy ranged `idle`
-- [ ] Buat animasi enemy ranged `move`
-- [ ] Buat animasi enemy ranged `attack`
-- [ ] Buat animasi enemy ranged `hit`
-- [ ] Buat animasi enemy ranged `death`
-- [ ] Buat sprite proyektil enemy ranged
+- [ ] Desain enemy melee cepat [P0]
+- [ ] Buat animasi enemy melee cepat `idle` [P0]
+- [ ] Buat animasi enemy melee cepat `move` [P0]
+- [ ] Buat animasi enemy melee cepat `attack` [P0]
+- [ ] Buat animasi enemy melee cepat `hit` [P0]
+- [ ] Buat animasi enemy melee cepat `death` [P0]
+- [ ] Desain enemy melee berat [P1]
+- [ ] Buat animasi enemy melee berat `idle` [P1]
+- [ ] Buat animasi enemy melee berat `move` [P1]
+- [ ] Buat animasi enemy melee berat `attack` [P1]
+- [ ] Buat animasi enemy melee berat `hit` [P1]
+- [ ] Buat animasi enemy melee berat `death` [P1]
+- [ ] Desain enemy ranged [P0]
+- [ ] Buat animasi enemy ranged `idle` [P0]
+- [ ] Buat animasi enemy ranged `move` [P0]
+- [ ] Buat animasi enemy ranged `attack` [P0]
+- [ ] Buat animasi enemy ranged `hit` [P0]
+- [ ] Buat animasi enemy ranged `death` [P0]
+- [ ] Buat sprite proyektil enemy ranged [P0]
 
 ### 3. Visual Vestige dan Ability
 
-- [ ] Tentukan daftar 6-8 Vestige MVP
-- [ ] Buat ikon untuk semua Vestige MVP
-- [ ] Buat sprite orb pickup Vestige
-- [ ] Buat efek absorb Vestige
-- [ ] Buat efek cast untuk Vestige aktif tipe melee
-- [ ] Buat efek cast untuk Vestige aktif tipe projectile
-- [ ] Buat efek dash Vestige tipe blink atau phase
-- [ ] Buat efek dash Vestige tipe fire trail
-- [ ] Buat indikator cooldown di HUD
+- [ ] Tentukan daftar 6-8 Vestige MVP [P1]
+- [ ] Buat ikon untuk semua Vestige MVP [P1]
+- [x] Buat sprite orb pickup Vestige [P0]
+- [ ] Buat efek absorb Vestige [P0]
+- [ ] Buat efek cast untuk Vestige aktif tipe melee [P1]
+- [ ] Buat efek cast untuk Vestige aktif tipe projectile [P1]
+- [ ] Buat efek dash Vestige tipe blink atau phase [P1]
+- [ ] Buat efek dash Vestige tipe fire trail [P1]
+- [ ] Buat indikator cooldown di HUD [P0]
 
 ### 4. Environment dan Room
 
-- [ ] Finalisasi tema biome dungeon pertama
-- [ ] Buat tileset lantai utama
-- [ ] Buat tileset dinding utama
-- [ ] Buat tileset sudut dan transisi dinding
-- [ ] Buat tileset pintu masuk atau keluar room
-- [ ] Buat obstacle kecil
-- [ ] Buat obstacle besar
-- [ ] Buat hazard lantai seperti duri atau api
-- [ ] Buat dekorasi dungeon ringan
-- [ ] Buat marker portal atau reward pedestal
-- [ ] Buat 8-12 layout room dasar
+- [ ] Finalisasi tema biome dungeon pertama [P0]
+- [ ] Buat tileset lantai utama [P0]
+- [ ] Buat tileset dinding utama [P0]
+- [ ] Buat tileset sudut dan transisi dinding [P0]
+- [ ] Buat tileset pintu masuk atau keluar room [P1]
+- [ ] Buat obstacle kecil [P1]
+- [ ] Buat obstacle besar [P1]
+- [ ] Buat hazard lantai seperti duri atau api [P1]
+- [ ] Buat dekorasi dungeon ringan [P2]
+- [ ] Buat marker portal atau reward pedestal [P1]
+- [ ] Buat 8-12 layout room dasar [P0]
 
 ### 5. UI dan UX
 
-- [ ] Pilih font utama UI
-- [ ] Buat health bar player
-- [ ] Buat 2 slot Vestige aktif
-- [ ] Buat 1 slot Vestige dash
-- [ ] Buat overlay cooldown skill
-- [ ] Buat indikator room clear
-- [ ] Buat panel pause menu
-- [ ] Buat panel game over
-- [ ] Buat panel victory atau end-of-run
-- [ ] Buat tombol UI dasar
+- [ ] Pilih font utama UI [P0]
+- [ ] Buat health bar player [P0]
+- [ ] Buat 2 slot Vestige aktif [P0]
+- [ ] Buat 1 slot Vestige dash [P0]
+- [ ] Buat overlay cooldown skill [P0]
+- [ ] Buat indikator room clear [P1]
+- [ ] Buat panel pause menu [P1]
+- [ ] Buat panel game over [P1]
+- [ ] Buat panel victory atau end-of-run [P1]
+- [ ] Buat tombol UI dasar [P1]
 
 ### 6. Audio
 
-- [ ] Pilih referensi style audio dan musik
-- [ ] Siapkan 1 loop musik combat
-- [ ] Siapkan 1 loop musik menu
-- [ ] Siapkan 1 stinger reward atau room clear
-- [ ] Siapkan SFX basic attack player
-- [ ] Siapkan SFX dash player
-- [ ] Siapkan SFX player kena hit
-- [ ] Siapkan SFX enemy melee attack
-- [ ] Siapkan SFX enemy ranged attack
-- [ ] Siapkan SFX projectile hit
-- [ ] Siapkan SFX enemy death
-- [ ] Siapkan SFX absorb Vestige
-- [ ] Siapkan SFX equip Vestige
-- [ ] Siapkan SFX activate Vestige
-- [ ] Siapkan SFX UI hover dan click
+- [ ] Pilih referensi style audio dan musik [P1]
+- [ ] Siapkan 1 loop musik combat [P1]
+- [ ] Siapkan 1 loop musik menu [P2]
+- [ ] Siapkan 1 stinger reward atau room clear [P2]
+- [ ] Siapkan SFX basic attack player [P0]
+- [ ] Siapkan SFX dash player [P0]
+- [ ] Siapkan SFX player kena hit [P0]
+- [ ] Siapkan SFX enemy melee attack [P1]
+- [ ] Siapkan SFX enemy ranged attack [P0]
+- [ ] Siapkan SFX projectile hit [P0]
+- [ ] Siapkan SFX enemy death [P1]
+- [ ] Siapkan SFX absorb Vestige [P0]
+- [ ] Siapkan SFX equip Vestige [P1]
+- [ ] Siapkan SFX activate Vestige [P1]
+- [ ] Siapkan SFX UI hover dan click [P2]
 
 ### 7. Design dan Data
 
-- [ ] Buat daftar nama semua enemy MVP
-- [ ] Buat sheet statistik enemy MVP
-- [ ] Buat sheet statistik Vestige MVP
-- [ ] Buat tabel damage, cooldown, dan scaling
-- [ ] Buat daftar 8-12 layout room
-- [ ] Buat referensi art direction
-- [ ] Buat referensi audio direction
-- [ ] Buat daftar fitur yang ditunda setelah MVP
+- [ ] Buat daftar nama semua enemy MVP [P0]
+- [x] Buat sheet statistik enemy MVP [P0]
+- [ ] Buat sheet statistik Vestige MVP [P0]
+- [ ] Buat tabel damage, cooldown, dan scaling [P0]
+- [ ] Buat daftar 8-12 layout room [P0]
+- [x] Dokumentasikan referensi art direction di docs/GDD_Resonance.md [P1]
+- [x] Dokumentasikan referensi audio direction di docs/GDD_Resonance.md [P2]
+- [ ] Buat daftar fitur yang ditunda setelah MVP [P1]
 
 ### 8. Setup Teknis dan Produksi
 
-- [ ] Kunci versi Godot yang dipakai tim
-- [ ] Tetapkan resolusi target dan pixel scale
-- [x] Siapkan input map keyboard
-- [ ] Siapkan scene dasar `Player`
-- [ ] Siapkan scene dasar `EnemyBase`
-- [ ] Siapkan scene dasar `Room`
-- [ ] Siapkan scene dasar `HUD`
-- [ ] Siapkan struktur data untuk Vestige
-- [x] Tetapkan collision layer dan mask
-- [x] Siapkan `autoload` inti jika diperlukan
-- [ ] Siapkan export preset Windows
-- [ ] Siapkan export preset Linux
-- [ ] Tetapkan aturan naming file dan folder
-- [ ] Siapkan board task untuk milestone prototype dan MVP
+- [ ] Kunci versi Godot yang dipakai tim [P1]
+- [ ] Tetapkan resolusi target dan pixel scale [P0]
+- [x] Siapkan input map keyboard [P0]
+- [x] Siapkan scene dasar `Player` [P0]
+- [x] Siapkan scene dasar `EnemyBase` [P0]
+- [x] Siapkan scene dasar `Room` [P0]
+- [ ] Siapkan scene dasar `HUD` [P0]
+- [ ] Siapkan struktur data untuk Vestige [P0]
+- [x] Tetapkan collision layer dan mask [P0]
+- [x] Siapkan `autoload` inti jika diperlukan [P0]
+- [ ] Siapkan export preset Windows [P1]
+- [ ] Siapkan export preset Linux [P2]
+- [ ] Tetapkan aturan naming file dan folder [P1]
+- [ ] Siapkan board task untuk milestone prototype dan MVP [P1]
+
+## Ringkasan Progress Otomatis
+
+Jalankan `./scripts/utils/update_checklist_progress.ps1` setiap kali checklist berubah untuk memperbarui ringkasan ini.
+
+<!-- PROGRESS_SUMMARY_START -->
+_Auto-updated: 2026-03-19 08:24_
+
+| Prioritas | Selesai | Total | Progress |
+| --- | ---: | ---: | ---: |
+| P0 | 15 | 56 | 26.8% |
+| P1 | 1 | 35 | 2.9% |
+| P2 | 1 | 6 | 16.7% |
+| Total | 17 | 97 | 17.5% |
+<!-- PROGRESS_SUMMARY_END -->
 
 ## Tabel Kebutuhan Asset MVP
 
