@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://5jn0x7nowitn"]
+
+[ext_resource type="Script" uid="uid://dy130cph1u6c5" path="res://scripts/projectiles/bone_projectile.gd" id="1_bone"]
+[ext_resource type="Texture2D" uid="uid://cvko7aa5p1n17" path="res://assets/Sprites/Effects/Bone.png" id="2_f83ur"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bone"]
+radius = 5.0
+
+[node name="BoneProjectile" type="Area2D" unique_id=1136611372]
+z_index = 4
+script = ExtResource("1_bone")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=546145612]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_f83ur")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1235124621]
+shape = SubResource("CircleShape2D_bone")

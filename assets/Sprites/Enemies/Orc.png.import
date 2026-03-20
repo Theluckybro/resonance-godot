@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://o3g1mkobx4b2"
-path="res://.godot/imported/Hit.png-2c55cb0f47b2f469aae6069d3321b2db.ctex"
+uid="uid://kee5c3i26wks"
+path="res://.godot/imported/Orc.png-65a2a2b5bb6719c511ded62f729a8856.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Sprites/Player/Hit.png"
-dest_files=["res://.godot/imported/Hit.png-2c55cb0f47b2f469aae6069d3321b2db.ctex"]
+source_file="res://assets/Sprites/Enemies/Orc.png"
+dest_files=["res://.godot/imported/Orc.png-65a2a2b5bb6719c511ded62f729a8856.ctex"]
 
 [params]
 

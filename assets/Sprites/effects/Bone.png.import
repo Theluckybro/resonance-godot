@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c228jcrv1yuax"
-path="res://.godot/imported/Run.png-4baaa7198a81e5ee86f48d74a3de917f.ctex"
+uid="uid://cvko7aa5p1n17"
+path="res://.godot/imported/Bone.png-f1b02902c89a4cccda2d1332534b102a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Sprites/Player/Run.png"
-dest_files=["res://.godot/imported/Run.png-4baaa7198a81e5ee86f48d74a3de917f.ctex"]
+source_file="res://assets/Sprites/Effects/Bone.png"
+dest_files=["res://.godot/imported/Bone.png-f1b02902c89a4cccda2d1332534b102a.ctex"]
 
 [params]
 

@@ -75,17 +75,18 @@ State dasar:
 3. Attack: berhenti, animasi serang, lalu kembali evaluasi state.
 
 ### 5.3 Komposisi Musuh Fase 1
-- 1 Melee cepat (HP rendah, pressure tinggi)
-- 1 Melee lambat-kuat (telegraphed attack, damage besar)
-- 1 Ranged (menjaga jarak, zoning)
-- Opsional: 1 support/summoner sederhana untuk variasi wave
+- 1 Duelist (HP rendah-menengah, pressure tinggi, gap-close cepat)
+- 1 Bruiser (HP tinggi, telegraphed attack, damage besar)
+- 1 Skirmisher (mobilitas tinggi, flank dan reposition)
+- 1 Artillery (menjaga jarak, zoning proyektil)
+- 1 Controller (area denial sederhana untuk variasi wave)
 
 ## 6. Kebutuhan Aset Visual dan Audio
 Sistem Vestige menekan kebutuhan aset karena memakai ulang animasi musuh.
 
 ### 6.1 Visual
 - Pemain: 1 sprite sheet (Idle, Run, Attack, Dash, Hit, Die)
-- Musuh: 3-4 tipe awal, masing-masing set animasi dasar
+- Musuh: 5 role awal, masing-masing set animasi dasar
 - Environment: 1 tileset utama (lantai, dinding, obstacle, hazard)
 - UI: health bar, 3 slot Vestige, indikator cooldown
 
@@ -99,7 +100,7 @@ Sistem Vestige menekan kebutuhan aset karena memakai ulang animasi musuh.
 ## 7. Scope Produksi MVP
 Batas produksi versi awal yang harus playable end-to-end:
 - 1 karakter playable lengkap
-- 3 tipe musuh aktif
+- 5 role musuh aktif
 - 1 biome dungeon
 - 8-12 variasi room
 - 6-8 Vestige total (gabungan aktif + dash)
@@ -109,7 +110,7 @@ Batas produksi versi awal yang harus playable end-to-end:
 Prototipe dianggap selesai jika:
 1. Satu run bisa dimainkan dari awal sampai selesai tanpa blocker.
 2. Sistem Vestige bisa drop, di-equip, digunakan, dan diganti tanpa bug kritis.
-3. Musuh melee/ranged dapat bernavigasi dan menyerang konsisten.
+3. Semua role musuh dapat bernavigasi dan menyerang konsisten.
 4. UI inti terbaca jelas saat combat ramai.
 5. Performa stabil pada target 60 FPS di PC kelas menengah.
 

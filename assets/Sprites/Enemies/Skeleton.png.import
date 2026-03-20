@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4foqmaoy0tj2"
-path="res://.godot/imported/PlayerSprite.png-5b8bb827d706f1333b9d76947e2b8af0.ctex"
+uid="uid://ca4y6f3xfnm2t"
+path="res://.godot/imported/Skeleton.png-2df57f112b2a02a5ca60d51cdc7bcacd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Sprites/Player/PlayerSprite.png"
-dest_files=["res://.godot/imported/PlayerSprite.png-5b8bb827d706f1333b9d76947e2b8af0.ctex"]
+source_file="res://assets/Sprites/Enemies/Skeleton.png"
+dest_files=["res://.godot/imported/Skeleton.png-2df57f112b2a02a5ca60d51cdc7bcacd.ctex"]
 
 [params]
 

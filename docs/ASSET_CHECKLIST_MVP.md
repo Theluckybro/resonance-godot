@@ -26,25 +26,38 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 
 ### 2. Visual Enemy
 
-- [ ] Desain enemy melee cepat [P0]
-- [ ] Buat animasi enemy melee cepat `idle` [P0]
-- [ ] Buat animasi enemy melee cepat `move` [P0]
-- [ ] Buat animasi enemy melee cepat `attack` [P0]
-- [ ] Buat animasi enemy melee cepat `hit` [P0]
-- [ ] Buat animasi enemy melee cepat `death` [P0]
-- [ ] Desain enemy melee berat [P1]
-- [ ] Buat animasi enemy melee berat `idle` [P1]
-- [ ] Buat animasi enemy melee berat `move` [P1]
-- [ ] Buat animasi enemy melee berat `attack` [P1]
-- [ ] Buat animasi enemy melee berat `hit` [P1]
-- [ ] Buat animasi enemy melee berat `death` [P1]
-- [ ] Desain enemy ranged [P0]
-- [ ] Buat animasi enemy ranged `idle` [P0]
-- [ ] Buat animasi enemy ranged `move` [P0]
-- [ ] Buat animasi enemy ranged `attack` [P0]
-- [ ] Buat animasi enemy ranged `hit` [P0]
-- [ ] Buat animasi enemy ranged `death` [P0]
-- [ ] Buat sprite proyektil enemy ranged [P0]
+- [x] Desain enemy role Duelist [P0]
+- [x] Buat animasi enemy role Duelist `idle` [P0]
+- [x] Buat animasi enemy role Duelist `move` [P0]
+- [x] Buat animasi enemy role Duelist `attack` [P0]
+- [x] Buat animasi enemy role Duelist `hit` [P0]
+- [x] Buat animasi enemy role Duelist `death` [P0]
+- [ ] Desain enemy role Bruiser [P1]
+- [ ] Buat animasi enemy role Bruiser `idle` [P1]
+- [ ] Buat animasi enemy role Bruiser `move` [P1]
+- [ ] Buat animasi enemy role Bruiser `attack` [P1]
+- [ ] Buat animasi enemy role Bruiser `hit` [P1]
+- [ ] Buat animasi enemy role Bruiser `death` [P1]
+- [ ] Desain enemy role Skirmisher [P0]
+- [ ] Buat animasi enemy role Skirmisher `idle` [P0]
+- [ ] Buat animasi enemy role Skirmisher `move` [P0]
+- [ ] Buat animasi enemy role Skirmisher `attack` [P0]
+- [ ] Buat animasi enemy role Skirmisher `hit` [P0]
+- [ ] Buat animasi enemy role Skirmisher `death` [P0]
+- [ ] Desain enemy role Artillery [P0]
+- [ ] Buat animasi enemy role Artillery `idle` [P0]
+- [ ] Buat animasi enemy role Artillery `move` [P0]
+- [ ] Buat animasi enemy role Artillery `attack` [P0]
+- [ ] Buat animasi enemy role Artillery `hit` [P0]
+- [ ] Buat animasi enemy role Artillery `death` [P0]
+- [ ] Buat sprite proyektil enemy role Artillery [P0]
+- [ ] Desain enemy role Controller [P1]
+- [ ] Buat animasi enemy role Controller `idle` [P1]
+- [ ] Buat animasi enemy role Controller `move` [P1]
+- [ ] Buat animasi enemy role Controller `attack` [P1]
+- [ ] Buat animasi enemy role Controller `hit` [P1]
+- [ ] Buat animasi enemy role Controller `death` [P1]
+- [ ] Buat VFX area control untuk role Controller [P1]
 
 ### 3. Visual Vestige dan Ability
 
@@ -136,14 +149,14 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 Jalankan `./scripts/utils/update_checklist_progress.ps1` setiap kali checklist berubah untuk memperbarui ringkasan ini.
 
 <!-- PROGRESS_SUMMARY_START -->
-_Auto-updated: 2026-03-19 08:24_
+_Auto-updated: 2026-03-20 12:57_
 
 | Prioritas | Selesai | Total | Progress |
 | --- | ---: | ---: | ---: |
-| P0 | 15 | 56 | 26.8% |
-| P1 | 1 | 35 | 2.9% |
+| P0 | 24 | 62 | 38.7% |
+| P1 | 1 | 42 | 2.4% |
 | P2 | 1 | 6 | 16.7% |
-| Total | 17 | 97 | 17.5% |
+| Total | 26 | 110 | 23.6% |
 <!-- PROGRESS_SUMMARY_END -->
 
 ## Tabel Kebutuhan Asset MVP
@@ -154,10 +167,12 @@ _Auto-updated: 2026-03-19 08:24_
 | Character | Efek slash player | 1 | P0 | Untuk basic attack readability |
 | Character | Efek dash trail dasar | 1 | P0 | Bisa sangat sederhana |
 | Character | Efek hit spark umum | 1 | P0 | Dipakai ulang untuk banyak serangan |
-| Enemy | Enemy melee cepat | 1 archetype | P0 | Wajib untuk pressure dekat |
-| Enemy | Enemy melee berat | 1 archetype | P1 | Menambah variasi timing dan threat |
-| Enemy | Enemy ranged | 1 archetype | P0 | Wajib untuk zoning |
-| Enemy | Sprite proyektil ranged | 1 | P0 | Bisa reuse palette musuh |
+| Enemy | Enemy role Duelist | 1 archetype | P0 | Wajib untuk pressure dekat |
+| Enemy | Enemy role Bruiser | 1 archetype | P1 | Menambah variasi timing dan threat |
+| Enemy | Enemy role Skirmisher | 1 archetype | P0 | Menambah flank dan reposition |
+| Enemy | Enemy role Artillery | 1 archetype | P0 | Wajib untuk zoning |
+| Enemy | Enemy role Controller | 1 archetype | P1 | Menambah area denial sederhana |
+| Enemy | Sprite proyektil role Artillery | 1 | P0 | Bisa reuse palette musuh |
 | Enemy | Animasi per enemy | 5 per enemy | P0 | Idle, move, attack, hit, death |
 | Vestige | Vestige aktif | 4 | P1 | Kombinasi serangan jarak dekat dan jarak jauh |
 | Vestige | Vestige dash modifier | 2-4 | P1 | Minimal 2 untuk variasi movement |

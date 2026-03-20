@@ -1,15 +1,19 @@
 extends CharacterBody2D
 class_name Player
 
+signal player_damaged(current_health: int, damage_taken: int)
+signal player_died()
+
 # Movement parameters
 @export var speed: float = 200.0
 @export var acceleration: float = 1500.0
 @export var friction: float = 1200.0
 
 # Dash parameters
-@export var dash_speed: float = 550.0
+@export var dash_speed: float = 400.0
 @export var dash_duration: float = 0.18
 @export var dash_cooldown: float = 0.75
+@export var dash_iframe_duration: float = -1.0
 @export var dash_trail_interval: float = 0.03
 @export var dash_trail_lifetime: float = 0.12
 @export var dash_trail_tint: Color = Color(0.75, 0.9, 1.0, 0.65)
@@ -19,20 +23,29 @@ class_name Player
 var dash_trail_spawn_left: float = 0.0
 
 # Attack parameters
-@export var attack_damage: int = 1
+@export var attack_damage: int = 5
+@export var attack_cooldown: float = 0.65
+@export var max_health: int = 10
+@export var damage_invulnerability_duration: float = 0.2
+@export var hit_knockback_impulse: float = 130.0
+@export var debug_print_health: bool = true
 
 const ANIM_IDLE: StringName = &"idle"
 const ANIM_RUN: StringName = &"run"
 const ANIM_DASH: StringName = &"dash"
+const ANIM_ATTACK: StringName = &"attack"
+const ANIM_DEATH: StringName = &"death"
 
 const STATE_IDLE: StringName = &"idle"
 const STATE_RUN: StringName = &"run"
 const STATE_DASH: StringName = &"dash"
 const STATE_ATTACK: StringName = &"attack"
+const STATE_DEAD: StringName = &"dead"
 
 const ATTACK_ANIM_LEFT: StringName = &"attack_left"
 const ATTACK_ANIM_RIGHT: StringName = &"attack_right"
 const ATTACK_ANIM_LEGACY: StringName = &"attack"
+const HP_PER_HEART: int = 2
 
 # Animation reference
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -47,16 +60,26 @@ var last_nonzero_direction: Vector2 = Vector2.DOWN
 var dash_direction: Vector2 = Vector2.ZERO
 var dash_time_left: float = 0.0
 var dash_cooldown_left: float = 0.0
+var attack_cooldown_left: float = 0.0
 var is_attack_facing_locked: bool = false
 var attack_facing_left: bool = false
 var hit_targets_this_attack: Dictionary = {}
 
 var current_dash_speed: float = 0.0
+var current_health: int = 0
+var damage_invulnerability_left: float = 0.0
+var dash_invulnerability_left: float = 0.0
 
 
 func _ready() -> void:
 	add_to_group("player")
 	current_dash_speed = dash_speed
+	max_health = maxi(max_health, HP_PER_HEART)
+	# Keep full-heart representation valid for HUD by using even max HP.
+	if (max_health % HP_PER_HEART) != 0:
+		max_health += 1
+	current_health = max_health
+	_log_health_debug("spawn")
 
 	# Setup collision layer dan mask
 	collision_layer = PhysicsLayers.PLAYER
@@ -89,6 +112,12 @@ func _physics_process(delta: float) -> void:
 
 	if dash_cooldown_left > 0.0:
 		dash_cooldown_left = max(dash_cooldown_left - delta, 0.0)
+	if attack_cooldown_left > 0.0:
+		attack_cooldown_left = max(attack_cooldown_left - delta, 0.0)
+	if damage_invulnerability_left > 0.0:
+		damage_invulnerability_left = maxf(damage_invulnerability_left - delta, 0.0)
+	if dash_invulnerability_left > 0.0:
+		dash_invulnerability_left = maxf(dash_invulnerability_left - delta, 0.0)
 
 	if state_machine:
 		state_machine.physics_step(delta)
@@ -114,10 +143,11 @@ func _update_animation() -> void:
 	elif visual_direction == Vector2.ZERO:
 		visual_direction = last_nonzero_direction
 
-	if current_state_name == STATE_ATTACK and is_attack_facing_locked:
-		animated_sprite.flip_h = attack_facing_left
-	elif not is_zero_approx(visual_direction.x):
-		animated_sprite.flip_h = visual_direction.x < 0.0
+	if current_state_name != STATE_DEAD:
+		if current_state_name == STATE_ATTACK and is_attack_facing_locked:
+			animated_sprite.flip_h = attack_facing_left
+		elif not is_zero_approx(visual_direction.x):
+			animated_sprite.flip_h = visual_direction.x < 0.0
 
 	if sword:
 		var facing_left := animated_sprite.flip_h
@@ -138,7 +168,7 @@ func _validate_required_animations() -> void:
 		push_error("Player AnimatedSprite2D has no SpriteFrames resource.")
 		return
 
-	var required_animations: Array[StringName] = [ANIM_IDLE, ANIM_RUN, ANIM_DASH]
+	var required_animations: Array[StringName] = [ANIM_IDLE, ANIM_RUN, ANIM_DASH, ANIM_ATTACK, ANIM_DEATH]
 	for animation_name in required_animations:
 		if not animated_sprite.sprite_frames.has_animation(animation_name):
 			push_error("Player is missing required animation: %s" % animation_name)
@@ -171,6 +201,8 @@ func is_attack_pressed() -> bool:
 
 
 func can_start_dash() -> bool:
+	if is_dead():
+		return false
 	return dash_cooldown_left <= 0.0 and dash_time_left <= 0.0
 
 
@@ -184,6 +216,7 @@ func start_dash() -> void:
 	dash_direction = requested_direction.normalized()
 	current_dash_speed = dash_speed
 	dash_time_left = dash_duration
+	dash_invulnerability_left = _resolve_dash_iframe_duration()
 	velocity = dash_direction * current_dash_speed
 	
 	_start_dash_trail()
@@ -201,8 +234,15 @@ func is_dash_finished() -> bool:
 func finish_dash() -> void:
 	dash_time_left = 0.0
 	dash_cooldown_left = dash_cooldown
+	dash_invulnerability_left = 0.0
 
 	_stop_dash_trail()
+
+
+func _resolve_dash_iframe_duration() -> float:
+	if dash_iframe_duration > 0.0:
+		return dash_iframe_duration
+	return dash_duration
 
 
 func _start_dash_trail() -> void:
@@ -295,6 +335,8 @@ func play_required_animation(animation_name: StringName) -> bool:
 	
 	
 func start_attack() -> void:
+	if is_dead():
+		return
 	if animation_player == null:
 		push_error("Player AnimationPlayer node is missing.")
 		return
@@ -308,8 +350,10 @@ func start_attack() -> void:
 
 	is_attack_facing_locked = true
 	lock_attack_motion()
+	play_required_animation(ANIM_ATTACK)
 	hit_targets_this_attack.clear()
 	_set_sword_active(true)
+	attack_cooldown_left = attack_cooldown
 	call_deferred("_apply_damage_to_current_overlaps")
 	animation_player.play(attack_animation_name)
 
@@ -337,6 +381,10 @@ func get_animation_player() -> AnimationPlayer:
 
 func can_start_attack() -> bool:
 	# Attack can be started if not already attacking
+	if is_dead():
+		return false
+	if attack_cooldown_left > 0.0:
+		return false
 	if animation_player == null:
 		return false
 
@@ -448,8 +496,91 @@ func _set_sword_active(is_active: bool) -> void:
 		sword.visible = is_active
 
 	if sword_hitbox:
-		sword_hitbox.monitoring = is_active
-		sword_hitbox.monitorable = is_active
+		sword_hitbox.set_deferred("monitoring", is_active)
+		sword_hitbox.set_deferred("monitorable", is_active)
 
 	if sword_hitbox_shape:
-		sword_hitbox_shape.disabled = not is_active
+		sword_hitbox_shape.set_deferred("disabled", not is_active)
+
+
+func is_dead() -> bool:
+	return current_health <= 0
+
+
+func get_current_health() -> int:
+	return current_health
+
+
+func get_max_health() -> int:
+	return max_health
+
+
+func get_heart_slot_count() -> int:
+	return maxi(1, int(float(max_health + HP_PER_HEART - 1) / HP_PER_HEART))
+
+
+func get_heart_fill_state(heart_index: int) -> int:
+	if heart_index < 0:
+		return 0
+
+	var heart_hp := clampi(current_health - (heart_index * HP_PER_HEART), 0, HP_PER_HEART)
+	if heart_hp >= HP_PER_HEART:
+		return 2
+	if heart_hp == (HP_PER_HEART - 1):
+		return 1
+	return 0
+
+
+func start_death() -> void:
+	is_attack_facing_locked = false
+	dash_time_left = 0.0
+	dash_invulnerability_left = 0.0
+	dash_direction = Vector2.ZERO
+	velocity = Vector2.ZERO
+	_set_sword_active(false)
+
+	if animation_player and animation_player.is_playing():
+		animation_player.stop()
+
+	play_required_animation(ANIM_DEATH)
+
+
+func receive_hit(damage: int, source_position: Vector2 = Vector2.ZERO) -> void:
+	if damage <= 0:
+		return
+	if current_health <= 0:
+		return
+	if dash_invulnerability_left > 0.0:
+		_log_health_debug("hit_ignored_dash_iframe", damage)
+		return
+	if damage_invulnerability_left > 0.0:
+		_log_health_debug("hit_ignored_invulnerability", damage)
+		return
+
+	current_health = max(current_health - damage, 0)
+	damage_invulnerability_left = damage_invulnerability_duration
+
+	if source_position != Vector2.ZERO:
+		var knockback_direction := (global_position - source_position).normalized()
+		velocity += knockback_direction * hit_knockback_impulse
+
+	player_damaged.emit(current_health, damage)
+	_log_health_debug("damaged", damage)
+	if current_health == 0:
+		_log_health_debug("dead")
+		if state_machine != null and state_machine.has_state(STATE_DEAD):
+			state_machine.request_transition(STATE_DEAD)
+		player_died.emit()
+
+
+func _log_health_debug(event_name: String, damage_amount: int = 0) -> void:
+	if not debug_print_health:
+		return
+
+	var heart_text := "%.1f/%d" % [float(current_health) / float(HP_PER_HEART), get_heart_slot_count()]
+
+	if damage_amount > 0:
+		print("[DEBUG][PlayerHP] %s | HP: %d/%d | Hearts: %s | Damage: %d" % [event_name, current_health, max_health, heart_text, damage_amount])
+		return
+
+	print("[DEBUG][PlayerHP] %s | HP: %d/%d | Hearts: %s" % [event_name, current_health, max_health, heart_text])
