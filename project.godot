@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameInput="*res://scripts/autoload/game_input.gd"
 PhysicsLayers="*res://scripts/autoload/physics_layers.gd"
+VestigeInventory="*res://scripts/autoload/vestige_inventory.gd"
 
 [display]
 

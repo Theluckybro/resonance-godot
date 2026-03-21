@@ -17,6 +17,10 @@ const ROLE_CONTROLLER: String = "controller"
 const PRESET_FILE_PATH: String = "res://data/enemies/EnemyArchetypePresets.json"
 const ENEMY_PROJECTILE_SCENE: PackedScene = preload("res://scenes/enemies/enemy_projectile.tscn")
 const BONE_PROJECTILE_SCENE: PackedScene = preload("res://scenes/projectiles/bone_projectile.tscn")
+const VESTIGE_PICKUP_SCENE: PackedScene = preload("res://scenes/core/vestige_pickup.tscn")
+const VESTIGE_ORB_GOBLIN: Texture2D = preload("res://assets/Sprites/Vestige/OrbGoblin.png")
+const VESTIGE_ORB_ORC: Texture2D = preload("res://assets/Sprites/Vestige/OrbOrc.png")
+const VESTIGE_ORB_SKELETON: Texture2D = preload("res://assets/Sprites/Vestige/OrbSkeleton.png")
 
 const DEFAULT_SPECIES_TO_ROLE := {
 	SPECIES_GOBLIN: ROLE_DUELIST,
@@ -24,6 +28,12 @@ const DEFAULT_SPECIES_TO_ROLE := {
 	SPECIES_SKIRMISHER: ROLE_SKIRMISHER,
 	SPECIES_SKELETON: ROLE_ARTILLERY,
 	SPECIES_CONTROLLER: ROLE_CONTROLLER,
+}
+
+const SPECIES_TO_VESTIGE_ORB := {
+	SPECIES_GOBLIN: VESTIGE_ORB_GOBLIN,
+	SPECIES_ORC: VESTIGE_ORB_ORC,
+	SPECIES_SKELETON: VESTIGE_ORB_SKELETON,
 }
 
 const LEGACY_ARCHETYPE_TO_ROLE := {
@@ -51,6 +61,8 @@ static var _preset_roles_cache: Dictionary = {}
 @export var hit_stun_duration: float = 0.08
 @export var hit_freeze_duration: float = 0.035
 @export var knockback_impulse: float = 110.0
+@export_range(0.0, 1.0, 0.01) var vestige_drop_chance: float = 0.5
+@export var vestige_drop_amount: int = 1
 @export var hit_spark_particle_count: int = 20
 @export var hit_spark_radius: float = 16.0
 @export var hit_spark_lifetime: float = 0.4
@@ -386,6 +398,7 @@ func on_enter_dead_state() -> void:
 	collision_layer = 0
 	collision_mask = 0
 	_spawn_feedback_burst(Color(1.0, 0.45, 0.45, 0.9), 16, 24.0, 0.26)
+	_try_spawn_vestige_pickup()
 	enemy_died.emit(self)
 
 	if body_visual:
@@ -395,6 +408,44 @@ func on_enter_dead_state() -> void:
 	vanish_tween.tween_property(self, "scale", Vector2.ZERO, 0.2)
 	vanish_tween.parallel().tween_property(self, "modulate:a", 0.0, 0.2)
 	vanish_tween.tween_callback(queue_free)
+
+
+func _try_spawn_vestige_pickup() -> void:
+	if vestige_drop_amount <= 0:
+		return
+
+	if randf() > clampf(vestige_drop_chance, 0.0, 1.0):
+		return
+
+	var host := get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		return
+
+	var drop_position := global_position + Vector2(randf_range(-4.0, 4.0), -3.0)
+	var pickup := _create_vestige_pickup(drop_position, vestige_drop_amount, species_id)
+	if pickup == null:
+		return
+	host.call_deferred("add_child", pickup)
+
+
+func _create_vestige_pickup(spawn_position: Vector2, amount: int, source_species: String) -> Area2D:
+	var pickup_variant: Variant = VESTIGE_PICKUP_SCENE.instantiate()
+	if not (pickup_variant is Area2D):
+		return null
+
+	var pickup := pickup_variant as Area2D
+	pickup.global_position = spawn_position
+
+	if pickup.has_method("set_vestige_amount"):
+		pickup.call("set_vestige_amount", amount)
+
+	var orb_texture_variant: Variant = SPECIES_TO_VESTIGE_ORB.get(source_species, null)
+	if orb_texture_variant is Texture2D and pickup.has_method("set_orb_texture"):
+		pickup.call("set_orb_texture", orb_texture_variant)
+
+	return pickup
 
 
 func _refresh_player_target() -> void:

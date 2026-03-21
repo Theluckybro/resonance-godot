@@ -3,6 +3,7 @@ class_name Player
 
 signal player_damaged(current_health: int, damage_taken: int)
 signal player_died()
+signal vestige_collected(total_vestige: int, amount: int)
 
 # Movement parameters
 @export var speed: float = 200.0
@@ -67,6 +68,7 @@ var hit_targets_this_attack: Dictionary = {}
 
 var current_dash_speed: float = 0.0
 var current_health: int = 0
+var current_vestige: int = 0
 var damage_invulnerability_left: float = 0.0
 var dash_invulnerability_left: float = 0.0
 
@@ -79,6 +81,8 @@ func _ready() -> void:
 	if (max_health % HP_PER_HEART) != 0:
 		max_health += 1
 	current_health = max_health
+	if has_node("/root/VestigeInventory"):
+		current_vestige = VestigeInventory.get_total()
 	_log_health_debug("spawn")
 
 	# Setup collision layer dan mask
@@ -513,6 +517,23 @@ func get_current_health() -> int:
 
 func get_max_health() -> int:
 	return max_health
+
+
+func get_current_vestige() -> int:
+	return current_vestige
+
+
+func collect_vestige(amount: int = 1) -> void:
+	if amount <= 0:
+		return
+
+	if has_node("/root/VestigeInventory"):
+		current_vestige = VestigeInventory.add_vestige(amount)
+	else:
+		current_vestige += amount
+
+	vestige_collected.emit(current_vestige, amount)
+	print("[DEBUG][Vestige] collected=%d | total=%d" % [amount, current_vestige])
 
 
 func get_heart_slot_count() -> int:
