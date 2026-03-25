@@ -7,6 +7,7 @@ const MOVE_DOWN: StringName = &"move_down"
 
 const ACTION_ATTACK: StringName = &"action_attack"
 const ACTION_DASH: StringName = &"action_dash"
+const ACTION_VESTIGE_PRIMARY: StringName = &"action_vestige_primary"
 
 const UI_UP: StringName = &"ui_up"
 const UI_DOWN: StringName = &"ui_down"
@@ -26,6 +27,7 @@ const REQUIRED_ACTIONS: Array[StringName] = [
 	MOVE_DOWN,
 	ACTION_ATTACK,
 	ACTION_DASH,
+	ACTION_VESTIGE_PRIMARY,
 	UI_UP,
 	UI_DOWN,
 	UI_LEFT,
@@ -48,6 +50,10 @@ func is_attack_pressed() -> bool:
 
 func is_dash_pressed() -> bool:
 	return Input.is_action_just_pressed(ACTION_DASH)
+
+
+func is_vestige_primary_pressed() -> bool:
+	return Input.is_action_just_pressed(ACTION_VESTIGE_PRIMARY)
 
 
 func get_missing_actions() -> PackedStringArray:

@@ -47,6 +47,14 @@ const ATTACK_ANIM_LEFT: StringName = &"attack_left"
 const ATTACK_ANIM_RIGHT: StringName = &"attack_right"
 const ATTACK_ANIM_LEGACY: StringName = &"attack"
 const HP_PER_HEART: int = 2
+const GOBLIN_SPECIES_ID: String = "goblin"
+const ORC_SPECIES_ID: String = "orc"
+const SKELETON_SPECIES_ID: String = "skeleton"
+const GOBLIN_SCENE: PackedScene = preload("res://scenes/enemies/goblin.tscn")
+const ORC_SCENE: PackedScene = preload("res://scenes/enemies/orc.tscn")
+const SKELETON_SCENE: PackedScene = preload("res://scenes/enemies/skeleton.tscn")
+const ORC_SLAM_RING_VFX_SCRIPT: Script = preload("res://scripts/enemies/vfx/orc_slam_ring_vfx.gd")
+const VESTIGE_BONE_PROJECTILE_SCENE: PackedScene = preload("res://scenes/projectiles/vestige_bone_projectile.tscn")
 
 # Animation reference
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -69,8 +77,71 @@ var hit_targets_this_attack: Dictionary = {}
 var current_dash_speed: float = 0.0
 var current_health: int = 0
 var current_vestige: int = 0
+var goblin_vestige_charges: int = 0
+var orc_vestige_charges: int = 0
+var skeleton_vestige_charges: int = 0
 var damage_invulnerability_left: float = 0.0
 var dash_invulnerability_left: float = 0.0
+var goblin_vestige_cooldown_left: float = 0.0
+var orc_vestige_cooldown_left: float = 0.0
+var skeleton_vestige_cooldown_left: float = 0.0
+var goblin_vestige_instance: CharacterBody2D
+var goblin_vestige_sprite: AnimatedSprite2D
+var goblin_vestige_target: Node2D
+var goblin_vestige_no_target_left: float = 0.0
+var goblin_vestige_attack_left: float = 0.0
+var goblin_vestige_attack_applied: bool = false
+var orc_vestige_instance: CharacterBody2D
+var orc_vestige_sprite: AnimatedSprite2D
+var orc_vestige_target: Node2D
+var orc_vestige_no_target_left: float = 0.0
+var orc_vestige_attack_left: float = 0.0
+var orc_vestige_attack_applied: bool = false
+var skeleton_vestige_instance: CharacterBody2D
+var skeleton_vestige_sprite: AnimatedSprite2D
+var skeleton_vestige_target: Node2D
+var skeleton_vestige_no_target_left: float = 0.0
+var skeleton_vestige_attack_cooldown_left: float = 0.0
+var skeleton_vestige_has_fired: bool = false
+
+# Goblin vestige: summon ally goblin that chases nearest enemy and attacks once.
+@export var goblin_vestige_damage: int = 6
+@export var goblin_vestige_cooldown: float = 0.28
+@export var goblin_vestige_spawn_offset: float = 16.0
+@export var goblin_vestige_chase_speed: float = 220.0
+@export var goblin_vestige_attack_range: float = 16.0
+@export var goblin_vestige_no_target_timeout: float = 2.0
+@export var goblin_vestige_attack_duration: float = 0.35
+@export var goblin_vestige_attack_hit_time: float = 0.15
+@export var goblin_vestige_move_stretch_scale: Vector2 = Vector2(1.3, 0.9)
+
+# Orc vestige: summon ally orc that chases nearest enemy and ground-slams.
+@export var orc_vestige_damage: int = 3
+@export var orc_vestige_cooldown: float = 0.55
+@export var orc_vestige_spawn_offset: float = 18.0
+@export var orc_vestige_chase_speed: float = 170.0
+@export var orc_vestige_attack_range: float = 18.0
+@export var orc_vestige_no_target_timeout: float = 2.0
+@export var orc_vestige_attack_duration: float = 0.52
+@export var orc_vestige_attack_hit_time: float = 0.26
+@export var orc_vestige_aoe_radius: float = 18.0
+@export var orc_vestige_slam_vfx_duration: float = 0.22
+@export var orc_vestige_slam_vfx_color: Color = Color(1.0, 0.64, 0.32, 0.95)
+@export var orc_vestige_slam_vfx_thickness_px: float = 2.4
+@export var orc_vestige_move_stretch_scale: Vector2 = Vector2(1.2, 0.92)
+
+# Skeleton vestige: summon ally skeleton that throws bone projectiles at range.
+@export var skeleton_vestige_damage: int = 2
+@export var skeleton_vestige_cooldown: float = 0.45
+@export var skeleton_vestige_spawn_offset: float = 18.0
+@export var skeleton_vestige_chase_speed: float = 145.0
+@export var skeleton_vestige_preferred_range: float = 96.0
+@export var skeleton_vestige_no_target_timeout: float = 2.0
+@export var skeleton_vestige_attack_cooldown: float = 0.42
+@export var skeleton_vestige_projectile_speed: float = 190.0
+@export var skeleton_vestige_projectile_lifetime: float = 1.35
+@export var skeleton_vestige_projectile_spawn_offset: float = 10.0
+@export var skeleton_vestige_move_stretch_scale: Vector2 = Vector2(1.18, 0.94)
 
 
 func _ready() -> void:
@@ -83,6 +154,9 @@ func _ready() -> void:
 	current_health = max_health
 	if has_node("/root/VestigeInventory"):
 		current_vestige = VestigeInventory.get_total()
+		goblin_vestige_charges = VestigeInventory.get_goblin_charges()
+		orc_vestige_charges = VestigeInventory.get_orc_charges()
+		skeleton_vestige_charges = VestigeInventory.get_skeleton_charges()
 	_log_health_debug("spawn")
 
 	# Setup collision layer dan mask
@@ -118,6 +192,12 @@ func _physics_process(delta: float) -> void:
 		dash_cooldown_left = max(dash_cooldown_left - delta, 0.0)
 	if attack_cooldown_left > 0.0:
 		attack_cooldown_left = max(attack_cooldown_left - delta, 0.0)
+	if goblin_vestige_cooldown_left > 0.0:
+		goblin_vestige_cooldown_left = maxf(goblin_vestige_cooldown_left - delta, 0.0)
+	if orc_vestige_cooldown_left > 0.0:
+		orc_vestige_cooldown_left = maxf(orc_vestige_cooldown_left - delta, 0.0)
+	if skeleton_vestige_cooldown_left > 0.0:
+		skeleton_vestige_cooldown_left = maxf(skeleton_vestige_cooldown_left - delta, 0.0)
 	if damage_invulnerability_left > 0.0:
 		damage_invulnerability_left = maxf(damage_invulnerability_left - delta, 0.0)
 	if dash_invulnerability_left > 0.0:
@@ -125,6 +205,10 @@ func _physics_process(delta: float) -> void:
 
 	if state_machine:
 		state_machine.physics_step(delta)
+
+	_tick_goblin_vestige_summon(delta)
+	_tick_orc_vestige_summon(delta)
+	_tick_skeleton_vestige_summon(delta)
 
 	move_and_slide()
 	_update_animation()
@@ -202,6 +286,10 @@ func is_dash_input_pressed() -> bool:
 
 func is_attack_pressed() -> bool:
 	return GameInput.is_attack_pressed()
+
+
+func is_vestige_primary_pressed() -> bool:
+	return GameInput.is_vestige_primary_pressed()
 
 
 func can_start_dash() -> bool:
@@ -523,17 +611,630 @@ func get_current_vestige() -> int:
 	return current_vestige
 
 
-func collect_vestige(amount: int = 1) -> void:
+func collect_vestige(amount: int = 1, source_species: String = "") -> void:
 	if amount <= 0:
 		return
 
+	var normalized_species := source_species.strip_edges().to_lower()
+
 	if has_node("/root/VestigeInventory"):
 		current_vestige = VestigeInventory.add_vestige(amount)
+		if normalized_species == GOBLIN_SPECIES_ID:
+			goblin_vestige_charges = VestigeInventory.add_goblin_charge(amount)
+		elif normalized_species == ORC_SPECIES_ID:
+			orc_vestige_charges = VestigeInventory.add_orc_charge(amount)
+		elif normalized_species == SKELETON_SPECIES_ID:
+			skeleton_vestige_charges = VestigeInventory.add_skeleton_charge(amount)
 	else:
 		current_vestige += amount
+		if normalized_species == GOBLIN_SPECIES_ID:
+			goblin_vestige_charges += amount
+		elif normalized_species == ORC_SPECIES_ID:
+			orc_vestige_charges += amount
+		elif normalized_species == SKELETON_SPECIES_ID:
+			skeleton_vestige_charges += amount
 
 	vestige_collected.emit(current_vestige, amount)
-	print("[DEBUG][Vestige] collected=%d | total=%d" % [amount, current_vestige])
+	print("[DEBUG][Vestige] species=%s | collected=%d | total=%d | goblin_charge=%d | orc_charge=%d | skeleton_charge=%d" % [normalized_species, amount, current_vestige, goblin_vestige_charges, orc_vestige_charges, skeleton_vestige_charges])
+
+
+func can_use_goblin_vestige() -> bool:
+	if is_dead():
+		return false
+	return not _resolve_primary_vestige_species_for_cast().is_empty()
+
+
+func try_use_goblin_vestige() -> bool:
+	var selected_species := _resolve_primary_vestige_species_for_cast()
+	if selected_species.is_empty():
+		return false
+
+	if selected_species == ORC_SPECIES_ID:
+		if has_node("/root/VestigeInventory"):
+			if not VestigeInventory.consume_orc_charge(1):
+				orc_vestige_charges = VestigeInventory.get_orc_charges()
+				return false
+			orc_vestige_charges = VestigeInventory.get_orc_charges()
+			current_vestige = VestigeInventory.get_total()
+		else:
+			orc_vestige_charges -= 1
+
+		orc_vestige_cooldown_left = orc_vestige_cooldown
+		_start_orc_vestige_summon()
+		print("[DEBUG][VestigeOrc] cast | charge=%d | cooldown=%.2f" % [orc_vestige_charges, orc_vestige_cooldown_left])
+		return true
+
+	if selected_species == SKELETON_SPECIES_ID:
+		if has_node("/root/VestigeInventory"):
+			if not VestigeInventory.consume_skeleton_charge(1):
+				skeleton_vestige_charges = VestigeInventory.get_skeleton_charges()
+				return false
+			skeleton_vestige_charges = VestigeInventory.get_skeleton_charges()
+			current_vestige = VestigeInventory.get_total()
+		else:
+			skeleton_vestige_charges -= 1
+
+		skeleton_vestige_cooldown_left = skeleton_vestige_cooldown
+		_start_skeleton_vestige_summon()
+		print("[DEBUG][VestigeSkeleton] cast | charge=%d | cooldown=%.2f" % [skeleton_vestige_charges, skeleton_vestige_cooldown_left])
+		return true
+
+	if has_node("/root/VestigeInventory"):
+		if not VestigeInventory.consume_goblin_charge(1):
+			goblin_vestige_charges = VestigeInventory.get_goblin_charges()
+			return false
+		goblin_vestige_charges = VestigeInventory.get_goblin_charges()
+		current_vestige = VestigeInventory.get_total()
+	else:
+		goblin_vestige_charges -= 1
+
+	goblin_vestige_cooldown_left = goblin_vestige_cooldown
+	_start_goblin_vestige_summon()
+	print("[DEBUG][VestigeGoblin] cast | charge=%d | cooldown=%.2f" % [goblin_vestige_charges, goblin_vestige_cooldown_left])
+	return true
+
+
+func _start_goblin_vestige_summon() -> void:
+	_despawn_goblin_vestige(true)
+
+	var summon_variant: Variant = GOBLIN_SCENE.instantiate()
+	if not (summon_variant is CharacterBody2D):
+		return
+
+	goblin_vestige_instance = summon_variant as CharacterBody2D
+	goblin_vestige_instance.remove_from_group("enemy")
+	goblin_vestige_instance.set_physics_process(false)
+	goblin_vestige_instance.set_process(false)
+	goblin_vestige_instance.collision_layer = 0
+	goblin_vestige_instance.collision_mask = 0
+
+	var collision_shape := goblin_vestige_instance.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision_shape:
+		collision_shape.disabled = true
+
+	goblin_vestige_sprite = goblin_vestige_instance.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+
+	var host: Node = get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		goblin_vestige_instance.free()
+		goblin_vestige_instance = null
+		return
+
+	host.add_child(goblin_vestige_instance)
+	goblin_vestige_instance.remove_from_group("enemy")
+	goblin_vestige_instance.set_meta("is_vestige_ally", true)
+	var facing_direction := _resolve_facing_direction_vector().normalized()
+	if facing_direction == Vector2.ZERO:
+		facing_direction = Vector2.RIGHT
+	goblin_vestige_instance.global_position = global_position + (facing_direction * goblin_vestige_spawn_offset)
+
+	goblin_vestige_target = null
+	goblin_vestige_no_target_left = goblin_vestige_no_target_timeout
+	goblin_vestige_attack_left = 0.0
+	goblin_vestige_attack_applied = false
+
+	_play_goblin_vestige_move_anim(facing_direction)
+	print("[DEBUG][VestigeGoblin] spawn")
+
+
+func _tick_goblin_vestige_summon(delta: float) -> void:
+	if goblin_vestige_instance == null or not is_instance_valid(goblin_vestige_instance):
+		return
+
+	if goblin_vestige_attack_left > 0.0:
+		goblin_vestige_attack_left = maxf(goblin_vestige_attack_left - delta, 0.0)
+		if not goblin_vestige_attack_applied and goblin_vestige_attack_left <= (goblin_vestige_attack_duration - goblin_vestige_attack_hit_time):
+			if goblin_vestige_target and is_instance_valid(goblin_vestige_target) and goblin_vestige_target.has_method("receive_hit"):
+				goblin_vestige_target.call("receive_hit", goblin_vestige_damage, goblin_vestige_instance.global_position)
+				print("[DEBUG][VestigeGoblin] attack_hit=%s" % goblin_vestige_target.name)
+			goblin_vestige_attack_applied = true
+		if goblin_vestige_attack_left <= 0.0:
+			_despawn_goblin_vestige(true)
+			print("[DEBUG][VestigeGoblin] despawn_after_attack")
+		return
+
+	if goblin_vestige_target == null or not is_instance_valid(goblin_vestige_target):
+		goblin_vestige_target = _find_nearest_enemy_for_vestige(goblin_vestige_instance.global_position, goblin_vestige_instance)
+		if goblin_vestige_target:
+			print("[DEBUG][VestigeGoblin] target_acquired=%s" % goblin_vestige_target.name)
+
+	if goblin_vestige_target == null:
+		goblin_vestige_no_target_left = maxf(goblin_vestige_no_target_left - delta, 0.0)
+		_play_goblin_vestige_idle_anim()
+		if goblin_vestige_no_target_left <= 0.0:
+			_despawn_goblin_vestige(true)
+			print("[DEBUG][VestigeGoblin] despawn_timeout")
+		return
+
+	var target_position := goblin_vestige_target.global_position
+	var to_target := target_position - goblin_vestige_instance.global_position
+	var distance_to_target := to_target.length()
+	if distance_to_target <= goblin_vestige_attack_range:
+		_play_goblin_vestige_attack_anim(to_target)
+		goblin_vestige_attack_left = goblin_vestige_attack_duration
+		goblin_vestige_attack_applied = false
+		return
+
+	var move_direction := to_target / maxf(distance_to_target, 0.001)
+	goblin_vestige_instance.global_position += move_direction * goblin_vestige_chase_speed * delta
+	_play_goblin_vestige_move_anim(move_direction)
+
+
+func _find_nearest_enemy_for_vestige(origin: Vector2, vestige_self: Node) -> Node2D:
+	var nearest_enemy: Node2D
+	var nearest_distance_sq := INF
+
+	for enemy_node in get_tree().get_nodes_in_group("enemy"):
+		if not (enemy_node is Node2D):
+			continue
+		if not enemy_node.has_method("receive_hit"):
+			continue
+
+		var enemy := enemy_node as Node2D
+		if enemy == vestige_self:
+			continue
+		if enemy.has_meta("is_vestige_ally") and bool(enemy.get_meta("is_vestige_ally")):
+			continue
+		if not is_instance_valid(enemy):
+			continue
+
+		var dist_sq := origin.distance_squared_to(enemy.global_position)
+		if dist_sq < nearest_distance_sq:
+			nearest_distance_sq = dist_sq
+			nearest_enemy = enemy
+
+	return nearest_enemy
+
+
+func _play_goblin_vestige_idle_anim() -> void:
+	if goblin_vestige_sprite == null:
+		return
+	if goblin_vestige_sprite.sprite_frames and goblin_vestige_sprite.sprite_frames.has_animation(&"idle"):
+		if goblin_vestige_sprite.animation != &"idle" or not goblin_vestige_sprite.is_playing():
+			goblin_vestige_sprite.play(&"idle")
+	goblin_vestige_sprite.scale = Vector2(1.0, 1.0)
+
+
+func _play_goblin_vestige_move_anim(direction: Vector2) -> void:
+	if goblin_vestige_sprite == null:
+		return
+	if goblin_vestige_sprite.sprite_frames and goblin_vestige_sprite.sprite_frames.has_animation(&"move"):
+		if goblin_vestige_sprite.animation != &"move" or not goblin_vestige_sprite.is_playing():
+			goblin_vestige_sprite.play(&"move")
+
+	if absf(direction.x) > 0.0001:
+		goblin_vestige_sprite.flip_h = direction.x < 0.0
+
+	goblin_vestige_sprite.scale = Vector2(
+		-absf(goblin_vestige_move_stretch_scale.x) if goblin_vestige_sprite.flip_h else absf(goblin_vestige_move_stretch_scale.x),
+		goblin_vestige_move_stretch_scale.y
+	)
+
+
+func _play_goblin_vestige_attack_anim(direction: Vector2) -> void:
+	if goblin_vestige_sprite == null:
+		return
+	if absf(direction.x) > 0.0001:
+		goblin_vestige_sprite.flip_h = direction.x < 0.0
+	if goblin_vestige_sprite.sprite_frames and goblin_vestige_sprite.sprite_frames.has_animation(&"attack"):
+		goblin_vestige_sprite.play(&"attack")
+	goblin_vestige_sprite.scale = Vector2(
+		-1.0 if goblin_vestige_sprite.flip_h else 1.0,
+		1.0
+	)
+
+
+func _despawn_goblin_vestige(should_clear_state: bool = true) -> void:
+	if goblin_vestige_instance and is_instance_valid(goblin_vestige_instance):
+		goblin_vestige_instance.queue_free()
+	if should_clear_state:
+		goblin_vestige_instance = null
+		goblin_vestige_sprite = null
+		goblin_vestige_target = null
+		goblin_vestige_no_target_left = 0.0
+		goblin_vestige_attack_left = 0.0
+		goblin_vestige_attack_applied = false
+
+
+func _start_orc_vestige_summon() -> void:
+	_despawn_orc_vestige(true)
+
+	var summon_variant: Variant = ORC_SCENE.instantiate()
+	if not (summon_variant is CharacterBody2D):
+		return
+
+	orc_vestige_instance = summon_variant as CharacterBody2D
+	orc_vestige_instance.remove_from_group("enemy")
+	orc_vestige_instance.set_physics_process(false)
+	orc_vestige_instance.set_process(false)
+	orc_vestige_instance.collision_layer = 0
+	orc_vestige_instance.collision_mask = 0
+
+	var collision_shape := orc_vestige_instance.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision_shape:
+		collision_shape.disabled = true
+
+	orc_vestige_sprite = orc_vestige_instance.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+
+	var host: Node = get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		orc_vestige_instance.free()
+		orc_vestige_instance = null
+		return
+
+	host.add_child(orc_vestige_instance)
+	orc_vestige_instance.remove_from_group("enemy")
+	orc_vestige_instance.set_meta("is_vestige_ally", true)
+
+	var facing_direction := _resolve_facing_direction_vector().normalized()
+	if facing_direction == Vector2.ZERO:
+		facing_direction = Vector2.RIGHT
+	orc_vestige_instance.global_position = global_position + (facing_direction * orc_vestige_spawn_offset)
+
+	orc_vestige_target = null
+	orc_vestige_no_target_left = orc_vestige_no_target_timeout
+	orc_vestige_attack_left = 0.0
+	orc_vestige_attack_applied = false
+
+	_play_orc_vestige_move_anim(facing_direction)
+	print("[DEBUG][VestigeOrc] spawn")
+
+
+func _tick_orc_vestige_summon(delta: float) -> void:
+	if orc_vestige_instance == null or not is_instance_valid(orc_vestige_instance):
+		return
+
+	if orc_vestige_attack_left > 0.0:
+		orc_vestige_attack_left = maxf(orc_vestige_attack_left - delta, 0.0)
+		if not orc_vestige_attack_applied and orc_vestige_attack_left <= (orc_vestige_attack_duration - orc_vestige_attack_hit_time):
+			_perform_orc_vestige_ground_slam(orc_vestige_instance.global_position)
+			orc_vestige_attack_applied = true
+		if orc_vestige_attack_left <= 0.0:
+			_despawn_orc_vestige(true)
+			print("[DEBUG][VestigeOrc] despawn_after_slam")
+		return
+
+	if orc_vestige_target == null or not is_instance_valid(orc_vestige_target):
+		orc_vestige_target = _find_nearest_enemy_for_vestige(orc_vestige_instance.global_position, orc_vestige_instance)
+		if orc_vestige_target:
+			print("[DEBUG][VestigeOrc] target_acquired=%s" % orc_vestige_target.name)
+
+	if orc_vestige_target == null:
+		orc_vestige_no_target_left = maxf(orc_vestige_no_target_left - delta, 0.0)
+		_play_orc_vestige_idle_anim()
+		if orc_vestige_no_target_left <= 0.0:
+			_despawn_orc_vestige(true)
+			print("[DEBUG][VestigeOrc] despawn_timeout")
+		return
+
+	var to_target := orc_vestige_target.global_position - orc_vestige_instance.global_position
+	var distance_to_target := to_target.length()
+	if distance_to_target <= orc_vestige_attack_range:
+		_play_orc_vestige_attack_anim(to_target)
+		orc_vestige_attack_left = orc_vestige_attack_duration
+		orc_vestige_attack_applied = false
+		return
+
+	var move_direction := to_target / maxf(distance_to_target, 0.001)
+	orc_vestige_instance.global_position += move_direction * orc_vestige_chase_speed * delta
+	_play_orc_vestige_move_anim(move_direction)
+
+
+func _perform_orc_vestige_ground_slam(origin: Vector2) -> void:
+	for enemy_node in get_tree().get_nodes_in_group("enemy"):
+		if not (enemy_node is Node2D):
+			continue
+		if not enemy_node.has_method("receive_hit"):
+			continue
+
+		var enemy := enemy_node as Node2D
+		if enemy == orc_vestige_instance:
+			continue
+		if enemy.has_meta("is_vestige_ally") and bool(enemy.get_meta("is_vestige_ally")):
+			continue
+		if not is_instance_valid(enemy):
+			continue
+		if origin.distance_to(enemy.global_position) > orc_vestige_aoe_radius:
+			continue
+
+		enemy.call("receive_hit", orc_vestige_damage, origin)
+
+	_spawn_orc_vestige_slam_vfx(origin)
+	print("[DEBUG][VestigeOrc] slam")
+
+
+func _spawn_orc_vestige_slam_vfx(origin: Vector2) -> void:
+	if orc_vestige_instance and is_instance_valid(orc_vestige_instance):
+		var embedded_vfx := orc_vestige_instance.get_node_or_null("GroundSlamVfx")
+		if embedded_vfx != null:
+			if embedded_vfx.has_method("configure"):
+				embedded_vfx.call(
+					"configure",
+					orc_vestige_aoe_radius,
+					orc_vestige_slam_vfx_duration,
+					orc_vestige_slam_vfx_color,
+					orc_vestige_slam_vfx_thickness_px
+				)
+			if embedded_vfx.has_method("play_once"):
+				embedded_vfx.call("play_once")
+			return
+
+	var host := get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		return
+
+	var vfx_variant: Variant = ORC_SLAM_RING_VFX_SCRIPT.new()
+	if not (vfx_variant is Node2D):
+		return
+
+	var vfx := vfx_variant as Node2D
+	vfx.global_position = origin
+	if vfx.has_method("configure"):
+		vfx.call(
+			"configure",
+			orc_vestige_aoe_radius,
+			orc_vestige_slam_vfx_duration,
+			orc_vestige_slam_vfx_color,
+			orc_vestige_slam_vfx_thickness_px
+		)
+	host.add_child(vfx)
+
+
+func _play_orc_vestige_idle_anim() -> void:
+	if orc_vestige_sprite == null:
+		return
+	if orc_vestige_sprite.sprite_frames and orc_vestige_sprite.sprite_frames.has_animation(&"idle"):
+		if orc_vestige_sprite.animation != &"idle" or not orc_vestige_sprite.is_playing():
+			orc_vestige_sprite.play(&"idle")
+	orc_vestige_sprite.scale = Vector2(1.0, 1.0)
+
+
+func _play_orc_vestige_move_anim(direction: Vector2) -> void:
+	if orc_vestige_sprite == null:
+		return
+	if orc_vestige_sprite.sprite_frames and orc_vestige_sprite.sprite_frames.has_animation(&"move"):
+		if orc_vestige_sprite.animation != &"move" or not orc_vestige_sprite.is_playing():
+			orc_vestige_sprite.play(&"move")
+
+	if absf(direction.x) > 0.0001:
+		orc_vestige_sprite.flip_h = direction.x < 0.0
+
+	orc_vestige_sprite.scale = Vector2(
+		-absf(orc_vestige_move_stretch_scale.x) if orc_vestige_sprite.flip_h else absf(orc_vestige_move_stretch_scale.x),
+		orc_vestige_move_stretch_scale.y
+	)
+
+
+func _play_orc_vestige_attack_anim(direction: Vector2) -> void:
+	if orc_vestige_sprite == null:
+		return
+	if absf(direction.x) > 0.0001:
+		orc_vestige_sprite.flip_h = direction.x < 0.0
+	if orc_vestige_sprite.sprite_frames and orc_vestige_sprite.sprite_frames.has_animation(&"attack"):
+		orc_vestige_sprite.play(&"attack")
+	orc_vestige_sprite.scale = Vector2(
+		-1.0 if orc_vestige_sprite.flip_h else 1.0,
+		1.0
+	)
+
+
+func _despawn_orc_vestige(should_clear_state: bool = true) -> void:
+	if orc_vestige_instance and is_instance_valid(orc_vestige_instance):
+		orc_vestige_instance.queue_free()
+	if should_clear_state:
+		orc_vestige_instance = null
+		orc_vestige_sprite = null
+		orc_vestige_target = null
+		orc_vestige_no_target_left = 0.0
+		orc_vestige_attack_left = 0.0
+		orc_vestige_attack_applied = false
+
+
+func _start_skeleton_vestige_summon() -> void:
+	_despawn_skeleton_vestige(true)
+
+	var summon_variant: Variant = SKELETON_SCENE.instantiate()
+	if not (summon_variant is CharacterBody2D):
+		return
+
+	skeleton_vestige_instance = summon_variant as CharacterBody2D
+	skeleton_vestige_instance.remove_from_group("enemy")
+	skeleton_vestige_instance.set_physics_process(false)
+	skeleton_vestige_instance.set_process(false)
+	skeleton_vestige_instance.collision_layer = 0
+	skeleton_vestige_instance.collision_mask = 0
+
+	var collision_shape := skeleton_vestige_instance.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision_shape:
+		collision_shape.disabled = true
+
+	skeleton_vestige_sprite = skeleton_vestige_instance.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+
+	var host: Node = get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		skeleton_vestige_instance.free()
+		skeleton_vestige_instance = null
+		return
+
+	host.add_child(skeleton_vestige_instance)
+	skeleton_vestige_instance.remove_from_group("enemy")
+	skeleton_vestige_instance.set_meta("is_vestige_ally", true)
+
+	var facing_direction := _resolve_facing_direction_vector().normalized()
+	if facing_direction == Vector2.ZERO:
+		facing_direction = Vector2.RIGHT
+	skeleton_vestige_instance.global_position = global_position + (facing_direction * skeleton_vestige_spawn_offset)
+
+	skeleton_vestige_target = null
+	skeleton_vestige_no_target_left = skeleton_vestige_no_target_timeout
+	skeleton_vestige_attack_cooldown_left = 0.0
+	skeleton_vestige_has_fired = false
+
+	_play_skeleton_vestige_move_anim(facing_direction)
+	print("[DEBUG][VestigeSkeleton] spawn")
+
+
+func _tick_skeleton_vestige_summon(delta: float) -> void:
+	if skeleton_vestige_instance == null or not is_instance_valid(skeleton_vestige_instance):
+		return
+
+	if skeleton_vestige_target == null or not is_instance_valid(skeleton_vestige_target):
+		skeleton_vestige_target = _find_nearest_enemy_for_vestige(skeleton_vestige_instance.global_position, skeleton_vestige_instance)
+		if skeleton_vestige_target:
+			print("[DEBUG][VestigeSkeleton] target_acquired=%s" % skeleton_vestige_target.name)
+
+	if skeleton_vestige_target == null:
+		skeleton_vestige_no_target_left = maxf(skeleton_vestige_no_target_left - delta, 0.0)
+		_play_skeleton_vestige_idle_anim()
+		if skeleton_vestige_no_target_left <= 0.0:
+			_despawn_skeleton_vestige(true)
+			print("[DEBUG][VestigeSkeleton] despawn_timeout")
+		return
+
+	if skeleton_vestige_attack_cooldown_left > 0.0:
+		skeleton_vestige_attack_cooldown_left = maxf(skeleton_vestige_attack_cooldown_left - delta, 0.0)
+
+	var to_target := skeleton_vestige_target.global_position - skeleton_vestige_instance.global_position
+	var distance_to_target := to_target.length()
+	if distance_to_target > skeleton_vestige_preferred_range:
+		var move_direction := to_target / maxf(distance_to_target, 0.001)
+		skeleton_vestige_instance.global_position += move_direction * skeleton_vestige_chase_speed * delta
+		_play_skeleton_vestige_move_anim(move_direction)
+		return
+
+	_play_skeleton_vestige_attack_anim(to_target)
+	if skeleton_vestige_attack_cooldown_left <= 0.0:
+		_throw_skeleton_vestige_bone(to_target)
+		skeleton_vestige_attack_cooldown_left = skeleton_vestige_attack_cooldown
+		skeleton_vestige_has_fired = true
+		print("[DEBUG][VestigeSkeleton] throw_bone")
+		_despawn_skeleton_vestige(true)
+		print("[DEBUG][VestigeSkeleton] despawn_after_throw")
+
+
+func _throw_skeleton_vestige_bone(direction_to_target: Vector2) -> void:
+	if skeleton_vestige_instance == null or not is_instance_valid(skeleton_vestige_instance):
+		return
+
+	var host := get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		return
+
+	var projectile_variant: Variant = VESTIGE_BONE_PROJECTILE_SCENE.instantiate()
+	if not (projectile_variant is Area2D):
+		return
+
+	var projectile := projectile_variant as Area2D
+	var fire_direction := direction_to_target.normalized() if direction_to_target.length_squared() > 0.0 else Vector2.RIGHT
+	projectile.global_position = skeleton_vestige_instance.global_position + (fire_direction * skeleton_vestige_projectile_spawn_offset)
+	host.add_child(projectile)
+
+	if projectile.has_method("configure"):
+		projectile.call(
+			"configure",
+			skeleton_vestige_instance,
+			fire_direction,
+			skeleton_vestige_projectile_speed,
+			skeleton_vestige_projectile_lifetime,
+			skeleton_vestige_damage,
+			5.0
+		)
+
+
+func _play_skeleton_vestige_idle_anim() -> void:
+	if skeleton_vestige_sprite == null:
+		return
+	if skeleton_vestige_sprite.sprite_frames and skeleton_vestige_sprite.sprite_frames.has_animation(&"idle"):
+		if skeleton_vestige_sprite.animation != &"idle" or not skeleton_vestige_sprite.is_playing():
+			skeleton_vestige_sprite.play(&"idle")
+	skeleton_vestige_sprite.scale = Vector2(1.0, 1.0)
+
+
+func _play_skeleton_vestige_move_anim(direction: Vector2) -> void:
+	if skeleton_vestige_sprite == null:
+		return
+	if skeleton_vestige_sprite.sprite_frames and skeleton_vestige_sprite.sprite_frames.has_animation(&"move"):
+		if skeleton_vestige_sprite.animation != &"move" or not skeleton_vestige_sprite.is_playing():
+			skeleton_vestige_sprite.play(&"move")
+
+	if absf(direction.x) > 0.0001:
+		skeleton_vestige_sprite.flip_h = direction.x < 0.0
+
+	skeleton_vestige_sprite.scale = Vector2(
+		-absf(skeleton_vestige_move_stretch_scale.x) if skeleton_vestige_sprite.flip_h else absf(skeleton_vestige_move_stretch_scale.x),
+		skeleton_vestige_move_stretch_scale.y
+	)
+
+
+func _play_skeleton_vestige_attack_anim(direction: Vector2) -> void:
+	if skeleton_vestige_sprite == null:
+		return
+	if absf(direction.x) > 0.0001:
+		skeleton_vestige_sprite.flip_h = direction.x < 0.0
+	if skeleton_vestige_sprite.sprite_frames and skeleton_vestige_sprite.sprite_frames.has_animation(&"attack"):
+		skeleton_vestige_sprite.play(&"attack")
+	skeleton_vestige_sprite.scale = Vector2(
+		-1.0 if skeleton_vestige_sprite.flip_h else 1.0,
+		1.0
+	)
+
+
+func _despawn_skeleton_vestige(should_clear_state: bool = true) -> void:
+	if skeleton_vestige_instance and is_instance_valid(skeleton_vestige_instance):
+		skeleton_vestige_instance.queue_free()
+	if should_clear_state:
+		skeleton_vestige_instance = null
+		skeleton_vestige_sprite = null
+		skeleton_vestige_target = null
+		skeleton_vestige_no_target_left = 0.0
+		skeleton_vestige_attack_cooldown_left = 0.0
+		skeleton_vestige_has_fired = false
+
+
+func _resolve_primary_vestige_species_for_cast() -> String:
+	if skeleton_vestige_charges > 0 and skeleton_vestige_cooldown_left <= 0.0:
+		return SKELETON_SPECIES_ID
+	if orc_vestige_charges > 0 and orc_vestige_cooldown_left <= 0.0:
+		return ORC_SPECIES_ID
+	if goblin_vestige_charges > 0 and goblin_vestige_cooldown_left <= 0.0:
+		return GOBLIN_SPECIES_ID
+	return ""
+
+
+func _resolve_facing_direction_vector() -> Vector2:
+	if _resolve_attack_facing_from_mouse():
+		return Vector2.LEFT
+	return Vector2.RIGHT
 
 
 func get_heart_slot_count() -> int:
@@ -558,6 +1259,9 @@ func start_death() -> void:
 	dash_invulnerability_left = 0.0
 	dash_direction = Vector2.ZERO
 	velocity = Vector2.ZERO
+	_despawn_goblin_vestige(true)
+	_despawn_orc_vestige(true)
+	_despawn_skeleton_vestige(true)
 	_set_sword_active(false)
 
 	if animation_player and animation_player.is_playing():

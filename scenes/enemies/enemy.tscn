@@ -41,6 +41,7 @@ radius = 6.0
 
 [node name="Enemy" type="CharacterBody2D" unique_id=344969062]
 script = ExtResource("1_oth3g")
+vestige_drop_chance = 1.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1052270600]
 sprite_frames = SubResource("SpriteFrames_h0m4p")

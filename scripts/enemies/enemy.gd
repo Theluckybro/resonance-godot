@@ -18,6 +18,7 @@ const PRESET_FILE_PATH: String = "res://data/enemies/EnemyArchetypePresets.json"
 const ENEMY_PROJECTILE_SCENE: PackedScene = preload("res://scenes/enemies/enemy_projectile.tscn")
 const BONE_PROJECTILE_SCENE: PackedScene = preload("res://scenes/projectiles/bone_projectile.tscn")
 const VESTIGE_PICKUP_SCENE: PackedScene = preload("res://scenes/core/vestige_pickup.tscn")
+const ORC_SLAM_RING_VFX_SCRIPT: Script = preload("res://scripts/enemies/vfx/orc_slam_ring_vfx.gd")
 const VESTIGE_ORB_GOBLIN: Texture2D = preload("res://assets/Sprites/Vestige/OrbGoblin.png")
 const VESTIGE_ORB_ORC: Texture2D = preload("res://assets/Sprites/Vestige/OrbOrc.png")
 const VESTIGE_ORB_SKELETON: Texture2D = preload("res://assets/Sprites/Vestige/OrbSkeleton.png")
@@ -67,6 +68,9 @@ static var _preset_roles_cache: Dictionary = {}
 @export var hit_spark_radius: float = 16.0
 @export var hit_spark_lifetime: float = 0.4
 @export var hit_spark_color: Color = Color(1.0, 0.27, 0.0, 1.0)
+@export var ground_slam_vfx_duration: float = 0.22
+@export var ground_slam_vfx_color: Color = Color(1.0, 0.64, 0.32, 0.95)
+@export var ground_slam_vfx_thickness_px: float = 2.4
 
 @onready var body_visual: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
 @onready var state_machine: StateMachine = $StateMachine
@@ -106,6 +110,7 @@ var artillery_projectile_lifetime: float = 1.25
 var artillery_projectile_damage: int = 10
 var artillery_projectile_radius: float = 4.0
 var melee_attack_range: float = 14.0
+var melee_aoe_radius: float = 14.0
 var melee_attack_damage: int = 9
 var melee_attack_cooldown: float = 0.5
 var melee_attack_cooldown_left: float = 0.0
@@ -308,6 +313,7 @@ func _apply_preset_values(preset: Dictionary) -> void:
 	artillery_projectile_radius = maxf(float(preset.get("projectile_radius_px", artillery_projectile_radius)), 1.0)
 
 	melee_attack_range = maxf(float(preset.get("attack_range", melee_attack_range)), 1.0)
+	melee_aoe_radius = maxf(float(preset.get("aoe_radius_px", melee_attack_range)), 1.0)
 	melee_attack_damage = max(int(preset.get("damage", melee_attack_damage)), 1)
 	melee_attack_cooldown = maxf(float(preset.get("cooldown_sec", melee_attack_cooldown)), 0.05)
 	melee_windup_sec = maxf(float(preset.get("windup_sec", melee_windup_sec)), 0.01)
@@ -440,6 +446,8 @@ func _create_vestige_pickup(spawn_position: Vector2, amount: int, source_species
 
 	if pickup.has_method("set_vestige_amount"):
 		pickup.call("set_vestige_amount", amount)
+	if pickup.has_method("set_source_species"):
+		pickup.call("set_source_species", source_species)
 
 	var orb_texture_variant: Variant = SPECIES_TO_VESTIGE_ORB.get(source_species, null)
 	if orb_texture_variant is Texture2D and pickup.has_method("set_orb_texture"):
@@ -485,6 +493,10 @@ func is_melee_role() -> bool:
 	return active_role_id == ROLE_DUELIST or active_role_id == ROLE_BRUISER
 
 
+func uses_ground_slam_attack() -> bool:
+	return active_role_id == ROLE_BRUISER
+
+
 func can_start_melee_attack() -> bool:
 	if not is_melee_role():
 		return false
@@ -496,6 +508,8 @@ func can_start_melee_attack() -> bool:
 		return false
 
 	var distance_to_player := global_position.distance_to(target_player.global_position)
+	if uses_ground_slam_attack():
+		return distance_to_player <= melee_aoe_radius
 	return distance_to_player <= melee_attack_range
 
 
@@ -522,6 +536,81 @@ func try_apply_melee_hit() -> bool:
 	target_player.call("receive_hit", melee_attack_damage, global_position)
 	melee_has_hit_in_cycle = true
 	return true
+
+
+func try_apply_melee_ground_slam_hit() -> bool:
+	if melee_has_hit_in_cycle:
+		return false
+
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty():
+		return false
+
+	var has_hit_target := false
+	for player_variant in players:
+		if not (player_variant is Node2D):
+			continue
+
+		var player := player_variant as Node2D
+		if not is_instance_valid(player):
+			continue
+		if global_position.distance_to(player.global_position) > melee_aoe_radius:
+			continue
+		if not player.has_method("receive_hit"):
+			continue
+
+		player.call("receive_hit", melee_attack_damage, global_position)
+		has_hit_target = true
+
+	if has_hit_target:
+		melee_has_hit_in_cycle = true
+
+	return has_hit_target
+
+
+func perform_melee_ground_slam() -> bool:
+	_spawn_ground_slam_vfx()
+	return try_apply_melee_ground_slam_hit()
+
+
+func _spawn_ground_slam_vfx() -> void:
+	var embedded_vfx := get_node_or_null("GroundSlamVfx")
+	if embedded_vfx != null:
+		if embedded_vfx.has_method("configure"):
+			embedded_vfx.call(
+				"configure",
+				melee_aoe_radius,
+				ground_slam_vfx_duration,
+				ground_slam_vfx_color,
+				ground_slam_vfx_thickness_px
+			)
+		if embedded_vfx.has_method("play_once"):
+			embedded_vfx.call("play_once")
+		return
+
+	var host := get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		return
+
+	var vfx_variant: Variant = ORC_SLAM_RING_VFX_SCRIPT.new()
+	if not (vfx_variant is Node2D):
+		return
+
+	var vfx := vfx_variant as Node2D
+	vfx.global_position = global_position
+
+	if vfx.has_method("configure"):
+		vfx.call(
+			"configure",
+			melee_aoe_radius,
+			ground_slam_vfx_duration,
+			ground_slam_vfx_color,
+			ground_slam_vfx_thickness_px
+		)
+
+	host.add_child(vfx)
 
 
 func apply_melee_lunge_motion(delta: float) -> void:

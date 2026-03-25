@@ -41,6 +41,10 @@ const SPECIES_TO_DEFAULT_ROLE := {
 @export var enemies_per_wave: int = 3
 @export_enum("early", "mid", "pressure") var wave_profile: String = "early"
 @export var auto_spawn_on_ready: bool = true
+@export var debug_force_goblin_drop_100_in_this_room: bool = false
+@export var debug_force_goblin_drop_debug_build_only: bool = true
+@export var debug_force_orc_drop_100_in_this_room: bool = false
+@export var debug_force_orc_drop_debug_build_only: bool = true
 
 var spawned_enemies: Array[Node] = []
 var is_room_cleared: bool = false
@@ -104,11 +108,35 @@ func spawn_wave() -> void:
 			enemy.role_id = ""
 			if role != default_role:
 				enemy.role_id = role
+			if _should_force_goblin_drop_100(species_id):
+				enemy.vestige_drop_chance = 1.0
+			if _should_force_orc_drop_100(species_id):
+				enemy.vestige_drop_chance = 1.0
 		if enemy_instance is Node2D:
 			var enemy_node := enemy_instance as Node2D
 			enemy_node.global_position = spawn_points[i % spawn_points.size()]
 		add_child(enemy_instance)
 		spawned_enemies.append(enemy_instance)
+
+
+func _should_force_goblin_drop_100(species_id: String) -> bool:
+	if species_id != SPECIES_GOBLIN:
+		return false
+	if not debug_force_goblin_drop_100_in_this_room:
+		return false
+	if debug_force_goblin_drop_debug_build_only and not OS.is_debug_build():
+		return false
+	return true
+
+
+func _should_force_orc_drop_100(species_id: String) -> bool:
+	if species_id != SPECIES_ORC:
+		return false
+	if not debug_force_orc_drop_100_in_this_room:
+		return false
+	if debug_force_orc_drop_debug_build_only and not OS.is_debug_build():
+		return false
+	return true
 
 
 func _has_complete_species_roster() -> bool:

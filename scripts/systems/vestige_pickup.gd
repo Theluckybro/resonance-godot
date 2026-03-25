@@ -7,6 +7,7 @@ extends Area2D
 
 var is_consumed: bool = false
 var pending_orb_texture: Texture2D
+var source_species_id: String = ""
 
 
 func _ready() -> void:
@@ -29,6 +30,10 @@ func set_orb_texture(texture: Texture2D) -> void:
 		return
 	pending_orb_texture = texture
 	_apply_orb_texture_if_ready()
+
+
+func set_source_species(species_id: String) -> void:
+	source_species_id = species_id.strip_edges().to_lower()
 
 
 func _apply_orb_texture_if_ready() -> void:
@@ -65,7 +70,7 @@ func _try_collect(collider: Node) -> void:
 	collision_mask = 0
 
 	if player_node.has_method("collect_vestige"):
-		player_node.call("collect_vestige", vestige_amount)
+		player_node.call("collect_vestige", vestige_amount, source_species_id)
 
 	queue_free()
 

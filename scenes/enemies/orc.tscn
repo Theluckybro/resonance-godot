@@ -8,22 +8,39 @@
 [ext_resource type="Script" uid="uid://pq2sds4cwrmv" path="res://scripts/enemies/states/enemy_hit_stun_state.gd" id="6_ec05t"]
 [ext_resource type="Script" uid="uid://dg4082i2hw3p8" path="res://scripts/enemies/states/enemy_dead_state.gd" id="7_kqqlc"]
 [ext_resource type="Script" uid="uid://biq45bglgg5em" path="res://scripts/enemies/states/enemy_attack_state.gd" id="8_attack"]
+[ext_resource type="Script" uid="uid://buvpixfhxnd0d" path="res://scripts/enemies/vfx/orc_slam_ring_vfx.gd" id="9_slamvfx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ff5pv"]
 atlas = ExtResource("2_4svvi")
-region = Rect2(0, 16, 16, 16)
+region = Rect2(0, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aijhm"]
 atlas = ExtResource("2_4svvi")
-region = Rect2(16, 16, 16, 16)
+region = Rect2(16, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m6j48"]
 atlas = ExtResource("2_4svvi")
-region = Rect2(32, 16, 16, 16)
+region = Rect2(32, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nbio8"]
 atlas = ExtResource("2_4svvi")
-region = Rect2(48, 16, 16, 16)
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_puc87"]
+atlas = ExtResource("2_4svvi")
+region = Rect2(64, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l68j3"]
+atlas = ExtResource("2_4svvi")
+region = Rect2(80, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sk24"]
+atlas = ExtResource("2_4svvi")
+region = Rect2(96, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_def7g"]
+atlas = ExtResource("2_4svvi")
+region = Rect2(112, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4svvi"]
 atlas = ExtResource("2_4svvi")
@@ -87,8 +104,20 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_nbio8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_puc87")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l68j3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7sk24")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_def7g")
 }],
-"loop": false,
+"loop": true,
 "name": &"attack",
 "speed": 10.0
 }, {
@@ -159,10 +188,30 @@ species_id = "orc"
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1052270600]
 sprite_frames = SubResource("SpriteFrames_h0m4p")
 animation = &"attack"
+frame_progress = 0.52828646
 offset = Vector2(0, -2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1040526212]
 shape = SubResource("CircleShape2D_txv6m")
+
+[node name="GroundSlamVfx" type="Node2D" parent="." unique_id=1053409169]
+z_index = 40
+script = ExtResource("9_slamvfx")
+
+[node name="RingParticles" type="GPUParticles2D" parent="GroundSlamVfx" unique_id=1194303078]
+emitting = false
+one_shot = true
+explosiveness = 1.0
+
+[node name="DustParticles" type="GPUParticles2D" parent="GroundSlamVfx" unique_id=1194942194]
+emitting = false
+one_shot = true
+explosiveness = 1.0
+
+[node name="DebrisParticles" type="GPUParticles2D" parent="GroundSlamVfx" unique_id=12272287]
+emitting = false
+one_shot = true
+explosiveness = 1.0
 
 [node name="StateMachine" type="Node" parent="." unique_id=1681590767]
 script = ExtResource("3_s0g86")

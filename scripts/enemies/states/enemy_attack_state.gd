@@ -41,9 +41,15 @@ func physics_update(delta: float) -> void:
 	if attack_elapsed < windup_end:
 		enemy.apply_idle_motion(delta)
 	elif attack_elapsed < active_end:
-		enemy.apply_melee_lunge_motion(delta)
+		if enemy.uses_ground_slam_attack():
+			enemy.apply_idle_motion(delta)
+		else:
+			enemy.apply_melee_lunge_motion(delta)
 		if not active_hit_checked:
-			enemy.try_apply_melee_hit()
+			if enemy.uses_ground_slam_attack():
+				enemy.perform_melee_ground_slam()
+			else:
+				enemy.try_apply_melee_hit()
 			active_hit_checked = true
 	else:
 		enemy.apply_idle_motion(delta)

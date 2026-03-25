@@ -1,9 +1,13 @@
 [gd_scene format=3 uid="uid://d06aej0o7o0rd"]
 
 [ext_resource type="Script" uid="uid://c2nnuvy1bkpyj" path="res://scripts/systems/room_manager.gd" id="1_wn31p"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/dummy_enemy.tscn" id="2_dummy"]
 
 [node name="RoomCombat01" type="Node2D" unique_id=1376762998]
 script = ExtResource("1_wn31p")
+wave_profile = "mid"
+debug_force_goblin_drop_100_in_this_room = true
+debug_force_orc_drop_100_in_this_room = true
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1255822014]
 position = Vector2(320, 180)
@@ -16,3 +20,6 @@ position = Vector2(218, 284)
 
 [node name="SpawnPointC" type="Marker2D" parent="." unique_id=1249506909]
 position = Vector2(203, 126)
+
+[node name="DummyEnemy" parent="." unique_id=1845159407 instance=ExtResource("2_dummy")]
+position = Vector2(356, 186)

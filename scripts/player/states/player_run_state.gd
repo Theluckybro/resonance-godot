@@ -18,6 +18,10 @@ func physics_update(delta: float) -> void:
 	if player == null:
 		return
 
+	if player.is_vestige_primary_pressed() and player.can_use_goblin_vestige():
+		player.try_use_goblin_vestige()
+		return
+
 	if player.is_attack_pressed() and player.can_start_attack():
 		request_transition(attack_state)
 		return
