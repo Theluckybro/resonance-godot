@@ -56,6 +56,10 @@ func is_vestige_primary_pressed() -> bool:
 	return Input.is_action_just_pressed(ACTION_VESTIGE_PRIMARY)
 
 
+func is_pause_pressed() -> bool:
+	return Input.is_action_just_pressed(UI_PAUSE)
+
+
 func get_missing_actions() -> PackedStringArray:
 	var missing := PackedStringArray()
 	for action_name in REQUIRED_ACTIONS:

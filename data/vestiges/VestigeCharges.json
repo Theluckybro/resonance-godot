@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "version": 1,
+    "notes": "Vestige orb charge rewards per species"
+  },
+  "default_charge": 3,
+  "species_charges": {
+    "goblin": 3,
+    "orc": 2,
+    "skeleton": 2,
+    "species_skirmisher": 2,
+    "species_controller": 3
+  }
+}

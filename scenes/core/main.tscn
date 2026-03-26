@@ -1,7 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://ctfwdbd8rn2w4"]
 
-[ext_resource type="PackedScene" path="res://scenes/rooms/room_combat_01.tscn" id="1_0hs1a"]
+[ext_resource type="PackedScene" uid="uid://bo6slx7tibpos" path="res://scenes/levels/level_01.tscn" id="1_lu0v7"]
+[ext_resource type="PackedScene" uid="uid://bw3rmwb5ydfqm" path="res://scenes/ui/pause_menu.tscn" id="2_2xq7m"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=1365454970]
 
-[node name="RoomCombat01" parent="." instance=ExtResource("1_0hs1a")]
+[node name="Level01" parent="." unique_id=900715938 instance=ExtResource("1_lu0v7")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("2_2xq7m")]

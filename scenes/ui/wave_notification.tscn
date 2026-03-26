@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://cd7tpyeqvfyaq"]
+
+[ext_resource type="Script" path="res://scripts/ui/wave_notification.gd" id="uid://gd4hfkw8x4hv2"]
+[ext_resource type="FontFile" path="res://assets/fonts/PixelFantasy.ttf" id="uid://bg5yw6d6dwvth"]
+
+[sub_resource type="Animation" id="Animation_fade_in_out"]
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 2.7, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_anim"]
+animations/fade_in_out = SubResource("Animation_fade_in_out")
+
+[node name="CanvasLayer" type="CanvasLayer"]
+layer = 10
+
+[node name="WaveNotification" type="Control" parent="."]
+script = ExtResource("uid://gd4hfkw8x4hv2")
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -150.0
+offset_top = 30.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/WaveNotification"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_right = 150.0
+offset_bottom = 64.0
+grow_horizontal = 2
+text = "Wave 1"
+custom_fonts/font = ExtResource("uid://bg5yw6d6dwvth")
+custom_font_sizes/font_size = 48
+text_overrun_behavior = 3
+horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/WaveNotification"]
+libraries = {
+"": SubResource("AnimationLibrary_anim")
+}

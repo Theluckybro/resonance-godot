@@ -2,6 +2,8 @@ extends Area2D
 class_name BoneProjectile
 ## Bone projectile variant for skeleton artillery enemies.
 
+const SFX_PROJECTILE_IMPACT: AudioStream = preload("res://assets/audio/sfx/ProjectileImpact.mp3")
+
 @export var speed: float = 170.0
 @export var lifetime_sec: float = 1.25
 @export var damage: int = 10
@@ -69,10 +71,12 @@ func _handle_collider(collider: Node) -> void:
 	var target := _resolve_damage_target(collider)
 	if target != null:
 		target.call("receive_hit", damage, global_position)
+		_play_impact_sfx()
 		queue_free()
 		return
 
 	if _should_block_projectile(collider):
+		_play_impact_sfx()
 		queue_free()
 
 
@@ -97,3 +101,26 @@ func _should_block_projectile(collider: Node) -> bool:
 	if collider.is_in_group("enemy"):
 		return false
 	return true
+
+
+func _play_impact_sfx() -> void:
+	if SFX_PROJECTILE_IMPACT == null:
+		return
+
+	var host := get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		return
+
+	var sfx := AudioStreamPlayer2D.new()
+	sfx.stream = SFX_PROJECTILE_IMPACT
+	sfx.bus = &"Master"
+	sfx.global_position = global_position
+	host.add_child(sfx)
+	sfx.play()
+
+	var timer := get_tree().create_timer(maxf(SFX_PROJECTILE_IMPACT.get_length(), 0.05))
+	await timer.timeout
+	if is_instance_valid(sfx):
+		sfx.queue_free()

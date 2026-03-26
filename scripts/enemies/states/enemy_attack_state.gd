@@ -18,6 +18,7 @@ func enter(_from_state: Node) -> void:
 	enemy.reset_melee_attack_cycle()
 	enemy.set_visual_state(&"attack")
 	enemy.velocity = Vector2.ZERO
+	enemy.play_attack_sfx()
 
 
 func physics_update(delta: float) -> void:

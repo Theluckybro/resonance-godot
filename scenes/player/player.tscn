@@ -11,21 +11,21 @@
 [ext_resource type="Script" uid="uid://bbv5s4w6ov82q" path="res://scripts/player/states/player_attack_state.gd" id="7_attack"]
 [ext_resource type="Script" uid="uid://3chn054g7s7h" path="res://scripts/player/states/player_dead_state.gd" id="8_dead"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_attack_0"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_iqsei"]
 atlas = ExtResource("2_5gtgg")
-region = Rect2(0, 96, 16, 24)
+region = Rect2(0, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_attack_1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tffgl"]
 atlas = ExtResource("2_5gtgg")
-region = Rect2(16, 96, 16, 24)
+region = Rect2(16, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_attack_2"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_pk8ii"]
 atlas = ExtResource("2_5gtgg")
-region = Rect2(32, 96, 16, 24)
+region = Rect2(32, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_attack_3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_5mf0n"]
 atlas = ExtResource("2_5gtgg")
-region = Rect2(48, 96, 16, 24)
+region = Rect2(48, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h17s1"]
 atlas = ExtResource("2_5gtgg")
@@ -111,18 +111,18 @@ region = Rect2(48, 24, 16, 24)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_attack_0")
+"texture": SubResource("AtlasTexture_iqsei")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_attack_1")
+"texture": SubResource("AtlasTexture_tffgl")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_attack_2")
+"texture": SubResource("AtlasTexture_pk8ii")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_attack_3")
+"texture": SubResource("AtlasTexture_5mf0n")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack",
 "speed": 10.0
 }, {
@@ -213,8 +213,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dovo2"]
-radius = 8.0
-height = 16.0
+radius = 5.0
+height = 12.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sword"]
 size = Vector2(12, 20)
@@ -491,13 +491,14 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" unique_id=1767086705]
 script = ExtResource("1_8afob")
-orc_vestige_damage = 12
-skeleton_vestige_damage = 15
+attack_damage = 30
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=943995036]
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_8afob")
-animation = &"hit"
+animation = &"attack"
+frame = 3
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=159978543]
 shape = SubResource("CapsuleShape2D_dovo2")

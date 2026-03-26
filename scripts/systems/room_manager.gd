@@ -2,6 +2,7 @@ extends Node2D
 class_name RoomManager
 
 signal room_cleared
+signal wave_started(wave_number: int)
 
 const SPECIES_GOBLIN: String = "goblin"
 const SPECIES_ORC: String = "orc"
@@ -14,6 +15,8 @@ const ROLE_BRUISER: String = "bruiser"
 const ROLE_SKIRMISHER: String = "skirmisher"
 const ROLE_ARTILLERY: String = "artillery"
 const ROLE_CONTROLLER: String = "controller"
+const SFX_WAVE_START: AudioStream = preload("res://assets/audio/sfx/WaveStart.mp3")
+const SFX_ROOM_CLEAR: AudioStream = preload("res://assets/audio/sfx/RoomClear.mp3")
 
 const ROLE_TO_SPECIES := {
 	ROLE_DUELIST: SPECIES_GOBLIN,
@@ -38,6 +41,7 @@ const SPECIES_TO_DEFAULT_ROLE := {
 @export var species_controller_scene: PackedScene = preload("res://scenes/enemies/species_controller.tscn")
 @export var player_scene: PackedScene = preload("res://scenes/player/player.tscn")
 @export var player_heart_hud_scene: PackedScene = preload("res://scenes/ui/player_heart_hud.tscn")
+@export var y_sort_container_path: NodePath = ^"YSortWorld"
 @export var enemies_per_wave: int = 3
 @export_enum("early", "mid", "pressure") var wave_profile: String = "early"
 @export var auto_spawn_on_ready: bool = true
@@ -48,9 +52,12 @@ const SPECIES_TO_DEFAULT_ROLE := {
 
 var spawned_enemies: Array[Node] = []
 var is_room_cleared: bool = false
+var current_wave: int = 0
+var sfx_player: AudioStreamPlayer
 
 
 func _ready() -> void:
+	_ensure_sfx_player()
 	_ensure_player_exists()
 	_ensure_player_heart_hud()
 	if auto_spawn_on_ready:
@@ -67,6 +74,7 @@ func _process(_delta: float) -> void:
 
 	is_room_cleared = true
 	room_cleared.emit()
+	_play_sfx(SFX_ROOM_CLEAR)
 	print("ROOM CLEAR")
 
 
@@ -75,8 +83,11 @@ func spawn_wave() -> void:
 		push_warning("RoomManager species roster scene is missing")
 		return
 
+	current_wave += 1
 	is_room_cleared = false
 	spawned_enemies.clear()
+	wave_started.emit(current_wave)
+	_play_sfx(SFX_WAVE_START)
 
 	var spawn_points := _collect_spawn_points()
 	if spawn_points.is_empty():
@@ -86,6 +97,7 @@ func spawn_wave() -> void:
 		]
 
 	var wave_roles: Array[String] = _build_wave_roles(enemies_per_wave)
+	var entity_parent := _get_entity_parent()
 	for i in wave_roles.size():
 		var role: String = wave_roles[i]
 		var species_id: String = _species_for_role(role)
@@ -115,8 +127,28 @@ func spawn_wave() -> void:
 		if enemy_instance is Node2D:
 			var enemy_node := enemy_instance as Node2D
 			enemy_node.global_position = spawn_points[i % spawn_points.size()]
-		add_child(enemy_instance)
+		entity_parent.add_child(enemy_instance)
 		spawned_enemies.append(enemy_instance)
+
+
+func _ensure_sfx_player() -> void:
+	if sfx_player != null:
+		return
+
+	sfx_player = AudioStreamPlayer.new()
+	sfx_player.name = "SfxPlayer"
+	sfx_player.bus = &"Master"
+	add_child(sfx_player)
+
+
+func _play_sfx(stream: AudioStream) -> void:
+	if stream == null:
+		return
+	if sfx_player == null:
+		return
+
+	sfx_player.stream = stream
+	sfx_player.play()
 
 
 func _should_force_goblin_drop_100(species_id: String) -> bool:
@@ -201,12 +233,12 @@ func _scene_for_species(species_id: String) -> PackedScene:
 
 func _collect_spawn_points() -> Array[Vector2]:
 	var points: Array[Vector2] = []
-	for child in get_children():
-		if not child is Marker2D:
+	var markers := find_children("SpawnPoint*", "Marker2D", true, false)
+	for marker_node in markers:
+		if not marker_node is Marker2D:
 			continue
-		var marker := child as Marker2D
-		if marker.name.begins_with("SpawnPoint"):
-			points.append(marker.global_position)
+		var marker := marker_node as Marker2D
+		points.append(marker.global_position)
 	return points
 
 
@@ -220,10 +252,10 @@ func _ensure_player_exists() -> void:
 	if player_instance == null:
 		return
 	if player_instance is Node2D:
-		var spawn_marker := get_node_or_null("PlayerSpawn")
+		var spawn_marker := _find_marker("PlayerSpawn")
 		if spawn_marker is Marker2D:
 			(player_instance as Node2D).global_position = (spawn_marker as Marker2D).global_position
-	add_child(player_instance)
+	_get_entity_parent().add_child(player_instance)
 
 
 func _ensure_player_heart_hud() -> void:
@@ -249,3 +281,22 @@ func _prune_dead_enemies() -> void:
 			continue
 		alive_enemies.append(enemy)
 	spawned_enemies = alive_enemies
+
+
+func _get_entity_parent() -> Node:
+	if y_sort_container_path.is_empty():
+		return self
+
+	var candidate := get_node_or_null(y_sort_container_path)
+	if candidate == null:
+		return self
+	return candidate
+
+
+func _find_marker(marker_name: String) -> Marker2D:
+	var markers := find_children(marker_name, "Marker2D", true, false)
+	if markers.is_empty():
+		return null
+	if markers[0] is Marker2D:
+		return markers[0] as Marker2D
+	return null

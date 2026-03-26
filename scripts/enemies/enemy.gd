@@ -22,6 +22,15 @@ const ORC_SLAM_RING_VFX_SCRIPT: Script = preload("res://scripts/enemies/vfx/orc_
 const VESTIGE_ORB_GOBLIN: Texture2D = preload("res://assets/Sprites/Vestige/OrbGoblin.png")
 const VESTIGE_ORB_ORC: Texture2D = preload("res://assets/Sprites/Vestige/OrbOrc.png")
 const VESTIGE_ORB_SKELETON: Texture2D = preload("res://assets/Sprites/Vestige/OrbSkeleton.png")
+const SFX_GOBLIN_ATTACK: AudioStream = preload("res://assets/audio/sfx/GoblinAttack.mp3")
+const SFX_ORC_ATTACK: AudioStream = preload("res://assets/audio/sfx/OrcAttack.mp3")
+const SFX_SKELETON_ATTACK: AudioStream = preload("res://assets/audio/sfx/SkeletonAttack.mp3")
+const SFX_GOBLIN_DEATH: AudioStream = preload("res://assets/audio/sfx/GoblinDeath.mp3")
+const SFX_HIT_VARIANTS: Array[AudioStream] = [
+	preload("res://assets/audio/sfx/Hit1.mp3"),
+	preload("res://assets/audio/sfx/Hit2.mp3"),
+	preload("res://assets/audio/sfx/Hit3.mp3"),
+]
 
 const DEFAULT_SPECIES_TO_ROLE := {
 	SPECIES_GOBLIN: ROLE_DUELIST,
@@ -74,6 +83,7 @@ static var _preset_roles_cache: Dictionary = {}
 
 @onready var body_visual: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
 @onready var state_machine: StateMachine = $StateMachine
+@onready var sfx_player: AudioStreamPlayer2D = get_node_or_null("SfxPlayer")
 
 const STATE_IDLE: StringName = &"idle"
 const STATE_CHASE: StringName = &"chase"
@@ -122,6 +132,7 @@ var melee_has_hit_in_cycle: bool = false
 
 
 func _ready() -> void:
+	_ensure_sfx_player()
 	_apply_species_and_role_from_runtime()
 	add_to_group("enemy")
 	collision_layer = PhysicsLayers.ENEMY
@@ -378,6 +389,7 @@ func receive_hit(damage: int, source_position: Vector2 = Vector2.ZERO) -> void:
 
 	current_health = max(current_health - damage, 0)
 	hit_flash_left = hit_flash_duration
+	_play_random_sfx(SFX_HIT_VARIANTS)
 	if body_visual:
 		body_visual.modulate = Color.WHITE
 
@@ -403,6 +415,7 @@ func _spawn_hit_spark() -> void:
 func on_enter_dead_state() -> void:
 	collision_layer = 0
 	collision_mask = 0
+	_play_sfx(_resolve_death_sfx())
 	_spawn_feedback_burst(Color(1.0, 0.45, 0.45, 0.9), 16, 24.0, 0.26)
 	_try_spawn_vestige_pickup()
 	enemy_died.emit(self)
@@ -457,6 +470,10 @@ func _create_vestige_pickup(spawn_position: Vector2, amount: int, source_species
 
 
 func _refresh_player_target() -> void:
+	if _is_vestige_ally_instance():
+		target_player = null
+		return
+
 	var players := get_tree().get_nodes_in_group("player")
 	if players.is_empty():
 		target_player = null
@@ -467,6 +484,8 @@ func _refresh_player_target() -> void:
 
 
 func has_valid_target_player() -> bool:
+	if _is_vestige_ally_instance():
+		return false
 	return target_player != null and is_instance_valid(target_player)
 
 
@@ -484,6 +503,8 @@ func _update_facing_direction() -> void:
 
 
 func is_player_in_aggro_range() -> bool:
+	if _is_vestige_ally_instance():
+		return false
 	if not has_valid_target_player():
 		return false
 	return global_position.distance_to(target_player.global_position) <= aggro_range
@@ -498,6 +519,8 @@ func uses_ground_slam_attack() -> bool:
 
 
 func can_start_melee_attack() -> bool:
+	if _is_vestige_ally_instance():
+		return false
 	if not is_melee_role():
 		return false
 	if current_state_name != STATE_CHASE:
@@ -522,6 +545,8 @@ func begin_melee_attack_cooldown() -> void:
 
 
 func try_apply_melee_hit() -> bool:
+	if _is_vestige_ally_instance():
+		return false
 	if melee_has_hit_in_cycle:
 		return false
 	if not has_valid_target_player():
@@ -539,6 +564,8 @@ func try_apply_melee_hit() -> bool:
 
 
 func try_apply_melee_ground_slam_hit() -> bool:
+	if _is_vestige_ally_instance():
+		return false
 	if melee_has_hit_in_cycle:
 		return false
 
@@ -675,6 +702,8 @@ func _apply_artillery_kiting_motion(delta: float) -> void:
 
 
 func _try_fire_artillery_projectile() -> void:
+	if _is_vestige_ally_instance():
+		return
 	if active_role_id != ROLE_ARTILLERY:
 		return
 	if current_state_name != STATE_CHASE:
@@ -705,6 +734,7 @@ func _spawn_artillery_projectile(fire_direction: Vector2) -> void:
 
 	# Use bone projectile for skeleton artillery, generic projectile for others
 	var projectile_scene = BONE_PROJECTILE_SCENE if species_id == SPECIES_SKELETON else ENEMY_PROJECTILE_SCENE
+	_play_sfx(_resolve_attack_sfx())
 	var projectile_variant: Variant = projectile_scene.instantiate()
 	if not (projectile_variant is Area2D):
 		return
@@ -732,6 +762,10 @@ func update_hit_stun_motion(delta: float) -> void:
 
 func is_hit_stun_finished() -> bool:
 	return hit_stun_left <= 0.0
+
+
+func _is_vestige_ally_instance() -> bool:
+	return has_meta("is_vestige_ally") and bool(get_meta("is_vestige_ally"))
 
 
 func request_state(state_name: StringName) -> void:
@@ -844,3 +878,51 @@ func _spawn_feedback_burst(color: Color, particle_count: int, radius: float, lif
 		faded_modulate.a = 0.0
 		tween.parallel().tween_property(fragment, "modulate", faded_modulate, lifetime)
 		tween.finished.connect(fragment.queue_free)
+
+
+func play_attack_sfx() -> void:
+	_play_sfx(_resolve_attack_sfx())
+
+
+func _ensure_sfx_player() -> void:
+	if sfx_player != null:
+		return
+
+	var created_player := AudioStreamPlayer2D.new()
+	created_player.name = "SfxPlayer"
+	created_player.max_polyphony = 2
+	created_player.bus = &"Master"
+	add_child(created_player)
+	sfx_player = created_player
+
+
+func _resolve_attack_sfx() -> AudioStream:
+	if species_id == SPECIES_ORC:
+		return SFX_ORC_ATTACK
+	if species_id == SPECIES_SKELETON:
+		return SFX_SKELETON_ATTACK
+	return SFX_GOBLIN_ATTACK
+
+
+func _resolve_death_sfx() -> AudioStream:
+	if species_id == SPECIES_GOBLIN:
+		return SFX_GOBLIN_DEATH
+	return null
+
+
+func _play_random_sfx(streams: Array[AudioStream]) -> void:
+	if streams.is_empty():
+		return
+
+	var random_index := randi_range(0, streams.size() - 1)
+	_play_sfx(streams[random_index])
+
+
+func _play_sfx(stream: AudioStream) -> void:
+	if stream == null:
+		return
+	if sfx_player == null:
+		return
+
+	sfx_player.stream = stream
+	sfx_player.play()

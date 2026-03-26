@@ -10,16 +10,16 @@ debug_force_goblin_drop_100_in_this_room = true
 debug_force_orc_drop_100_in_this_room = true
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1255822014]
-position = Vector2(320, 180)
+position = Vector2(160, 90)
 
 [node name="SpawnPointA" type="Marker2D" parent="." unique_id=8868068]
-position = Vector2(441, 108)
+position = Vector2(220.5, 54)
 
 [node name="SpawnPointB" type="Marker2D" parent="." unique_id=1899939370]
-position = Vector2(218, 284)
+position = Vector2(109, 142)
 
 [node name="SpawnPointC" type="Marker2D" parent="." unique_id=1249506909]
-position = Vector2(203, 126)
+position = Vector2(101.5, 63)
 
 [node name="DummyEnemy" parent="." unique_id=1845159407 instance=ExtResource("2_dummy")]
-position = Vector2(356, 186)
+position = Vector2(178, 93)

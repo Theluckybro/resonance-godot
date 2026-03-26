@@ -1,0 +1,320 @@
+[gd_scene format=3 uid="uid://bw3rmwb5ydfqm"]
+
+[ext_resource type="Script" uid="uid://5khmgw3e4gcr" path="res://scripts/ui/pause_menu.gd" id="1_kgqfn"]
+[ext_resource type="Texture2D" uid="uid://bumahnbtl6cv" path="res://assets/Sprites/Ui/PauseMenu.png" id="2_0lmf7"]
+[ext_resource type="FontFile" uid="uid://bi7sqq3wcoi55" path="res://assets/fonts/PixelFantasy.ttf" id="3_8uki6"]
+[ext_resource type="Texture2D" uid="uid://bpde6d04w3e7e" path="res://assets/Sprites/Ui/PauseButton.png" id="3_f6eus"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8uki6"]
+texture = ExtResource("2_0lmf7")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0bnpd"]
+texture = ExtResource("3_f6eus")
+texture_margin_left = 16.0
+texture_margin_top = 5.0
+texture_margin_right = 4.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="ButtonStyleHover"]
+bg_color = Color(0.35, 0.35, 0.45, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.8, 0.9, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8uki6"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=773884482]
+layer = 100
+script = ExtResource("1_kgqfn")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=618505723]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_filter = 1
+mouse_filter = 1
+color = Color(0, 0, 0, 0.4)
+
+[node name="Panel" type="Panel" parent="." unique_id=163724240]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -118.0
+offset_top = -84.0
+offset_right = 118.0
+offset_bottom = 84.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_8uki6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=452347695]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -8.0
+alignment = 1
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer" unique_id=1472327589]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 20
+text = "Game Paused"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainButtons" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=118512380]
+visible = false
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Spacer1" type="Control" parent="Panel/VBoxContainer/MainButtons" unique_id=677168711]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="ResumeButton" type="Button" parent="Panel/VBoxContainer/MainButtons" unique_id=1724791726]
+texture_filter = 1
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxTexture_0bnpd")
+theme_override_styles/hover = SubResource("ButtonStyleHover")
+text = "Resume"
+
+[node name="Spacer2" type="Control" parent="Panel/VBoxContainer/MainButtons" unique_id=1156955931]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="SettingsButton" type="Button" parent="Panel/VBoxContainer/MainButtons" unique_id=2073950835]
+texture_filter = 1
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxTexture_0bnpd")
+theme_override_styles/hover = SubResource("ButtonStyleHover")
+text = "Settings"
+
+[node name="Spacer3" type="Control" parent="Panel/VBoxContainer/MainButtons" unique_id=833053482]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="Panel/VBoxContainer/MainButtons" unique_id=112922229]
+texture_filter = 1
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxTexture_0bnpd")
+theme_override_styles/hover = SubResource("ButtonStyleHover")
+text = "Quit to Menu"
+
+[node name="SettingsMenu" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=2055826493]
+visible = false
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Spacer1" type="Control" parent="Panel/VBoxContainer/SettingsMenu" unique_id=503572030]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="VideoButton" type="Button" parent="Panel/VBoxContainer/SettingsMenu" unique_id=575661055]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxTexture_0bnpd")
+theme_override_styles/hover = SubResource("ButtonStyleHover")
+text = "Video"
+
+[node name="Spacer2" type="Control" parent="Panel/VBoxContainer/SettingsMenu" unique_id=756620344]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="AudioButton" type="Button" parent="Panel/VBoxContainer/SettingsMenu" unique_id=90190835]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxTexture_0bnpd")
+theme_override_styles/hover = SubResource("ButtonStyleHover")
+text = "Audio"
+
+[node name="Spacer3" type="Control" parent="Panel/VBoxContainer/SettingsMenu" unique_id=375985707]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="Panel/VBoxContainer/SettingsMenu" unique_id=1339424429]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxTexture_0bnpd")
+theme_override_styles/hover = SubResource("ButtonStyleHover")
+text = "Back"
+
+[node name="VideoMenu" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=1015419357]
+visible = false
+custom_minimum_size = Vector2(206, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="VideoLabel" type="Label" parent="Panel/VBoxContainer/VideoMenu" unique_id=1176106575]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 12
+text = "Video Settings"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="Panel/VBoxContainer/VideoMenu" unique_id=1114804473]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="ResolutionLabel" type="Label" parent="Panel/VBoxContainer/VideoMenu" unique_id=734039958]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 11
+text = "Resolution:"
+
+[node name="ResolutionOption" type="OptionButton" parent="Panel/VBoxContainer/VideoMenu" unique_id=1345013157]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 11
+selected = 0
+item_count = 4
+popup/item_0/text = "320x180"
+popup/item_0/id = 0
+popup/item_1/text = "640x360"
+popup/item_1/id = 1
+popup/item_2/text = "1280x720"
+popup/item_2/id = 2
+popup/item_3/text = "1920x1080"
+popup/item_3/id = 3
+
+[node name="Spacer2" type="Control" parent="Panel/VBoxContainer/VideoMenu" unique_id=104503536]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="FullscreenContainer" type="HBoxContainer" parent="Panel/VBoxContainer/VideoMenu" unique_id=2049554359]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="FullscreenLabel" type="Label" parent="Panel/VBoxContainer/VideoMenu/FullscreenContainer" unique_id=1915510305]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 11
+text = "Fullscreen:"
+
+[node name="FullscreenToggle" type="CheckButton" parent="Panel/VBoxContainer/VideoMenu/FullscreenContainer" unique_id=1806058170]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+
+[node name="Spacer3" type="Control" parent="Panel/VBoxContainer/VideoMenu" unique_id=1116523323]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+
+[node name="BackButton2" type="Button" parent="Panel/VBoxContainer/VideoMenu" unique_id=1817749650]
+custom_minimum_size = Vector2(206, 20)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxTexture_0bnpd")
+theme_override_styles/hover = SubResource("ButtonStyleHover")
+text = "Back"
+
+[node name="AudioMenu" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=22810044]
+custom_minimum_size = Vector2(206, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="AudioLabel" type="Label" parent="Panel/VBoxContainer/AudioMenu" unique_id=1255663427]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 12
+text = "Audio Settings"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="Panel/VBoxContainer/AudioMenu" unique_id=411788109]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="VolumeLabel" type="Label" parent="Panel/VBoxContainer/AudioMenu" unique_id=420749631]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 11
+text = "Master Volume:"
+
+[node name="VolumeSlider" type="HSlider" parent="Panel/VBoxContainer/AudioMenu" unique_id=1731203839]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_8uki6")
+value = 75.0
+tick_count = 4
+ticks_on_borders = true
+
+[node name="VolumeValue" type="Label" parent="Panel/VBoxContainer/AudioMenu" unique_id=1657059080]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 11
+text = "75%"
+horizontal_alignment = 1
+
+[node name="MuteContainer" type="HBoxContainer" parent="Panel/VBoxContainer/AudioMenu" unique_id=1482501355]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="MuteLabel" type="Label" parent="Panel/VBoxContainer/AudioMenu/MuteContainer" unique_id=657574425]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 11
+text = "Mute:"
+
+[node name="MuteToggle" type="CheckButton" parent="Panel/VBoxContainer/AudioMenu/MuteContainer" unique_id=427644341]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+
+[node name="Spacer3" type="Control" parent="Panel/VBoxContainer/AudioMenu" unique_id=1990794458]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+
+[node name="BackButton3" type="Button" parent="Panel/VBoxContainer/AudioMenu" unique_id=391342157]
+custom_minimum_size = Vector2(206, 20)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_8uki6")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxTexture_0bnpd")
+theme_override_styles/hover = SubResource("ButtonStyleHover")
+text = "Back"
+
+[connection signal="pressed" from="Panel/VBoxContainer/MainButtons/ResumeButton" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/MainButtons/SettingsButton" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/MainButtons/QuitButton" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/SettingsMenu/VideoButton" to="." method="_on_video_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/SettingsMenu/AudioButton" to="." method="_on_audio_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/SettingsMenu/BackButton" to="." method="_on_back_pressed"]
+[connection signal="item_selected" from="Panel/VBoxContainer/VideoMenu/ResolutionOption" to="." method="_on_resolutions_item_selected"]
+[connection signal="toggled" from="Panel/VBoxContainer/VideoMenu/FullscreenContainer/FullscreenToggle" to="." method="_on_fullscreen_toggled"]
+[connection signal="pressed" from="Panel/VBoxContainer/VideoMenu/BackButton2" to="." method="_on_back_to_settings_pressed"]
+[connection signal="value_changed" from="Panel/VBoxContainer/AudioMenu/VolumeSlider" to="." method="_on_volume_value_changed"]
+[connection signal="toggled" from="Panel/VBoxContainer/AudioMenu/MuteContainer/MuteToggle" to="." method="_on_mute_toggled"]
+[connection signal="pressed" from="Panel/VBoxContainer/AudioMenu/BackButton3" to="." method="_on_back_to_settings_pressed"]
