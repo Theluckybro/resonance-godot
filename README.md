@@ -1,101 +1,74 @@
 # Resonance
 
-2D top-down action roguelite in Godot where players absorb and use the abilities of defeated monsters.
+Resonance is a 2D top-down action roguelite built with Godot, featuring a unique system where players absorb monster abilities (Vestiges) and equip them as active skills.
 
-## Overview
+## Project Status
 
-Resonance is an arena-based action roguelite built around a modular Vestige system. Players fight through compact combat rooms, collect Vestiges dropped by defeated enemies, and equip those Vestiges as active skills or dash modifiers to adapt their build during each run.
+**In Development (Early Prototype) – snapshot March 2026**
 
-## Core Pillars
+This project is actively developed. Core combat is already playable, but content, balancing, UI, and polish are still in progress.
 
-- Fast adaptation through changing Vestige loadouts
-- Tight and readable top-down combat
-- Room-based progression with replayable runs
-- Realistic production scope for an MVP
+## Gameplay Overview
 
-## Core Gameplay Loop
+Resonance is designed as an arena-based roguelite with a concise gameplay loop:
 
-1. Fight through waves of enemies in a closed arena.
+1. Battle waves of enemies in a closed arena.
 2. Collect Vestige orbs dropped by defeated monsters.
-3. Equip Vestiges into 2 active skill slots and 1 dash slot.
-4. Move to the next room with stronger enemy combinations.
-5. Repeat until the run ends in victory or defeat.
+3. Equip Vestiges into 3 active skill slots and 1 dash slot.
+4. Progress to the next room with increasing threats.
+5. Repeat until the run ends (victory/defeat).
+
+## Design Pillars
+
+- Fast adaptation through dynamic Vestige loadouts.
+- Responsive, readable top-down combat.
+- Room-based progression for replayability.
+- Realistic production scope for MVP delivery.
 
 ## MVP Scope
 
-- 1 playable character
-- 3 enemy archetypes
-- 1 dungeon biome
-- 8-12 room variations
-- 6-8 total Vestige abilities
-- 1 complete run loop with clear win/lose conditions
+- 1 playable character.
+- 3 core enemy roles for the initial prototype.
+- 1 dungeon biome.
+- 8–12 room variations.
+- 6–8 Vestige abilities (active + dash).
+- 1 complete run loop with clear win/lose conditions.
 
 ## Tech Stack
 
 - Engine: Godot 4.x
 - Genre: 2D Top-Down Action RPG / Roguelite
-- Platform: PC (Windows, Linux)
-- Visual Style: Pixel art
+- Target platforms: PC (Windows, Linux)
+- Visual style: Pixel art
 
-## Project Structure
+## Documentation
+
+- Main GDD: [docs/GDD_Resonance.md](docs/GDD_Resonance.md)
+- Asset production checklist: [docs/ASSET_CHECKLIST_MVP.md](docs/ASSET_CHECKLIST_MVP.md)
+- Technical setup (input & collision): [docs/TECH_SETUP_INPUT_COLLISION.md](docs/TECH_SETUP_INPUT_COLLISION.md)
+- Project portfolio draft: [docs/PORTFOLIO_RESONANCE.md](docs/PORTFOLIO_RESONANCE.md)
+
+## Current Progress
+
+- Core scenes available (Player, Enemy, Room).
+- Core combat implemented: movement, dash, basic attack, hit-damage flow.
+- Enemy archetype presets documented in [data/enemies/EnemyArchetypePresets.json](data/enemies/EnemyArchetypePresets.json).
+- Basic Vestige pickup integrated.
+- Production progress tracked in [docs/ASSET_CHECKLIST_MVP.md](docs/ASSET_CHECKLIST_MVP.md).
+
+## Folder Structure (Summary)
 
 ```text
 Resonance/
 |- assets/
-|  |- audio/
-|  |  |- music/
-|  |  `- sfx/
-|  |- fonts/
-|  |- sprites/
-|  |  |- enemies/
-|  |  |- effects/
-|  |  |- player/
-|  |  `- ui/
-|  `- tilesets/
 |- data/
-|  |- balance/
-|  |- vestiges/
-|  |- enemies/
-|  `- rooms/
 |- docs/
-|  `- GDD_Resonance.md
 |- scenes/
-|  |- core/
-|  |- enemies/
-|  |- player/
-|  |- rooms/
-|  `- ui/
 |- scripts/
-|  |- autoload/
-|  |- enemies/
-|  |- player/
-|  |- systems/
-|  |- ui/
-|  `- utils/
-|- tests/
-|- .gitignore
-|- GDD_Resonance.md
-`- README.md
+`- tests/
 ```
-
-## Documentation
-
-- Main design document: [GDD_Resonance.md](GDD_Resonance.md)
-- Reference copy: [docs/GDD_Resonance.md](docs/GDD_Resonance.md)
-- Production checklist: [docs/ASSET_CHECKLIST_MVP.md](docs/ASSET_CHECKLIST_MVP.md)
-
-## Status
-
-Early prototype in progress (snapshot: March 2026).
-
-- Core baseline sudah ada: scene Player, EnemyBase, dan Room combat awal.
-- Combat dasar aktif: move, dash, basic attack, dan serangan player sudah bisa damage enemy.
-- Preset statistik enemy MVP sudah terdokumentasi di [data/enemies/EnemyArchetypePresets.json](data/enemies/EnemyArchetypePresets.json).
-- Orb pickup Vestige dan scene pickup dasar sudah tersedia.
-- Detail progres produksi ada di [docs/ASSET_CHECKLIST_MVP.md](docs/ASSET_CHECKLIST_MVP.md).
-- Fokus berikutnya: UI HUD, audio, variasi room, dan data Vestige.
 
 ## Notes
 
-- Empty folders are kept with `.gitkeep` so they can be tracked by Git.
-- The repository is structured to support Godot-based development and future asset organization.
+- Empty folders are kept with `.gitkeep` for Git tracking.
+- The repository structure is designed for easy scaling and future feature iteration.

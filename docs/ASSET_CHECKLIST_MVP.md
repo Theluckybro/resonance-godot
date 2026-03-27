@@ -1,79 +1,83 @@
 # Asset Production Checklist
 
-Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
+This document serves as the initial production checklist for the Resonance MVP project.
 
-## Skala Prioritas
+> Project status: **In Development** (active prototype, content still expanding).
 
-- `P0` = wajib untuk prototype playable
-- `P1` = wajib untuk MVP yang layak diuji
-- `P2` = bagus untuk polish, bisa menyusul
+Use this document to track asset production progress, not as a final build quality indicator.
 
-## Checklist Asset Produksi
+## Priority Scale
 
-### 1. Visual Character dan Combat
+- `P0` = required for playable prototype
+- `P1` = required for a testable MVP
+- `P2` = nice for polish, can follow later
 
-- [x] Finalisasi ukuran sprite player dan grid pixel art [P0]
-- [x] Buat sprite sheet player `idle` [P0]
-- [x] Buat sprite sheet player `run` [P0]
-- [x] Buat sprite sheet player `basic_attack` [P0]
-- [x] Buat sprite sheet player `dash` [P0]
-- [x] Buat sprite sheet player `hit` [P0]
-- [x] Buat sprite sheet player `death` [P0]
-- [x] Buat efek tebasan pedang [P0]
-- [x] Buat efek dash trail dasar [P0]
-- [x] Buat efek hit spark umum [P0]
-- [ ] Buat efek damage flash untuk player dan enemy [P1]
+## Asset Production Checklist
 
-### 2. Visual Enemy
+### 1. Character and Combat Visuals
 
-- [x] Desain enemy role Duelist [P0]
-- [x] Buat animasi enemy role Duelist `idle` [P0]
-- [x] Buat animasi enemy role Duelist `move` [P0]
-- [x] Buat animasi enemy role Duelist `attack` [P0]
-- [x] Buat animasi enemy role Duelist `hit` [P0]
-- [x] Buat animasi enemy role Duelist `death` [P0]
-- [x] Desain enemy role Bruiser [P1]
-- [x] Buat animasi enemy role Bruiser `idle` [P1]
-- [x] Buat animasi enemy role Bruiser `move` [P1]
-- [x] Buat animasi enemy role Bruiser `attack` [P1]
-- [x] Buat animasi enemy role Bruiser `hit` [P1]
-- [x] Buat animasi enemy role Bruiser `death` [P1]
-- [x] Desain enemy role Skirmisher [P0]
-- [x] Buat animasi enemy role Skirmisher `idle` [P0]
-- [x] Buat animasi enemy role Skirmisher `move` [P0]
-- [x] Buat animasi enemy role Skirmisher `attack` [P0]
-- [x] Buat animasi enemy role Skirmisher `hit` [P0]
-- [x] Buat animasi enemy role Skirmisher `death` [P0]
-- [x] Desain enemy role Artillery [P0]
-- [x] Buat animasi enemy role Artillery `idle` [P0]
-- [x] Buat animasi enemy role Artillery `move` [P0]
-- [x] Buat animasi enemy role Artillery `attack` [P0]
-- [x] Buat animasi enemy role Artillery `hit` [P0]
-- [x] Buat animasi enemy role Artillery `death` [P0]
-- [x] Buat sprite proyektil enemy role Artillery [P0]
-- [x] Desain enemy role Controller [P1]
-- [x] Buat animasi enemy role Controller `idle` [P1]
-- [x] Buat animasi enemy role Controller `move` [P1]
-- [x] Buat animasi enemy role Controller `attack` [P1]
-- [x] Buat animasi enemy role Controller `hit` [P1]
-- [x] Buat animasi enemy role Controller `death` [P1]
-- [ ] Buat VFX area control untuk role Controller [P1]
+- [x] Finalize player sprite size and pixel art grid [P0]
+- [x] Create player sprite sheet `idle` [P0]
+- [x] Create player sprite sheet `run` [P0]
+- [x] Create player sprite sheet `basic_attack` [P0]
+- [x] Create player sprite sheet `dash` [P0]
+- [x] Create player sprite sheet `hit` [P0]
+- [x] Create player sprite sheet `death` [P0]
+- [x] Create sword slash effect [P0]
+- [x] Create basic dash trail effect [P0]
+- [x] Create generic hit spark effect [P0]
+- [ ] Create damage flash effect for player and enemy [P1]
 
-### 3. Visual Vestige dan Ability
+### 2. Enemy Visuals
 
-- [ ] Tentukan daftar 6-8 Vestige MVP [P1]
-- [ ] Buat ikon untuk semua Vestige MVP [P1]
-- [x] Buat sprite orb pickup Vestige [P0]
-- [ ] Buat efek absorb Vestige [P0]
-- [ ] Buat efek cast untuk Vestige aktif tipe melee [P1]
-- [ ] Buat efek cast untuk Vestige aktif tipe projectile [P1]
-- [ ] Buat efek dash Vestige tipe blink atau phase [P1]
-- [ ] Buat efek dash Vestige tipe fire trail [P1]
-- [ ] Buat indikator cooldown di HUD [P0]
+- [x] Design Duelist enemy role [P0]
+- [x] Create Duelist enemy animations `idle` [P0]
+- [x] Create Duelist enemy animations `move` [P0]
+- [x] Create Duelist enemy animations `attack` [P0]
+- [x] Create Duelist enemy animations `hit` [P0]
+- [x] Create Duelist enemy animations `death` [P0]
+- [x] Design Bruiser enemy role [P1]
+- [x] Create Bruiser enemy animations `idle` [P1]
+- [x] Create Bruiser enemy animations `move` [P1]
+- [x] Create Bruiser enemy animations `attack` [P1]
+- [x] Create Bruiser enemy animations `hit` [P1]
+- [x] Create Bruiser enemy animations `death` [P1]
+- [x] Design Skirmisher enemy role [P0]
+- [x] Create Skirmisher enemy animations `idle` [P0]
+- [x] Create Skirmisher enemy animations `move` [P0]
+- [x] Create Skirmisher enemy animations `attack` [P0]
+- [x] Create Skirmisher enemy animations `hit` [P0]
+- [x] Create Skirmisher enemy animations `death` [P0]
+- [x] Design Artillery enemy role [P0]
+- [x] Create Artillery enemy animations `idle` [P0]
+- [x] Create Artillery enemy animations `move` [P0]
+- [x] Create Artillery enemy animations `attack` [P0]
+- [x] Create Artillery enemy animations `hit` [P0]
+- [x] Create Artillery enemy animations `death` [P0]
+- [x] Create Artillery enemy projectile sprite [P0]
+- [x] Design Controller enemy role [P1]
+- [x] Create Controller enemy animations `idle` [P1]
+- [x] Create Controller enemy animations `move` [P1]
+- [x] Create Controller enemy animations `attack` [P1]
+- [x] Create Controller enemy animations `hit` [P1]
+- [x] Create Controller enemy animations `death` [P1]
+- [ ] Create area control VFX for Controller role [P1]
 
-### 4. Environment dan Room
+### 3. Vestige and Ability Visuals
 
-- [ ] Finalisasi tema biome dungeon pertama [P0]
+- [ ] Define list of 6–8 MVP Vestiges [P1]
+- [ ] Create icons for all MVP Vestiges [P1]
+- [x] Create Vestige orb pickup sprite [P0]
+- [ ] Create Vestige absorb effect [P0]
+- [ ] Create cast effect for melee-type active Vestige [P1]
+- [ ] Create cast effect for projectile-type active Vestige [P1]
+- [ ] Create dash effect for blink/phase Vestige [P1]
+- [ ] Create dash effect for fire trail Vestige [P1]
+- [ ] Create cooldown indicator in HUD [P0]
+
+### 4. Environment and Room
+
+- [ ] Finalize first dungeon biome theme [P0]
 - [x] Buat tileset lantai utama [P0]
 - [x] Buat tileset dinding utama [P0]
 - [x] Buat tileset sudut dan transisi dinding [P0]

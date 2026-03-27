@@ -18,6 +18,7 @@ const ROLE_CONTROLLER: String = "controller"
 const SFX_WAVE_START: AudioStream = preload("res://assets/audio/sfx/WaveStart.mp3")
 const SFX_ROOM_CLEAR: AudioStream = preload("res://assets/audio/sfx/RoomClear.mp3")
 const BGM_INGAME: AudioStream = preload("res://assets/audio/music/BGM_不条理モード.mp3")
+const WAVE_SEQUENCE: Array[String] = ["early", "mid", "pressure"]
 
 const ROLE_TO_SPECIES := {
 	ROLE_DUELIST: SPECIES_GOBLIN,
@@ -45,6 +46,7 @@ const SPECIES_TO_DEFAULT_ROLE := {
 @export var y_sort_container_path: NodePath = ^"YSortWorld"
 @export var enemies_per_wave: int = 3
 @export_enum("early", "mid", "pressure") var wave_profile: String = "early"
+@export var wave_transition_delay_seconds: float = 2.0
 @export var auto_spawn_on_ready: bool = true
 @export var debug_force_goblin_drop_100_in_this_room: bool = false
 @export var debug_force_goblin_drop_debug_build_only: bool = true
@@ -54,11 +56,14 @@ const SPECIES_TO_DEFAULT_ROLE := {
 var spawned_enemies: Array[Node] = []
 var is_room_cleared: bool = false
 var current_wave: int = 0
+var current_wave_profile_index: int = 0
+var is_waiting_next_wave: bool = false
 var sfx_player: AudioStreamPlayer
 var bgm_player: AudioStreamPlayer
 
 
 func _ready() -> void:
+	_initialize_wave_profile_index()
 	_ensure_sfx_player()
 	_ensure_bgm_player()
 	_play_bgm(BGM_INGAME)
@@ -75,6 +80,13 @@ func _process(_delta: float) -> void:
 	_prune_dead_enemies()
 	if not spawned_enemies.is_empty():
 		return
+	if is_waiting_next_wave:
+		return
+
+	if _has_next_wave_profile():
+		is_waiting_next_wave = true
+		_start_next_wave_after_delay()
+		return
 
 	is_room_cleared = true
 	room_cleared.emit()
@@ -89,6 +101,7 @@ func spawn_wave() -> void:
 
 	current_wave += 1
 	is_room_cleared = false
+	is_waiting_next_wave = false
 	spawned_enemies.clear()
 	wave_started.emit(current_wave)
 	_play_sfx(SFX_WAVE_START)
@@ -133,6 +146,34 @@ func spawn_wave() -> void:
 			enemy_node.global_position = spawn_points[i % spawn_points.size()]
 		entity_parent.add_child(enemy_instance)
 		spawned_enemies.append(enemy_instance)
+
+
+func _start_next_wave_after_delay() -> void:
+	await get_tree().create_timer(max(wave_transition_delay_seconds, 0.0)).timeout
+	if is_room_cleared:
+		is_waiting_next_wave = false
+		return
+	_advance_to_next_wave_profile()
+	spawn_wave()
+
+
+func _initialize_wave_profile_index() -> void:
+	var start_index: int = WAVE_SEQUENCE.find(wave_profile)
+	if start_index == -1:
+		start_index = 0
+	current_wave_profile_index = start_index
+	wave_profile = WAVE_SEQUENCE[current_wave_profile_index]
+
+
+func _has_next_wave_profile() -> bool:
+	return current_wave_profile_index < WAVE_SEQUENCE.size() - 1
+
+
+func _advance_to_next_wave_profile() -> void:
+	if not _has_next_wave_profile():
+		return
+	current_wave_profile_index += 1
+	wave_profile = WAVE_SEQUENCE[current_wave_profile_index]
 
 
 func _ensure_sfx_player() -> void:
@@ -224,9 +265,9 @@ func _template_for_profile() -> Array[String]:
 		"early":
 			return [ROLE_DUELIST, ROLE_DUELIST, ROLE_BRUISER]
 		"mid":
-			return [ROLE_DUELIST, ROLE_ARTILLERY, ROLE_SKIRMISHER]
+			return [ROLE_DUELIST, ROLE_BRUISER, ROLE_ARTILLERY]
 		"pressure":
-			return [ROLE_BRUISER, ROLE_CONTROLLER, ROLE_SKIRMISHER]
+			return [ROLE_BRUISER, ROLE_BRUISER, ROLE_ARTILLERY]
 	return [ROLE_DUELIST, ROLE_BRUISER, ROLE_ARTILLERY]
 
 

@@ -1,78 +1,83 @@
+
 # Game Design Document (GDD)
 ## Project: Resonance
 
-## 1. Ringkasan Eksekutif
+> Status: **In Development** (Early Prototype, March 2026)
+
+This document serves as the main design reference for ongoing development. Some implementation details may change as the prototype iterates and playtest feedback is incorporated.
+
+## 1. Executive Summary
 - Genre: 2D Top-Down Action RPG Roguelite (arena-based)
-- Visual Style: Pixel art (proporsi 16-bit klasik atau chibi)
+- Visual Style: Pixel art (classic 16-bit or chibi proportions)
 - Platform: PC (Windows, Linux)
 - Engine: Godot Engine 4.x
-- Logline: Bertahan hidup di arena labirin yang terus berubah dengan cara menyerap dan menggunakan kemampuan monster yang baru saja dikalahkan.
+- Logline: Survive in a shifting labyrinthine arena by absorbing and wielding the abilities of defeated monsters.
 
-### Pilar Desain
-1. Adaptasi cepat: pemain harus sering mengganti komposisi Vestige sesuai kondisi arena.
-2. Combat ringkas dan responsif: kontrol sederhana, keputusan taktis tinggi.
-3. Scope realistis: fokus pada konten sedikit tetapi replayable.
+### Design Pillars
+1. Fast adaptation: players must frequently change Vestige loadouts to match arena conditions.
+2. Concise, responsive combat: simple controls, high tactical decision-making.
+3. Realistic scope: focus on a small amount of content but high replayability.
 
 ## 2. Core Gameplay Loop
-Siklus utama permainan:
-1. Bertarung: menghadapi wave musuh dalam arena tertutup.
-2. Absorpsi: mengambil orb Vestige/Jiwa yang dijatuhkan musuh (drop rate berbasis RNG).
-3. Adaptasi: memasang Vestige ke slot skill (maks. 2 slot aktif + 1 slot dash).
-4. Progresi: berpindah ke arena berikutnya dengan tingkat kesulitan meningkat.
-5. Ulangi: kombinasi musuh, layout, dan pilihan Vestige memaksa strategi baru tiap run.
+Main gameplay cycle:
+1. Combat: face waves of enemies in a closed arena.
+2. Absorb: collect Vestige/Soul orbs dropped by enemies (RNG-based drop rate).
+3. Adapt: equip Vestiges into skill slots (max. 2 active + 1 dash slot).
+4. Progress: move to the next arena with increased difficulty.
+5. Repeat: enemy combinations, layouts, and Vestige choices force new strategies each run.
 
-## 3. Mekanik Utama: Sistem Vestige
-Karakter utama memiliki kit dasar minimal:
-- Serangan dasar: tebasan/tusukan pedang
-- Mobilitas dasar: dash
+## 3. Core Mechanic: Vestige System
+The main character has a minimal base kit:
+- Basic attack: sword slash/thrust
+- Basic mobility: dash
 
-Kekuatan utama datang dari Vestige monster yang diserap.
+The main power comes from absorbed monster Vestiges.
 
-### 3.1 Vestige Aktif (Serangan)
-- Saat diaktifkan, sprite monster muncul sesaat, menjalankan animasi serangan, memberi damage, lalu menghilang.
-- Contoh:
-  - Vestige Slime: loncatan AoE di area kecil
-  - Vestige Archer Goblin: tembakan proyektil lurus
+### 3.1 Active Vestiges (Attack)
+- When activated, the monster sprite appears briefly, performs an attack animation, deals damage, then disappears.
+- Examples:
+  - Slime Vestige: small AoE leap attack
+  - Goblin Archer Vestige: straight projectile shot
 
-### 3.2 Vestige Utilitas (Modifikasi Dash)
-- Menggantikan dash standar pemain.
-- Contoh:
-  - Vestige Bat: dash dapat menembus rintangan tipis
-  - Vestige Fire Elemental: dash meninggalkan jejak api yang melukai musuh
+### 3.2 Utility Vestiges (Dash Modifiers)
+- Replace the player's standard dash.
+- Examples:
+  - Bat Vestige: dash can phase through thin obstacles
+  - Fire Elemental Vestige: dash leaves a damaging fire trail
 
-### 3.3 Aturan Slot dan Batasan (MVP)
-- 2 slot Vestige Aktif dan 1 slot Vestige Dash.
-- Satu Vestige hanya dapat dipasang pada satu slot.
-- Ganti Vestige hanya bisa dilakukan di momen aman (antar-room) untuk menjaga ritme.
-- Tiap Vestige memiliki cooldown agar tidak ada spam ability tunggal.
+### 3.3 Slot Rules and Limitations (MVP)
+- 2 Active Vestige slots and 1 Dash Vestige slot.
+- A Vestige can only be equipped in one slot at a time.
+- Vestige swapping is only allowed during safe moments (between rooms) to maintain game rhythm.
+- Each Vestige has a cooldown to prevent single-ability spamming.
 
-## 4. Level Design dan Skala Arena
-Untuk mencegah scope creep:
-- Struktur: room-based, bukan open world.
-- Referensi pengalaman: Hades / Enter the Gungeon.
-- Ukuran arena: 1.0 hingga 1.5 viewport.
-- Kamera: minim scrolling agar pemain fokus pada action readability.
-- Variasi: 1-2 tileset awal (mis. Dungeon Batu, Dungeon Lumut) dengan layout rintangan/jebakan acak.
+## 4. Level Design and Arena Scale
+To prevent scope creep:
+- Structure: room-based, not open world.
+- Experience reference: Hades / Enter the Gungeon.
+- Arena size: 1.0 to 1.5 viewports.
+- Camera: minimal scrolling to keep action readable.
+- Variation: 1–2 initial tilesets (e.g., Stone Dungeon, Moss Dungeon) with randomized obstacle/trap layouts.
 
-### Target Variasi Room (MVP)
-- 8-12 pola room total
-- 3 tipe fungsi room:
-  - Combat room (utama)
-  - Transition room (napas singkat)
-  - Reward room (pilihan Vestige/upgrade sederhana)
+### Room Variation Targets (MVP)
+- 8–12 total room patterns
+- 3 room function types:
+  - Combat room (main)
+  - Transition room (short break)
+  - Reward room (simple Vestige/upgrade choice)
 
-## 5. AI dan Musuh
-Arena tertutup membuat navigasi musuh menjadi faktor penting.
+## 5. AI and Enemies
+Closed arenas make enemy navigation a key factor.
 
 ### 5.1 Pathfinding
-- Gunakan A* (A-Star) dengan NavMesh atau grid-based movement bawaan Godot.
-- Tujuan: musuh melee tetap bisa mengejar pemain tanpa tersangkut obstacle.
+- Use A* (A-Star) with NavMesh or Godot's built-in grid-based movement.
+- Goal: melee enemies can always reach the player without getting stuck on obstacles.
 
-### 5.2 State Machine Musuh
-State dasar:
-1. Idle/Patrol: gerak acak atau menunggu.
-2. Chase: mengejar pemain lewat rute valid.
-3. Attack: berhenti, animasi serang, lalu kembali evaluasi state.
+### 5.2 Enemy State Machine
+Basic states:
+1. Idle/Patrol: random movement or waiting.
+2. Chase: pursue the player via valid routes.
+3. Attack: stop, perform attack animation, then re-evaluate state.
 
 ### 5.3 Komposisi Musuh Fase 1
 - 1 Duelist (HP rendah-menengah, pressure tinggi, gap-close cepat)

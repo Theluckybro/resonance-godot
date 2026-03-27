@@ -5,7 +5,7 @@
 
 [node name="RoomCombat01" type="Node2D" unique_id=1376762998]
 script = ExtResource("1_wn31p")
-wave_profile = "mid"
+wave_profile = "early"
 debug_force_goblin_drop_100_in_this_room = true
 debug_force_orc_drop_100_in_this_room = true
 

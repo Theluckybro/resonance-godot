@@ -16,9 +16,9 @@ var _is_paused: bool = false
 func _ready() -> void:
 	_configure_render_layers()
 	_build_world_bounds()
+	_setup_wave_notifications()
 	super._ready()
 	_setup_level_camera()
-	_setup_wave_notifications()
 	_setup_pause_system()
 
 
@@ -166,6 +166,10 @@ func _setup_wave_notifications() -> void:
 	)
 	
 	print("Level01: Wave notification signals connected successfully")
+
+	# If wave 1 started before this connection (e.g. custom init order), show it once.
+	if current_wave > 0:
+		wave_notification.show_notification("Wave %d" % current_wave)
 
 
 func _setup_pause_system() -> void:
