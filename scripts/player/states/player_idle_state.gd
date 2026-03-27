@@ -20,8 +20,23 @@ func physics_update(delta: float) -> void:
 
 	player.apply_idle_motion(delta)
 
-	if player.is_vestige_primary_pressed() and player.can_use_goblin_vestige():
-		player.try_use_goblin_vestige()
+	if player.is_vestige_inventory_open():
+		return
+
+	if player.is_vestige_primary_pressed() and player.can_use_vestige_slot(0):
+		player.try_use_vestige_slot(0)
+		return
+
+	if player.is_vestige_secondary_pressed() and player.can_use_vestige_slot(1):
+		player.try_use_vestige_slot(1)
+		return
+
+	if player.is_vestige_tertiary_pressed() and player.can_use_vestige_slot(2):
+		player.try_use_vestige_slot(2)
+		return
+
+	if player.is_vestige_quaternary_pressed() and player.can_use_vestige_slot(3):
+		player.try_use_vestige_slot(3)
 		return
 
 	if player.is_attack_pressed() and player.can_start_attack():

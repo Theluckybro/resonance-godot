@@ -885,15 +885,14 @@ func play_attack_sfx() -> void:
 
 
 func _ensure_sfx_player() -> void:
-	if sfx_player != null:
-		return
+	if sfx_player == null:
+		var created_player := AudioStreamPlayer2D.new()
+		created_player.name = "SfxPlayer"
+		created_player.max_polyphony = 2
+		add_child(created_player)
+		sfx_player = created_player
 
-	var created_player := AudioStreamPlayer2D.new()
-	created_player.name = "SfxPlayer"
-	created_player.max_polyphony = 2
-	created_player.bus = &"Master"
-	add_child(created_player)
-	sfx_player = created_player
+	sfx_player.bus = &"SFX" if AudioServer.get_bus_index("SFX") != -1 else &"Master"
 
 
 func _resolve_attack_sfx() -> AudioStream:

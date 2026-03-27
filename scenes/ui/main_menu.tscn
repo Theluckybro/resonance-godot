@@ -1,0 +1,292 @@
+[gd_scene format=3 uid="uid://b8k6pjt5k2r5u"]
+
+[ext_resource type="Script" uid="uid://bqj5hbp7carsq" path="res://scripts/ui/main_menu.gd" id="1_main_menu"]
+[ext_resource type="Theme" uid="uid://c817yc0aoicsj" path="res://scenes/ui/pause_menu_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" uid="uid://bumahnbtl6cv" path="res://assets/Sprites/Ui/PauseMenu.png" id="3_panel_tex"]
+[ext_resource type="FontFile" uid="uid://b5oy130pfvvpa" path="res://assets/fonts/alagard.ttf" id="4_m1kxf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+texture = ExtResource("3_panel_tex")
+
+[node name="MainMenu" type="Node" unique_id=2116958209]
+
+[node name="MenuUI" type="CanvasLayer" parent="." unique_id=1379564611]
+layer = 100
+script = ExtResource("1_main_menu")
+
+[node name="ColorRect" type="ColorRect" parent="MenuUI" unique_id=319953129]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.4)
+
+[node name="Panel" type="Panel" parent="MenuUI" unique_id=985807900]
+custom_minimum_size = Vector2(230, 160)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = -80.0
+offset_right = 115.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="ContentScroll" type="ScrollContainer" parent="MenuUI/Panel" unique_id=1551191073]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -9.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuUI/Panel/ContentScroll" unique_id=2003407734]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Title" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer" unique_id=1189090349]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_m1kxf")
+theme_override_font_sizes/font_size = 34
+text = "RESONANCE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainButtons" type="VBoxContainer" parent="MenuUI/Panel/ContentScroll/VBoxContainer" unique_id=390701693]
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Spacer1" type="Control" parent="MenuUI/Panel/ContentScroll/VBoxContainer/MainButtons" unique_id=1906420244]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/MainButtons" unique_id=1764406780]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Play"
+
+[node name="SettingsButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/MainButtons" unique_id=1810574489]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/MainButtons" unique_id=1586034979]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Quit"
+
+[node name="DifficultyPanel" type="VBoxContainer" parent="MenuUI/Panel/ContentScroll/VBoxContainer" unique_id=1792306419]
+visible = false
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="DifficultyTitle" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel" unique_id=1187255240]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Select Difficulty"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel" unique_id=946958003]
+layout_mode = 2
+
+[node name="EasyButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel" unique_id=1173342485]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Easy"
+
+[node name="NormalButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel" unique_id=25538814]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Normal"
+
+[node name="HardButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel" unique_id=142820812]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Hard"
+
+[node name="BackButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel" unique_id=663714982]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Back"
+
+[node name="SettingsMenu" type="VBoxContainer" parent="MenuUI/Panel/ContentScroll/VBoxContainer" unique_id=1659405267]
+visible = false
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="SettingsTitle" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/SettingsMenu" unique_id=1194055217]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="MenuUI/Panel/ContentScroll/VBoxContainer/SettingsMenu" unique_id=1687821586]
+layout_mode = 2
+
+[node name="VideoButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/SettingsMenu" unique_id=1670447630]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Video"
+
+[node name="AudioButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/SettingsMenu" unique_id=38126461]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Audio"
+
+[node name="BackButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/SettingsMenu" unique_id=1897461204]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Back"
+
+[node name="VideoMenu" type="VBoxContainer" parent="MenuUI/Panel/ContentScroll/VBoxContainer" unique_id=1200565234]
+visible = false
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="VideoTitle" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu" unique_id=63416370]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Video Settings"
+horizontal_alignment = 1
+
+[node name="ResolutionOption" type="OptionButton" parent="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu" unique_id=1896039315]
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "320x180"
+popup/item_0/id = 0
+popup/item_1/text = "640x360"
+popup/item_1/id = 1
+popup/item_2/text = "1280x720"
+popup/item_2/id = 2
+popup/item_3/text = "1920x1080"
+popup/item_3/id = 3
+
+[node name="FullscreenContainer" type="HBoxContainer" parent="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu" unique_id=1829145034]
+layout_mode = 2
+
+[node name="FullscreenLabel" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu/FullscreenContainer" unique_id=1237958413]
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="FullscreenToggle" type="CheckButton" parent="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu/FullscreenContainer" unique_id=1941769718]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu" unique_id=224410392]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Back"
+
+[node name="AudioMenu" type="VBoxContainer" parent="MenuUI/Panel/ContentScroll/VBoxContainer" unique_id=426656435]
+visible = false
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="AudioTitle" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=1881251766]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Audio Settings"
+horizontal_alignment = 1
+
+[node name="VolumeLabel" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=526845256]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Master Volume:"
+
+[node name="VolumeContainer" type="HBoxContainer" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=181907853]
+layout_mode = 2
+
+[node name="VolumeSlider" type="HSlider" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/VolumeContainer" unique_id=719070980]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+
+[node name="VolumeValue" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/VolumeContainer" unique_id=917627810]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=899406198]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="SpacerBgm" type="Control" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=1740886993]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+
+[node name="BgmLabel" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=774273660]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "BGM Volume:"
+
+[node name="BgmSlider" type="HSlider" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=1744893059]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+value = 75.0
+tick_count = 4
+ticks_on_borders = true
+
+[node name="BgmValue" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=2119191471]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "75%"
+horizontal_alignment = 1
+
+[node name="SpacerSfx" type="Control" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=461797684]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+
+[node name="SfxLabel" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=670695442]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "SFX Volume:"
+
+[node name="SfxSlider" type="HSlider" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=1453437404]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+value = 75.0
+tick_count = 4
+ticks_on_borders = true
+
+[node name="SfxValue" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=1148253460]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "75%"
+horizontal_alignment = 1
+
+[node name="MuteContainer" type="HBoxContainer" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=1438678033]
+layout_mode = 2
+
+[node name="MuteLabel" type="Label" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/MuteContainer" unique_id=320893492]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Mute All:"
+
+[node name="MuteToggle" type="CheckButton" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/MuteContainer" unique_id=1603490101]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu" unique_id=1860765596]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Back"

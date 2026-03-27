@@ -17,6 +17,7 @@ const ROLE_ARTILLERY: String = "artillery"
 const ROLE_CONTROLLER: String = "controller"
 const SFX_WAVE_START: AudioStream = preload("res://assets/audio/sfx/WaveStart.mp3")
 const SFX_ROOM_CLEAR: AudioStream = preload("res://assets/audio/sfx/RoomClear.mp3")
+const BGM_INGAME: AudioStream = preload("res://assets/audio/music/BGM_不条理モード.mp3")
 
 const ROLE_TO_SPECIES := {
 	ROLE_DUELIST: SPECIES_GOBLIN,
@@ -54,10 +55,13 @@ var spawned_enemies: Array[Node] = []
 var is_room_cleared: bool = false
 var current_wave: int = 0
 var sfx_player: AudioStreamPlayer
+var bgm_player: AudioStreamPlayer
 
 
 func _ready() -> void:
 	_ensure_sfx_player()
+	_ensure_bgm_player()
+	_play_bgm(BGM_INGAME)
 	_ensure_player_exists()
 	_ensure_player_heart_hud()
 	if auto_spawn_on_ready:
@@ -132,13 +136,37 @@ func spawn_wave() -> void:
 
 
 func _ensure_sfx_player() -> void:
-	if sfx_player != null:
+	if sfx_player == null:
+		sfx_player = AudioStreamPlayer.new()
+		sfx_player.name = "SfxPlayer"
+		add_child(sfx_player)
+
+	sfx_player.bus = &"SFX" if AudioServer.get_bus_index("SFX") != -1 else &"Master"
+
+
+func _ensure_bgm_player() -> void:
+	if bgm_player == null:
+		bgm_player = AudioStreamPlayer.new()
+		bgm_player.name = "BgmPlayer"
+		add_child(bgm_player)
+
+	# Keep BGM audible while SceneTree is paused; pause effect is handled via bus attenuation.
+	bgm_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	bgm_player.stream_paused = false
+	bgm_player.bus = &"BGM" if AudioServer.get_bus_index("BGM") != -1 else &"Master"
+
+
+func _play_bgm(stream: AudioStream) -> void:
+	if stream == null:
+		return
+	if bgm_player == null:
+		return
+	if bgm_player.stream == stream and bgm_player.playing:
 		return
 
-	sfx_player = AudioStreamPlayer.new()
-	sfx_player.name = "SfxPlayer"
-	sfx_player.bus = &"Master"
-	add_child(sfx_player)
+	bgm_player.stream = stream
+	bgm_player.volume_db = 0.0
+	bgm_player.play()
 
 
 func _play_sfx(stream: AudioStream) -> void:

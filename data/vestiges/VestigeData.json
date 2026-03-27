@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "version": 1,
+    "notes": "Data vestige untuk panel inventory (nama, deskripsi, efek)"
+  },
+  "vestiges": {
+    "goblin": {
+      "name": "Goblin",
+      "description": "Rogue cepat yang mengejar target terdekat dan menyerang jarak dekat.",
+      "effect": "Skill aktif: Dash slash cepat ke arah target, cooldown singkat."
+    },
+    "orc": {
+      "name": "Orc",
+      "description": "Bruiser yang menghantam area kecil dengan serangan ground slam.",
+      "effect": "Skill aktif: Ground slam area kecil dengan damage tinggi."
+    },
+    "skeleton": {
+      "name": "Skeleton",
+      "description": "Ranger yang melempar proyektil tulang dari jarak aman.",
+      "effect": "Skill aktif: Menembakkan bone projectile lurus ke depan."
+    }
+  }
+}

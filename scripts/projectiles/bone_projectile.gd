@@ -115,7 +115,7 @@ func _play_impact_sfx() -> void:
 
 	var sfx := AudioStreamPlayer2D.new()
 	sfx.stream = SFX_PROJECTILE_IMPACT
-	sfx.bus = &"Master"
+	sfx.bus = &"SFX" if AudioServer.get_bus_index("SFX") != -1 else &"Master"
 	sfx.global_position = global_position
 	host.add_child(sfx)
 	sfx.play()

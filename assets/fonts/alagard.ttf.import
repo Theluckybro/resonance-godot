@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bi7sqq3wcoi55"
-path="res://.godot/imported/PixelFantasy.ttf-892ab8a3ae2cd0771f25a8c9d30ee847.fontdata"
+uid="uid://b5oy130pfvvpa"
+path="res://.godot/imported/alagard.ttf-384173aa1940560c638759aff37d300b.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/PixelFantasy.ttf"
-dest_files=["res://.godot/imported/PixelFantasy.ttf-892ab8a3ae2cd0771f25a8c9d30ee847.fontdata"]
+source_file="res://assets/fonts/alagard.ttf"
+dest_files=["res://.godot/imported/alagard.ttf-384173aa1940560c638759aff37d300b.fontdata"]
 
 [params]
 

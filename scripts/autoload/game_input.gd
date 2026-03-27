@@ -7,7 +7,11 @@ const MOVE_DOWN: StringName = &"move_down"
 
 const ACTION_ATTACK: StringName = &"action_attack"
 const ACTION_DASH: StringName = &"action_dash"
-const ACTION_VESTIGE_PRIMARY: StringName = &"action_vestige_primary"
+const ACTION_VESTIGE_Q: StringName = &"action_vestige_q"
+const ACTION_VESTIGE_E: StringName = &"action_vestige_e"
+const ACTION_VESTIGE_R: StringName = &"action_vestige_r"
+const ACTION_VESTIGE_SHIFT: StringName = &"action_vestige_shift"
+const ACTION_VESTIGE_INVENTORY: StringName = &"action_vestige_inventory"
 
 const UI_UP: StringName = &"ui_up"
 const UI_DOWN: StringName = &"ui_down"
@@ -27,7 +31,11 @@ const REQUIRED_ACTIONS: Array[StringName] = [
 	MOVE_DOWN,
 	ACTION_ATTACK,
 	ACTION_DASH,
-	ACTION_VESTIGE_PRIMARY,
+	ACTION_VESTIGE_Q,
+	ACTION_VESTIGE_E,
+	ACTION_VESTIGE_R,
+	ACTION_VESTIGE_SHIFT,
+	ACTION_VESTIGE_INVENTORY,
 	UI_UP,
 	UI_DOWN,
 	UI_LEFT,
@@ -52,8 +60,40 @@ func is_dash_pressed() -> bool:
 	return Input.is_action_just_pressed(ACTION_DASH)
 
 
+func is_vestige_q_pressed() -> bool:
+	return Input.is_action_just_pressed(ACTION_VESTIGE_Q)
+
+
+func is_vestige_e_pressed() -> bool:
+	return Input.is_action_just_pressed(ACTION_VESTIGE_E)
+
+
+func is_vestige_r_pressed() -> bool:
+	return Input.is_action_just_pressed(ACTION_VESTIGE_R)
+
+
+func is_vestige_shift_pressed() -> bool:
+	return Input.is_action_just_pressed(ACTION_VESTIGE_SHIFT)
+
+
 func is_vestige_primary_pressed() -> bool:
-	return Input.is_action_just_pressed(ACTION_VESTIGE_PRIMARY)
+	return is_vestige_q_pressed()
+
+
+func is_vestige_secondary_pressed() -> bool:
+	return is_vestige_e_pressed()
+
+
+func is_vestige_tertiary_pressed() -> bool:
+	return is_vestige_r_pressed()
+
+
+func is_vestige_quaternary_pressed() -> bool:
+	return is_vestige_shift_pressed()
+
+
+func is_vestige_inventory_pressed() -> bool:
+	return Input.is_action_just_pressed(ACTION_VESTIGE_INVENTORY)
 
 
 func is_pause_pressed() -> bool:

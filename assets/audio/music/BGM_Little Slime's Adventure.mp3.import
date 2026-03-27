@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c3tsb5mm84aoo"
+path="res://.godot/imported/BGM_Little Slime's Adventure.mp3-f50926453d0e4e49df5c5f307716747a.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/music/BGM_Little Slime's Adventure.mp3"
+dest_files=["res://.godot/imported/BGM_Little Slime's Adventure.mp3-f50926453d0e4e49df5c5f307716747a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

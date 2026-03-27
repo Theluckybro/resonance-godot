@@ -32,31 +32,31 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 - [x] Buat animasi enemy role Duelist `attack` [P0]
 - [x] Buat animasi enemy role Duelist `hit` [P0]
 - [x] Buat animasi enemy role Duelist `death` [P0]
-- [ ] Desain enemy role Bruiser [P1]
-- [ ] Buat animasi enemy role Bruiser `idle` [P1]
-- [ ] Buat animasi enemy role Bruiser `move` [P1]
-- [ ] Buat animasi enemy role Bruiser `attack` [P1]
-- [ ] Buat animasi enemy role Bruiser `hit` [P1]
-- [ ] Buat animasi enemy role Bruiser `death` [P1]
-- [ ] Desain enemy role Skirmisher [P0]
-- [ ] Buat animasi enemy role Skirmisher `idle` [P0]
-- [ ] Buat animasi enemy role Skirmisher `move` [P0]
-- [ ] Buat animasi enemy role Skirmisher `attack` [P0]
-- [ ] Buat animasi enemy role Skirmisher `hit` [P0]
-- [ ] Buat animasi enemy role Skirmisher `death` [P0]
-- [ ] Desain enemy role Artillery [P0]
-- [ ] Buat animasi enemy role Artillery `idle` [P0]
-- [ ] Buat animasi enemy role Artillery `move` [P0]
-- [ ] Buat animasi enemy role Artillery `attack` [P0]
-- [ ] Buat animasi enemy role Artillery `hit` [P0]
-- [ ] Buat animasi enemy role Artillery `death` [P0]
-- [ ] Buat sprite proyektil enemy role Artillery [P0]
-- [ ] Desain enemy role Controller [P1]
-- [ ] Buat animasi enemy role Controller `idle` [P1]
-- [ ] Buat animasi enemy role Controller `move` [P1]
-- [ ] Buat animasi enemy role Controller `attack` [P1]
-- [ ] Buat animasi enemy role Controller `hit` [P1]
-- [ ] Buat animasi enemy role Controller `death` [P1]
+- [x] Desain enemy role Bruiser [P1]
+- [x] Buat animasi enemy role Bruiser `idle` [P1]
+- [x] Buat animasi enemy role Bruiser `move` [P1]
+- [x] Buat animasi enemy role Bruiser `attack` [P1]
+- [x] Buat animasi enemy role Bruiser `hit` [P1]
+- [x] Buat animasi enemy role Bruiser `death` [P1]
+- [x] Desain enemy role Skirmisher [P0]
+- [x] Buat animasi enemy role Skirmisher `idle` [P0]
+- [x] Buat animasi enemy role Skirmisher `move` [P0]
+- [x] Buat animasi enemy role Skirmisher `attack` [P0]
+- [x] Buat animasi enemy role Skirmisher `hit` [P0]
+- [x] Buat animasi enemy role Skirmisher `death` [P0]
+- [x] Desain enemy role Artillery [P0]
+- [x] Buat animasi enemy role Artillery `idle` [P0]
+- [x] Buat animasi enemy role Artillery `move` [P0]
+- [x] Buat animasi enemy role Artillery `attack` [P0]
+- [x] Buat animasi enemy role Artillery `hit` [P0]
+- [x] Buat animasi enemy role Artillery `death` [P0]
+- [x] Buat sprite proyektil enemy role Artillery [P0]
+- [x] Desain enemy role Controller [P1]
+- [x] Buat animasi enemy role Controller `idle` [P1]
+- [x] Buat animasi enemy role Controller `move` [P1]
+- [x] Buat animasi enemy role Controller `attack` [P1]
+- [x] Buat animasi enemy role Controller `hit` [P1]
+- [x] Buat animasi enemy role Controller `death` [P1]
 - [ ] Buat VFX area control untuk role Controller [P1]
 
 ### 3. Visual Vestige dan Ability
@@ -74,9 +74,9 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 ### 4. Environment dan Room
 
 - [ ] Finalisasi tema biome dungeon pertama [P0]
-- [ ] Buat tileset lantai utama [P0]
-- [ ] Buat tileset dinding utama [P0]
-- [ ] Buat tileset sudut dan transisi dinding [P0]
+- [x] Buat tileset lantai utama [P0]
+- [x] Buat tileset dinding utama [P0]
+- [x] Buat tileset sudut dan transisi dinding [P0]
 - [ ] Buat tileset pintu masuk atau keluar room [P1]
 - [ ] Buat obstacle kecil [P1]
 - [ ] Buat obstacle besar [P1]
@@ -87,38 +87,38 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 
 ### 5. UI dan UX
 
-- [ ] Pilih font utama UI [P0]
-- [ ] Buat health bar player [P0]
+- [x] Pilih font utama UI [P0]
+- [x] Buat health bar player [P0]
 - [ ] Buat 2 slot Vestige aktif [P0]
 - [ ] Buat 1 slot Vestige dash [P0]
 - [ ] Buat overlay cooldown skill [P0]
 - [ ] Buat indikator room clear [P1]
-- [ ] Buat panel pause menu [P1]
+- [x] Buat panel pause menu [P1]
 - [ ] Buat panel game over [P1]
 - [ ] Buat panel victory atau end-of-run [P1]
-- [ ] Buat tombol UI dasar [P1]
+- [x] Buat tombol UI dasar [P1]
 
 ### 6. Audio
 
-- [ ] Pilih referensi style audio dan musik [P1]
-- [ ] Siapkan 1 loop musik combat [P1]
-- [ ] Siapkan 1 loop musik menu [P2]
-- [ ] Siapkan 1 stinger reward atau room clear [P2]
-- [ ] Siapkan SFX basic attack player [P0]
-- [ ] Siapkan SFX dash player [P0]
-- [ ] Siapkan SFX player kena hit [P0]
-- [ ] Siapkan SFX enemy melee attack [P1]
-- [ ] Siapkan SFX enemy ranged attack [P0]
-- [ ] Siapkan SFX projectile hit [P0]
-- [ ] Siapkan SFX enemy death [P1]
-- [ ] Siapkan SFX absorb Vestige [P0]
+- [x] Pilih referensi style audio dan musik [P1]
+- [x] Siapkan 1 loop musik combat [P1]
+- [x] Siapkan 1 loop musik menu [P2]
+- [x] Siapkan 1 stinger reward atau room clear [P2]
+- [x] Siapkan SFX basic attack player [P0]
+- [x] Siapkan SFX dash player [P0]
+- [x] Siapkan SFX player kena hit [P0]
+- [x] Siapkan SFX enemy melee attack [P1]
+- [x] Siapkan SFX enemy ranged attack [P0]
+- [x] Siapkan SFX projectile hit [P0]
+- [x] Siapkan SFX enemy death [P1]
+- [x] Siapkan SFX absorb Vestige [P0]
 - [ ] Siapkan SFX equip Vestige [P1]
-- [ ] Siapkan SFX activate Vestige [P1]
+- [x] Siapkan SFX activate Vestige [P1]
 - [ ] Siapkan SFX UI hover dan click [P2]
 
 ### 7. Design dan Data
 
-- [ ] Buat daftar nama semua enemy MVP [P0]
+- [x] Buat daftar nama semua enemy MVP [P0]
 - [x] Buat sheet statistik enemy MVP [P0]
 - [ ] Buat sheet statistik Vestige MVP [P0]
 - [ ] Buat tabel damage, cooldown, dan scaling [P0]
@@ -130,13 +130,13 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 ### 8. Setup Teknis dan Produksi
 
 - [ ] Kunci versi Godot yang dipakai tim [P1]
-- [ ] Tetapkan resolusi target dan pixel scale [P0]
+- [x] Tetapkan resolusi target dan pixel scale [P0]
 - [x] Siapkan input map keyboard [P0]
 - [x] Siapkan scene dasar `Player` [P0]
 - [x] Siapkan scene dasar `EnemyBase` [P0]
 - [x] Siapkan scene dasar `Room` [P0]
-- [ ] Siapkan scene dasar `HUD` [P0]
-- [ ] Siapkan struktur data untuk Vestige [P0]
+- [x] Siapkan scene dasar `HUD` [P0]
+- [x] Siapkan struktur data untuk Vestige [P0]
 - [x] Tetapkan collision layer dan mask [P0]
 - [x] Siapkan `autoload` inti jika diperlukan [P0]
 - [ ] Siapkan export preset Windows [P1]
@@ -149,14 +149,14 @@ Dokumen ini dipakai sebagai checklist produksi awal untuk MVP project Resonance.
 Jalankan `./scripts/utils/update_checklist_progress.ps1` setiap kali checklist berubah untuk memperbarui ringkasan ini.
 
 <!-- PROGRESS_SUMMARY_START -->
-_Auto-updated: 2026-03-20 12:57_
+_Auto-updated: 2026-03-27 11:03_
 
 | Prioritas | Selesai | Total | Progress |
 | --- | ---: | ---: | ---: |
-| P0 | 24 | 62 | 38.7% |
-| P1 | 1 | 42 | 2.4% |
-| P2 | 1 | 6 | 16.7% |
-| Total | 26 | 110 | 23.6% |
+| P0 | 52 | 62 | 83.9% |
+| P1 | 20 | 42 | 47.6% |
+| P2 | 3 | 6 | 50.0% |
+| Total | 75 | 110 | 68.2% |
 <!-- PROGRESS_SUMMARY_END -->
 
 ## Tabel Kebutuhan Asset MVP

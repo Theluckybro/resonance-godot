@@ -1,0 +1,58 @@
+[gd_resource type="Theme" format=3 uid="uid://c817yc0aoicsj"]
+
+[ext_resource type="Texture2D" uid="uid://bpde6d04w3e7e" path="res://assets/Sprites/Ui/PauseButton.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://b4d48c8kx5t7p" path="res://assets/Sprites/Ui/PauseButtonPressed.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://btphr4eionq6h" path="res://assets/Sprites/Ui/PauseButtonHover.png" id="3"]
+[ext_resource type="FontFile" uid="uid://bi7sqq3wcoi55" path="res://assets/fonts/PixelFantasy.ttf" id="4"]
+[ext_resource type="Texture2D" uid="uid://c1s1yygo04x14" path="res://assets/Sprites/Ui/PauseButtonHoverPressed.png" id="4_fke3x"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
+texture = ExtResource("1")
+texture_margin_left = 16.0
+texture_margin_top = 5.0
+texture_margin_right = 4.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
+texture = ExtResource("3")
+texture_margin_left = 16.0
+texture_margin_top = 5.0
+texture_margin_right = 4.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uyb4t"]
+texture = ExtResource("4_fke3x")
+texture_margin_left = 16.0
+texture_margin_top = 5.0
+texture_margin_right = 4.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
+texture = ExtResource("2")
+texture_margin_left = 16.0
+texture_margin_top = 5.0
+texture_margin_right = 4.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_grabber"]
+
+[resource]
+default_font = ExtResource("4")
+default_font_size = 16
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 16
+Button/fonts/font = ExtResource("4")
+Button/styles/disabled = SubResource("StyleBoxTexture_btn_normal")
+Button/styles/focus = SubResource("StyleBoxTexture_btn_hover")
+Button/styles/hover = SubResource("StyleBoxTexture_btn_hover")
+Button/styles/hover_pressed = SubResource("StyleBoxTexture_uyb4t")
+Button/styles/normal = SubResource("StyleBoxTexture_btn_normal")
+Button/styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+CheckButton/font_sizes/font_size = 13
+CheckButton/fonts/font = ExtResource("4")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_slider_grabber")
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/font_sizes/font_size = 15
+Label/fonts/font = ExtResource("4")
+OptionButton/font_sizes/font_size = 14
+OptionButton/fonts/font = ExtResource("4")

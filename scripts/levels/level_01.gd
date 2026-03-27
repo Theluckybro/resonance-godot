@@ -142,29 +142,34 @@ func _update_camera_tracking() -> void:
 
 func _setup_wave_notifications() -> void:
 	if wave_notification == null:
+		push_warning("Level01: WaveNotification node not found at path 'WaveNotification/WaveNotification'")
 		return
 	
+	print("Level01: Wave notification system initialized")
+	print("Level01: Connecting wave_started signal...")
+	
 	wave_started.connect(func(wave_number: int) -> void:
-		wave_notification.show_notification("Wave %d" % wave_number)
+		if wave_notification != null:
+			print("Level01: Wave started signal received - Wave %d" % wave_number)
+			wave_notification.show_notification("Wave %d" % wave_number)
+		else:
+			push_warning("Level01: wave_notification became null during wave_started callback")
 	)
+	
+	print("Level01: Connecting room_cleared signal...")
 	room_cleared.connect(func() -> void:
-		wave_notification.show_notification("Room Clear")
+		if wave_notification != null:
+			print("Level01: Room cleared signal received")
+			wave_notification.show_notification("Room Clear")
+		else:
+			push_warning("Level01: wave_notification became null during room_cleared callback")
 	)
+	
+	print("Level01: Wave notification signals connected successfully")
 
 
 func _setup_pause_system() -> void:
-	# Register the level as pausable
-	if PauseManager:
-		# Register player node
-		var player = get_tree().get_first_node_in_group("player")
-		if player:
-			PauseManager.register_pausable_node(player)
-		
-		# Register enemy spawner (this)
-		PauseManager.register_pausable_node(self)
-		
-		# Subscribe to pause events
-		PauseManager.pause_toggled.connect(_on_pause_toggled)
+	_is_paused = false
 
 
 func _on_pause_toggled(is_paused: bool) -> void:

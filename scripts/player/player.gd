@@ -311,6 +311,24 @@ func is_vestige_primary_pressed() -> bool:
 	return GameInput.is_vestige_primary_pressed()
 
 
+func is_vestige_secondary_pressed() -> bool:
+	return GameInput.is_vestige_secondary_pressed()
+
+
+func is_vestige_tertiary_pressed() -> bool:
+	return GameInput.is_vestige_tertiary_pressed()
+
+
+func is_vestige_quaternary_pressed() -> bool:
+	return GameInput.is_vestige_quaternary_pressed()
+
+
+func is_vestige_inventory_open() -> bool:
+	if has_node("/root/VestigeInventoryFlow"):
+		return VestigeInventoryFlow.is_open()
+	return false
+
+
 func can_start_dash() -> bool:
 	if is_dead():
 		return false
@@ -659,24 +677,47 @@ func collect_vestige(amount: int = 1, source_species: String = "") -> void:
 	print("[DEBUG][Vestige] species=%s | collected=%d | total=%d | goblin_charge=%d | orc_charge=%d | skeleton_charge=%d" % [normalized_species, amount, current_vestige, goblin_vestige_charges, orc_vestige_charges, skeleton_vestige_charges])
 
 
-func can_use_goblin_vestige() -> bool:
+func can_use_vestige_slot(slot_index: int) -> bool:
 	if is_dead():
 		return false
-	return not _resolve_primary_vestige_species_for_cast().is_empty()
+	if slot_index < 0 or slot_index >= 4:
+		return false
+	if is_vestige_inventory_open():
+		return false
+
+	var species_id := _resolve_equipped_species_for_slot(slot_index)
+	if species_id.is_empty():
+		return false
+	if _get_species_charge_count(species_id) <= 0:
+		return false
+	return _get_species_cooldown_left(species_id) <= 0.0
+
+
+func try_use_vestige_slot(slot_index: int) -> bool:
+	if not can_use_vestige_slot(slot_index):
+		return false
+	var selected_species := _resolve_equipped_species_for_slot(slot_index)
+	return _try_cast_vestige_species(selected_species)
+
+
+func can_use_goblin_vestige() -> bool:
+	return can_use_vestige_slot(0)
 
 
 func try_use_goblin_vestige() -> bool:
-	var selected_species := _resolve_primary_vestige_species_for_cast()
+	return try_use_vestige_slot(0)
+
+
+func _try_cast_vestige_species(selected_species: String) -> bool:
 	if selected_species.is_empty():
 		return false
 
 	if selected_species == ORC_SPECIES_ID:
 		if has_node("/root/VestigeInventory"):
-			if not VestigeInventory.consume_orc_charge(1):
-				orc_vestige_charges = VestigeInventory.get_orc_charges()
+			if not VestigeInventory.consume_charge(ORC_SPECIES_ID, 1):
+				_sync_local_vestige_counts_from_inventory()
 				return false
-			orc_vestige_charges = VestigeInventory.get_orc_charges()
-			current_vestige = VestigeInventory.get_total()
+			_sync_local_vestige_counts_from_inventory()
 		else:
 			orc_vestige_charges -= 1
 
@@ -687,11 +728,10 @@ func try_use_goblin_vestige() -> bool:
 
 	if selected_species == SKELETON_SPECIES_ID:
 		if has_node("/root/VestigeInventory"):
-			if not VestigeInventory.consume_skeleton_charge(1):
-				skeleton_vestige_charges = VestigeInventory.get_skeleton_charges()
+			if not VestigeInventory.consume_charge(SKELETON_SPECIES_ID, 1):
+				_sync_local_vestige_counts_from_inventory()
 				return false
-			skeleton_vestige_charges = VestigeInventory.get_skeleton_charges()
-			current_vestige = VestigeInventory.get_total()
+			_sync_local_vestige_counts_from_inventory()
 		else:
 			skeleton_vestige_charges -= 1
 
@@ -701,11 +741,10 @@ func try_use_goblin_vestige() -> bool:
 		return true
 
 	if has_node("/root/VestigeInventory"):
-		if not VestigeInventory.consume_goblin_charge(1):
-			goblin_vestige_charges = VestigeInventory.get_goblin_charges()
+		if not VestigeInventory.consume_charge(GOBLIN_SPECIES_ID, 1):
+			_sync_local_vestige_counts_from_inventory()
 			return false
-		goblin_vestige_charges = VestigeInventory.get_goblin_charges()
-		current_vestige = VestigeInventory.get_total()
+		_sync_local_vestige_counts_from_inventory()
 	else:
 		goblin_vestige_charges -= 1
 
@@ -1277,14 +1316,41 @@ func _despawn_skeleton_vestige(should_clear_state: bool = true) -> void:
 		skeleton_vestige_has_fired = false
 
 
-func _resolve_primary_vestige_species_for_cast() -> String:
-	if skeleton_vestige_charges > 0 and skeleton_vestige_cooldown_left <= 0.0:
-		return SKELETON_SPECIES_ID
-	if orc_vestige_charges > 0 and orc_vestige_cooldown_left <= 0.0:
-		return ORC_SPECIES_ID
-	if goblin_vestige_charges > 0 and goblin_vestige_cooldown_left <= 0.0:
-		return GOBLIN_SPECIES_ID
-	return ""
+func _resolve_equipped_species_for_slot(slot_index: int) -> String:
+	if not has_node("/root/VestigeInventory"):
+		return ""
+	return VestigeInventory.get_equipped_species(slot_index)
+
+
+func _get_species_charge_count(species_id: String) -> int:
+	match species_id:
+		GOBLIN_SPECIES_ID:
+			return goblin_vestige_charges
+		ORC_SPECIES_ID:
+			return orc_vestige_charges
+		SKELETON_SPECIES_ID:
+			return skeleton_vestige_charges
+	return 0
+
+
+func _get_species_cooldown_left(species_id: String) -> float:
+	match species_id:
+		GOBLIN_SPECIES_ID:
+			return goblin_vestige_cooldown_left
+		ORC_SPECIES_ID:
+			return orc_vestige_cooldown_left
+		SKELETON_SPECIES_ID:
+			return skeleton_vestige_cooldown_left
+	return 9999.0
+
+
+func _sync_local_vestige_counts_from_inventory() -> void:
+	if not has_node("/root/VestigeInventory"):
+		return
+	current_vestige = VestigeInventory.get_total()
+	goblin_vestige_charges = VestigeInventory.get_goblin_charges()
+	orc_vestige_charges = VestigeInventory.get_orc_charges()
+	skeleton_vestige_charges = VestigeInventory.get_skeleton_charges()
 
 
 func _resolve_facing_direction_vector() -> Vector2:
@@ -1370,15 +1436,14 @@ func _log_health_debug(event_name: String, damage_amount: int = 0) -> void:
 
 
 func _ensure_sfx_player() -> void:
-	if sfx_player != null:
-		return
+	if sfx_player == null:
+		var created_player := AudioStreamPlayer2D.new()
+		created_player.name = "SfxPlayer"
+		created_player.max_polyphony = 3
+		add_child(created_player)
+		sfx_player = created_player
 
-	var created_player := AudioStreamPlayer2D.new()
-	created_player.name = "SfxPlayer"
-	created_player.max_polyphony = 3
-	created_player.bus = &"Master"
-	add_child(created_player)
-	sfx_player = created_player
+	sfx_player.bus = &"SFX" if AudioServer.get_bus_index("SFX") != -1 else &"Master"
 
 
 func _play_random_sfx(streams: Array[AudioStream]) -> void:
