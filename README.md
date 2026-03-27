@@ -46,7 +46,7 @@ Resonance is designed as an arena-based roguelite with a concise gameplay loop:
 - Main GDD: [docs/GDD_Resonance.md](docs/GDD_Resonance.md)
 - Asset production checklist: [docs/ASSET_CHECKLIST_MVP.md](docs/ASSET_CHECKLIST_MVP.md)
 - Technical setup (input & collision): [docs/TECH_SETUP_INPUT_COLLISION.md](docs/TECH_SETUP_INPUT_COLLISION.md)
-- Project portfolio draft: [docs/PORTFOLIO_RESONANCE.md](docs/PORTFOLIO_RESONANCE.md)
+- Project portfolio draft: [docs/PORTFOLIO_RESONANCE.md](docs/PORTFOLIO_RESONANCE_EN.md)
 
 ## Current Progress
 
