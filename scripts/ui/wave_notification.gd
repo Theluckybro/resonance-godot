@@ -73,7 +73,6 @@ func show_notification(text: String) -> void:
 			push_error("WaveNotification: Animation '%s' is unavailable." % animation_path)
 			return
 	
-	print("WaveNotification: Displaying text: '%s'" % text)
 	label.text = text
 	# Reset animation and play fade-in then fade-out
 	animation_player.stop()

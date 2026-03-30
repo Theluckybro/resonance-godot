@@ -145,28 +145,20 @@ func _setup_wave_notifications() -> void:
 		push_warning("Level01: WaveNotification node not found at path 'WaveNotification/WaveNotification'")
 		return
 	
-	print("Level01: Wave notification system initialized")
-	print("Level01: Connecting wave_started signal...")
-	
 	wave_started.connect(func(wave_number: int) -> void:
 		if wave_notification != null:
-			print("Level01: Wave started signal received - Wave %d" % wave_number)
 			wave_notification.show_notification("Wave %d" % wave_number)
 		else:
 			push_warning("Level01: wave_notification became null during wave_started callback")
 	)
 	
-	print("Level01: Connecting room_cleared signal...")
 	room_cleared.connect(func() -> void:
 		if wave_notification != null:
-			print("Level01: Room cleared signal received")
 			wave_notification.show_notification("Room Clear")
 		else:
 			push_warning("Level01: wave_notification became null during room_cleared callback")
 	)
 	
-	print("Level01: Wave notification signals connected successfully")
-
 	# If wave 1 started before this connection (e.g. custom init order), show it once.
 	if current_wave > 0:
 		wave_notification.show_notification("Wave %d" % current_wave)

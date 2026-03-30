@@ -119,6 +119,9 @@ var artillery_projectile_speed: float = 170.0
 var artillery_projectile_lifetime: float = 1.25
 var artillery_projectile_damage: int = 10
 var artillery_projectile_radius: float = 4.0
+var skeleton_attack_windup_sec: float = 0.32
+var skeleton_attack_windup_left: float = 0.0
+var skeleton_pending_attack_direction: Vector2 = Vector2.ZERO
 var melee_attack_range: float = 14.0
 var melee_aoe_radius: float = 14.0
 var melee_attack_damage: int = 9
@@ -364,6 +367,7 @@ func _physics_process(delta: float) -> void:
 		state_machine.physics_step(delta)
 
 	_try_fire_artillery_projectile()
+	_update_skeleton_attack_windup()
 
 	move_and_slide()
 	_update_visual_state(delta)
@@ -379,6 +383,21 @@ func _update_timers(delta: float) -> void:
 	if active_role_id == ROLE_ARTILLERY:
 		artillery_attack_cooldown_left = maxf(artillery_attack_cooldown_left - delta, 0.0)
 		artillery_strafe_switch_left = maxf(artillery_strafe_switch_left - delta, 0.0)
+	if species_id == SPECIES_SKELETON:
+		skeleton_attack_windup_left = maxf(skeleton_attack_windup_left - delta, 0.0)
+
+
+func _update_skeleton_attack_windup() -> void:
+	if species_id != SPECIES_SKELETON:
+		return
+	if skeleton_attack_windup_left > 0.0:
+		return
+	if skeleton_pending_attack_direction == Vector2.ZERO:
+		return
+	
+	# Windup complete, spawn the projectile
+	_spawn_skeleton_projectile(skeleton_pending_attack_direction)
+	skeleton_pending_attack_direction = Vector2.ZERO
 
 
 func receive_hit(damage: int, source_position: Vector2 = Vector2.ZERO) -> void:
@@ -726,15 +745,63 @@ func _try_fire_artillery_projectile() -> void:
 
 
 func _spawn_artillery_projectile(fire_direction: Vector2) -> void:
+	if species_id == SPECIES_SKELETON:
+		# Skeleton uses windup delay - start animation and windup timer
+		_play_sfx(_resolve_attack_sfx())
+		if body_visual and body_visual.sprite_frames and body_visual.sprite_frames.has_animation(ANIM_ATTACK):
+			body_visual.play(ANIM_ATTACK)
+		skeleton_attack_windup_left = skeleton_attack_windup_sec
+		skeleton_pending_attack_direction = fire_direction
+		return
+	
+	# Other artillery units fire immediately
+	_spawn_projectile_immediately(fire_direction)
+
+
+func _spawn_projectile_immediately(fire_direction: Vector2) -> void:
 	var host := get_tree().current_scene
 	if host == null:
 		host = get_parent()
 	if host == null:
 		return
 
-	# Use bone projectile for skeleton artillery, generic projectile for others
-	var projectile_scene = BONE_PROJECTILE_SCENE if species_id == SPECIES_SKELETON else ENEMY_PROJECTILE_SCENE
+	# Use generic projectile for non-skeleton artillery
+	var projectile_scene = ENEMY_PROJECTILE_SCENE
 	_play_sfx(_resolve_attack_sfx())
+	
+	# Play attack animation for artillery enemies
+	if body_visual and body_visual.sprite_frames and body_visual.sprite_frames.has_animation(ANIM_ATTACK):
+		body_visual.play(ANIM_ATTACK)
+	
+	var projectile_variant: Variant = projectile_scene.instantiate()
+	if not (projectile_variant is Area2D):
+		return
+
+	var projectile := projectile_variant as Area2D
+	projectile.global_position = global_position + fire_direction * (artillery_projectile_radius + 8.0)
+	host.add_child(projectile)
+
+	if projectile.has_method("configure"):
+		projectile.call(
+			"configure",
+			self,
+			fire_direction,
+			artillery_projectile_speed,
+			artillery_projectile_lifetime,
+			artillery_projectile_damage,
+			artillery_projectile_radius
+		)
+
+
+func _spawn_skeleton_projectile(fire_direction: Vector2) -> void:
+	var host := get_tree().current_scene
+	if host == null:
+		host = get_parent()
+	if host == null:
+		return
+
+	# Use bone projectile for skeleton
+	var projectile_scene = BONE_PROJECTILE_SCENE
 	var projectile_variant: Variant = projectile_scene.instantiate()
 	if not (projectile_variant is Area2D):
 		return

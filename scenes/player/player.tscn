@@ -491,7 +491,8 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" unique_id=1767086705]
 script = ExtResource("1_8afob")
-attack_damage = 30
+attack_damage = 10
+debug_print_health = false
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=943995036]
 position = Vector2(0, -7)

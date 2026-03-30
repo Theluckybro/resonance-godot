@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://bvx8r7k2n3q5p"]
+
+[ext_resource type="Script" uid="uid://dfaa2vwr40d1" path="res://scripts/ui/game_over_menu.gd" id="1_game_over_script"]
+[ext_resource type="Texture2D" uid="uid://bumahnbtl6cv" path="res://assets/Sprites/Ui/PauseMenu.png" id="2_panel_tex"]
+[ext_resource type="Theme" uid="uid://c817yc0aoicsj" path="res://scenes/ui/pause_menu_theme.tres" id="3_theme"]
+[ext_resource type="FontFile" uid="uid://b5oy130pfvvpa" path="res://assets/fonts/alagard.ttf" id="4_font"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+texture = ExtResource("2_panel_tex")
+
+[node name="GameOverMenu" type="CanvasLayer" unique_id=375104667]
+layer = 100
+script = ExtResource("1_game_over_script")
+show_delay = 5.0
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=636027603]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.4)
+
+[node name="Panel" type="Panel" parent="." unique_id=2024193347]
+custom_minimum_size = Vector2(230, 160)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = -80.0
+offset_right = 115.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="ContentScroll" type="ScrollContainer" parent="Panel" unique_id=1115816345]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -9.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ContentScroll" unique_id=2099557098]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Title" type="Label" parent="Panel/ContentScroll/VBoxContainer" unique_id=1253798043]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 24
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainButtons" type="VBoxContainer" parent="Panel/ContentScroll/VBoxContainer" unique_id=1933029367]
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Spacer1" type="Control" parent="Panel/ContentScroll/VBoxContainer/MainButtons" unique_id=1298354003]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="RetryButton" type="Button" parent="Panel/ContentScroll/VBoxContainer/MainButtons" unique_id=590498612]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Retry"
+
+[node name="Spacer2" type="Control" parent="Panel/ContentScroll/VBoxContainer/MainButtons" unique_id=1991628338]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="MainMenuButton" type="Button" parent="Panel/ContentScroll/VBoxContainer/MainButtons" unique_id=1541790153]
+custom_minimum_size = Vector2(208, 24)
+layout_mode = 2
+text = "Main Menu"
+
+[connection signal="pressed" from="Panel/ContentScroll/VBoxContainer/MainButtons/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="Panel/ContentScroll/VBoxContainer/MainButtons/MainMenuButton" to="." method="_on_main_menu_button_pressed"]

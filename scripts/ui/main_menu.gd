@@ -58,7 +58,6 @@ func _ready() -> void:
 	_ensure_bgm_player()
 	_resolve_audio_bus_indexes()
 	_play_bgm(BGM_MAIN_MENU)
-	_connect_runtime_signals()
 
 	if not get_viewport().size_changed.is_connected(_on_viewport_size_changed):
 		get_viewport().size_changed.connect(_on_viewport_size_changed)
@@ -66,48 +65,6 @@ func _ready() -> void:
 
 	_initialize_settings()
 
-
-func _connect_runtime_signals() -> void:
-	if not play_button.pressed.is_connected(_on_play_pressed):
-		play_button.pressed.connect(_on_play_pressed)
-	if not settings_button.pressed.is_connected(_on_settings_pressed):
-		settings_button.pressed.connect(_on_settings_pressed)
-	if not quit_button.pressed.is_connected(_on_quit_pressed):
-		quit_button.pressed.connect(_on_quit_pressed)
-
-	if not easy_button.pressed.is_connected(_on_easy_pressed):
-		easy_button.pressed.connect(_on_easy_pressed)
-	if not normal_button.pressed.is_connected(_on_normal_pressed):
-		normal_button.pressed.connect(_on_normal_pressed)
-	if not hard_button.pressed.is_connected(_on_hard_pressed):
-		hard_button.pressed.connect(_on_hard_pressed)
-	if not difficulty_back_button.pressed.is_connected(_on_difficulty_back_pressed):
-		difficulty_back_button.pressed.connect(_on_difficulty_back_pressed)
-
-	if not video_button.pressed.is_connected(_on_video_pressed):
-		video_button.pressed.connect(_on_video_pressed)
-	if not audio_button.pressed.is_connected(_on_audio_pressed):
-		audio_button.pressed.connect(_on_audio_pressed)
-	if not settings_back_button.pressed.is_connected(_on_settings_back_pressed):
-		settings_back_button.pressed.connect(_on_settings_back_pressed)
-
-	if not resolution_option.item_selected.is_connected(_on_resolutions_item_selected):
-		resolution_option.item_selected.connect(_on_resolutions_item_selected)
-	if not fullscreen_toggle.toggled.is_connected(_on_fullscreen_toggled):
-		fullscreen_toggle.toggled.connect(_on_fullscreen_toggled)
-	if not video_back_button.pressed.is_connected(_on_video_back_pressed):
-		video_back_button.pressed.connect(_on_video_back_pressed)
-
-	if not volume_slider.value_changed.is_connected(_on_volume_value_changed):
-		volume_slider.value_changed.connect(_on_volume_value_changed)
-	if not bgm_slider.value_changed.is_connected(_on_bgm_volume_value_changed):
-		bgm_slider.value_changed.connect(_on_bgm_volume_value_changed)
-	if not sfx_slider.value_changed.is_connected(_on_sfx_volume_value_changed):
-		sfx_slider.value_changed.connect(_on_sfx_volume_value_changed)
-	if not mute_toggle.toggled.is_connected(_on_mute_toggled):
-		mute_toggle.toggled.connect(_on_mute_toggled)
-	if not audio_back_button.pressed.is_connected(_on_audio_back_pressed):
-		audio_back_button.pressed.connect(_on_audio_back_pressed)
 
 
 func _resolve_audio_bus_indexes() -> void:

@@ -47,7 +47,6 @@ func _ready() -> void:
 	_prev_window_size = DisplayServer.window_get_size()
 	_ensure_ui_click_player()
 	_resolve_audio_bus_indexes()
-	_connect_runtime_signals()
 	
 	# Keep pause panel centered across window resize/fullscreen changes
 	if not get_viewport().size_changed.is_connected(_on_viewport_size_changed):
@@ -77,41 +76,6 @@ func _input(event: InputEvent) -> void:
 		PauseManager.resume()
 		get_viewport().set_input_as_handled()
 
-
-func _connect_runtime_signals() -> void:
-	# Connect runtime in code to keep scene editable without brittle hard-coded connections.
-	if not resume_button.pressed.is_connected(_on_resume_pressed):
-		resume_button.pressed.connect(_on_resume_pressed)
-	if not settings_button.pressed.is_connected(_on_settings_pressed):
-		settings_button.pressed.connect(_on_settings_pressed)
-	if not quit_button.pressed.is_connected(_on_quit_pressed):
-		quit_button.pressed.connect(_on_quit_pressed)
-
-	if not video_button.pressed.is_connected(_on_video_pressed):
-		video_button.pressed.connect(_on_video_pressed)
-	if not audio_button.pressed.is_connected(_on_audio_pressed):
-		audio_button.pressed.connect(_on_audio_pressed)
-	if not back_button.pressed.is_connected(_on_back_pressed):
-		back_button.pressed.connect(_on_back_pressed)
-
-	if not resolution_option.item_selected.is_connected(_on_resolutions_item_selected):
-		resolution_option.item_selected.connect(_on_resolutions_item_selected)
-	if not fullscreen_toggle.toggled.is_connected(_on_fullscreen_toggled):
-		fullscreen_toggle.toggled.connect(_on_fullscreen_toggled)
-	if not back_button_video.pressed.is_connected(_on_back_to_settings_pressed):
-		back_button_video.pressed.connect(_on_back_to_settings_pressed)
-
-	if not volume_slider.value_changed.is_connected(_on_volume_value_changed):
-		volume_slider.value_changed.connect(_on_volume_value_changed)
-	if not mute_toggle.toggled.is_connected(_on_mute_toggled):
-		mute_toggle.toggled.connect(_on_mute_toggled)
-	if not back_button_audio.pressed.is_connected(_on_back_to_settings_pressed):
-		back_button_audio.pressed.connect(_on_back_to_settings_pressed)
- 
-	if not bgm_slider.value_changed.is_connected(_on_bgm_volume_value_changed):
-		bgm_slider.value_changed.connect(_on_bgm_volume_value_changed)
-	if not sfx_slider.value_changed.is_connected(_on_sfx_volume_value_changed):
-		sfx_slider.value_changed.connect(_on_sfx_volume_value_changed)
 
 
 func _resolve_audio_bus_indexes() -> void:

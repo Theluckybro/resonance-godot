@@ -2,7 +2,7 @@ extends Area2D
 
 const MIN_VESTIGE_CHARGE_PER_ORB: int = 3
 const SFX_VESTIGE_PICKUP: AudioStream = preload("res://assets/audio/sfx/VestigePickUp.mp3")
-const VESTIGE_CHARGES_CONFIG_PATH: String = "res://data/vestiges/VestigeCharges.json"
+const VESTIGE_ARCHETYPE_CONFIG_PATH: String = "res://data/enemies/EnemyArchetypePresets.json"
 
 @export var vestige_amount: int = MIN_VESTIGE_CHARGE_PER_ORB
 @export var auto_pickup_radius: float = 0
@@ -150,16 +150,16 @@ func _play_pickup_sfx_then_free() -> void:
 
 
 func _load_vestige_charges_config() -> void:
-	var file := FileAccess.open(VESTIGE_CHARGES_CONFIG_PATH, FileAccess.READ)
+	var file := FileAccess.open(VESTIGE_ARCHETYPE_CONFIG_PATH, FileAccess.READ)
 	if file == null:
-		push_error("Failed to load vestige charges config from: %s" % VESTIGE_CHARGES_CONFIG_PATH)
+		push_error("Failed to load vestige archetype config from: %s" % VESTIGE_ARCHETYPE_CONFIG_PATH)
 		return
 	
 	var json_string := file.get_as_text()
 	var json := JSON.new()
 	var error := json.parse(json_string)
 	if error != OK:
-		push_error("Failed to parse vestige charges config: %s" % json.get_error_message())
+		push_error("Failed to parse vestige archetype config: %s" % json.get_error_message())
 		return
 	
 	_vestige_charges_config = json.get_data() as Dictionary
@@ -169,12 +169,13 @@ func _get_charge_for_species(species_id: String) -> int:
 	if _vestige_charges_config.is_empty():
 		return maxi(MIN_VESTIGE_CHARGE_PER_ORB, vestige_amount)
 	
-	var species_charges := _vestige_charges_config.get("species_charges", {}) as Dictionary
+	var species_data := _vestige_charges_config.get("species", {}) as Dictionary
 	var species_key := species_id.to_lower()
 	
-	if species_charges.has(species_key):
-		return species_charges[species_key] as int
+	if species_data.has(species_key):
+		var species_entry := species_data[species_key] as Dictionary
+		if species_entry.has("vestige_charge"):
+			return species_entry["vestige_charge"] as int
 	
-	# Fallback to default charge from config or use vestige_amount
-	var default_charge: int = _vestige_charges_config.get("default_charge", MIN_VESTIGE_CHARGE_PER_ORB) as int
-	return maxi(MIN_VESTIGE_CHARGE_PER_ORB, default_charge)
+	# Fallback to default charge or use vestige_amount
+	return maxi(MIN_VESTIGE_CHARGE_PER_ORB, vestige_amount)

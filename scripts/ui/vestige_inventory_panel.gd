@@ -4,7 +4,7 @@ class_name VestigeInventoryPanel
 const SPECIES_GOBLIN: String = "goblin"
 const SPECIES_ORC: String = "orc"
 const SPECIES_SKELETON: String = "skeleton"
-const VESTIGE_DATA_PATH: String = "res://data/vestiges/VestigeData.json"
+const VESTIGE_ARCHETYPE_PATH: String = "res://data/enemies/EnemyArchetypePresets.json"
 const SLOT_LABELS: Array[String] = ["Q", "E", "R", "Shift"]
 const COLOR_GOBLIN: Color = Color(0.8, 1.0, 0.6)
 const COLOR_ORC: Color = Color(0.9, 0.6, 0.4)
@@ -274,27 +274,42 @@ func _slot_species(slots: Array[String], slot_index: int) -> String:
 
 func _load_vestige_data() -> void:
 	vestige_data_by_species.clear()
-	if not FileAccess.file_exists(VESTIGE_DATA_PATH):
-		push_warning("Vestige data file tidak ditemukan: %s" % VESTIGE_DATA_PATH)
+	if not FileAccess.file_exists(VESTIGE_ARCHETYPE_PATH):
+		push_warning("Vestige archetype file tidak ditemukan: %s" % VESTIGE_ARCHETYPE_PATH)
 		return
 
-	var file := FileAccess.open(VESTIGE_DATA_PATH, FileAccess.READ)
+	var file := FileAccess.open(VESTIGE_ARCHETYPE_PATH, FileAccess.READ)
 	if file == null:
-		push_warning("Gagal membuka vestige data file: %s" % VESTIGE_DATA_PATH)
+		push_warning("Gagal membuka vestige archetype file: %s" % VESTIGE_ARCHETYPE_PATH)
 		return
 
 	var raw_text := file.get_as_text()
 	var parsed: Variant = JSON.parse_string(raw_text)
 	if not (parsed is Dictionary):
-		push_warning("Format JSON vestige tidak valid (harus Dictionary).")
+		push_warning("Format JSON vestige archetype tidak valid (harus Dictionary).")
 		return
 
 	var root_dict: Dictionary = parsed as Dictionary
-	var vestiges: Variant = root_dict.get("vestiges", {})
-	if vestiges is Dictionary:
-		vestige_data_by_species = vestiges as Dictionary
+	var species: Variant = root_dict.get("species", {})
+	if species is Dictionary:
+		var species_dict := species as Dictionary
+		# Extract vestige data from species entries
+		for species_id in species_dict.keys():
+			var species_entry: Variant = species_dict[species_id]
+			if species_entry is Dictionary:
+				var entry_dict := species_entry as Dictionary
+				var vestige_info := {}
+				if entry_dict.has("vestige_name"):
+					vestige_info["name"] = entry_dict["vestige_name"]
+				if entry_dict.has("vestige_description"):
+					vestige_info["description"] = entry_dict["vestige_description"]
+				if entry_dict.has("vestige_effect"):
+					vestige_info["effect"] = entry_dict["vestige_effect"]
+				
+				if not vestige_info.is_empty():
+					vestige_data_by_species[species_id] = vestige_info
 	else:
-		push_warning("Key 'vestiges' tidak ditemukan atau bukan Dictionary.")
+		push_warning("Key 'species' tidak ditemukan atau bukan Dictionary.")
 
 
 func _description_for(species_id: String) -> String:

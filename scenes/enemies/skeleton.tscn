@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://di35mrlycn4jx" path="res://scripts/enemies/states/enemy_idle_state.gd" id="4_ddai1"]
 [ext_resource type="Script" uid="uid://h7bn6v3p4uc8" path="res://scripts/enemies/states/enemy_chase_state.gd" id="5_0k1hm"]
 [ext_resource type="Script" uid="uid://pq2sds4cwrmv" path="res://scripts/enemies/states/enemy_hit_stun_state.gd" id="6_ec05t"]
+[ext_resource type="Script" uid="uid://biq45bglgg5em" path="res://scripts/enemies/states/enemy_attack_state.gd" id="8_attack"]
 [ext_resource type="Script" uid="uid://dg4082i2hw3p8" path="res://scripts/enemies/states/enemy_dead_state.gd" id="7_kqqlc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i7jur"]
@@ -87,22 +88,22 @@ region = Rect2(48, 16, 16, 16)
 [sub_resource type="SpriteFrames" id="SpriteFrames_h0m4p"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 2.5,
 "texture": SubResource("AtlasTexture_i7jur")
 }, {
-"duration": 1.0,
+"duration": 0.7,
 "texture": SubResource("AtlasTexture_7q0fe")
 }, {
-"duration": 1.0,
+"duration": 0.6,
 "texture": SubResource("AtlasTexture_8dcmp")
 }, {
-"duration": 1.0,
+"duration": 2.0,
 "texture": SubResource("AtlasTexture_heqel")
 }, {
-"duration": 1.0,
+"duration": 1.4,
 "texture": SubResource("AtlasTexture_6e4lt")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack",
 "speed": 10.0
 }, {
@@ -178,7 +179,9 @@ species_id = "skeleton"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1052270600]
 sprite_frames = SubResource("SpriteFrames_h0m4p")
-animation = &"hit"
+animation = &"attack"
+frame = 4
+frame_progress = 1.0
 offset = Vector2(0, -2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1040526212]
@@ -199,6 +202,10 @@ state_name = &"chase"
 [node name="HitStun" type="Node" parent="StateMachine" unique_id=244136843]
 script = ExtResource("6_ec05t")
 state_name = &"hit_stun"
+
+[node name="Attack" type="Node" parent="StateMachine" unique_id=1688621881]
+script = ExtResource("8_attack")
+state_name = &"attack"
 
 [node name="Dead" type="Node" parent="StateMachine" unique_id=739231180]
 script = ExtResource("7_kqqlc")

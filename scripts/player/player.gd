@@ -5,6 +5,8 @@ signal player_damaged(current_health: int, damage_taken: int)
 signal player_died()
 signal vestige_collected(total_vestige: int, amount: int)
 
+const GAME_OVER_SCENE: PackedScene = preload("res://scenes/ui/game_over_menu.tscn")
+
 @export_group("Movement")
 @export var speed: float = 200.0
 @export var acceleration: float = 1500.0
@@ -122,6 +124,8 @@ var skeleton_vestige_no_target_left: float = 0.0
 var skeleton_vestige_attack_cooldown_left: float = 0.0
 var skeleton_vestige_has_fired: bool = false
 
+var game_over_ui: CanvasLayer
+
 @export_group("Vestige: Goblin")
 @export var goblin_vestige_damage: int = 6
 @export var goblin_vestige_cooldown: float = 0.28
@@ -199,6 +203,10 @@ func _ready() -> void:
 
 	state_machine.set_context(self)
 	state_machine.start()
+	
+	# Connect player died signal
+	if not player_died.is_connected(_on_player_died):
+		player_died.connect(_on_player_died)
 
 
 func _physics_process(delta: float) -> void:
@@ -1463,3 +1471,35 @@ func _play_sfx(stream: AudioStream) -> void:
 
 	sfx_player.stream = stream
 	sfx_player.play()
+
+
+func _on_player_died() -> void:
+	# Create and show Game Over UI
+	if game_over_ui == null:
+		game_over_ui = GAME_OVER_SCENE.instantiate()
+		get_tree().current_scene.add_child(game_over_ui)
+		
+		# Connect button signals
+		if not game_over_ui.retry_requested.is_connected(_on_retry_requested):
+			game_over_ui.retry_requested.connect(_on_retry_requested)
+		if not game_over_ui.main_menu_requested.is_connected(_on_main_menu_requested):
+			game_over_ui.main_menu_requested.connect(_on_main_menu_requested)
+	
+	# Show the Game Over UI with delay
+	game_over_ui.show_game_over()
+
+
+func _on_retry_requested() -> void:
+	# Resume game before reloading to prevent stuck pause state
+	get_tree().paused = false
+	print("Retrying...")
+	# Reload current scene
+	get_tree().reload_current_scene()
+
+
+func _on_main_menu_requested() -> void:
+	# Resume game before changing scene to prevent stuck pause state
+	get_tree().paused = false
+	print("Going to main menu...")
+	# Go back to main menu
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")

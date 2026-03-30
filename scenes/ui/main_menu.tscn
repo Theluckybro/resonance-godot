@@ -290,3 +290,22 @@ layout_mode = 2
 custom_minimum_size = Vector2(208, 24)
 layout_mode = 2
 text = "Back"
+
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/MainButtons/PlayButton" to="MenuUI" method="_on_play_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/MainButtons/SettingsButton" to="MenuUI" method="_on_settings_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/MainButtons/QuitButton" to="MenuUI" method="_on_quit_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel/EasyButton" to="MenuUI" method="_on_easy_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel/NormalButton" to="MenuUI" method="_on_normal_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel/HardButton" to="MenuUI" method="_on_hard_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/DifficultyPanel/BackButton" to="MenuUI" method="_on_difficulty_back_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/SettingsMenu/VideoButton" to="MenuUI" method="_on_video_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/SettingsMenu/AudioButton" to="MenuUI" method="_on_audio_pressed"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/SettingsMenu/BackButton" to="MenuUI" method="_on_settings_back_pressed"]
+[connection signal="item_selected" from="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu/ResolutionOption" to="MenuUI" method="_on_resolutions_item_selected"]
+[connection signal="toggled" from="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu/FullscreenContainer/FullscreenToggle" to="MenuUI" method="_on_fullscreen_toggled"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/VideoMenu/BackButton" to="MenuUI" method="_on_video_back_pressed"]
+[connection signal="value_changed" from="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/VolumeContainer/VolumeSlider" to="MenuUI" method="_on_volume_value_changed"]
+[connection signal="value_changed" from="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/BgmSlider" to="MenuUI" method="_on_bgm_volume_value_changed"]
+[connection signal="value_changed" from="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/SfxSlider" to="MenuUI" method="_on_sfx_volume_value_changed"]
+[connection signal="toggled" from="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/MuteContainer/MuteToggle" to="MenuUI" method="_on_mute_toggled"]
+[connection signal="pressed" from="MenuUI/Panel/ContentScroll/VBoxContainer/AudioMenu/BackButton" to="MenuUI" method="_on_audio_back_pressed"]

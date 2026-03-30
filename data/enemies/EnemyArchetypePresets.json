@@ -1,38 +1,58 @@
 {
   "meta": {
-    "version": 2,
-    "notes": "MVP hybrid presets with species metadata and role balancing"
+    "version": 3,
+    "notes": "MVP hybrid presets with species metadata, role balancing, and vestige data"
   },
   "species": {
     "goblin": {
       "display_name": "Goblin",
       "default_role": "duelist",
       "sprite_width_px": 16,
-      "sprite_height_px": 32
+      "sprite_height_px": 32,
+      "vestige_name": "Goblin",
+      "vestige_description": "Rogue cepat yang mengejar target terdekat dan menyerang jarak dekat.",
+      "vestige_effect": "Skill aktif: Dash slash cepat ke arah target, cooldown singkat.",
+      "vestige_charge": 3
     },
     "orc": {
       "display_name": "Orc",
       "default_role": "bruiser",
       "sprite_width_px": 16,
-      "sprite_height_px": 32
+      "sprite_height_px": 32,
+      "vestige_name": "Orc",
+      "vestige_description": "Bruiser yang menghantam area kecil dengan serangan ground slam.",
+      "vestige_effect": "Skill aktif: Ground slam area kecil dengan damage tinggi.",
+      "vestige_charge": 2
     },
-    "species_skirmisher": {
-      "display_name": "Species Skirmisher",
+    "imp": {
+      "display_name": "Imp",
       "default_role": "skirmisher",
       "sprite_width_px": 16,
-      "sprite_height_px": 32
+      "sprite_height_px": 32,
+      "vestige_name": "Imp",
+      "vestige_description": "Iblis lincah yang menyerang dari sudut tak terduga.",
+      "vestige_effect": "Skill aktif: Melakukan blink/dash menembus musuh, memberikan damage pada rute yang dilewati.",
+      "vestige_charge": 2
     },
     "skeleton": {
       "display_name": "Skeleton",
       "default_role": "artillery",
       "sprite_width_px": 16,
-      "sprite_height_px": 32
+      "sprite_height_px": 32,
+      "vestige_name": "Skeleton",
+      "vestige_description": "Ranger yang melempar proyektil tulang dari jarak aman.",
+      "vestige_effect": "Skill aktif: Menembakkan bone projectile lurus ke depan.",
+      "vestige_charge": 2
     },
-    "species_controller": {
-      "display_name": "Species Controller",
+    "cherub": {
+      "display_name": "Cherub",
       "default_role": "controller",
       "sprite_width_px": 16,
-      "sprite_height_px": 32
+      "sprite_height_px": 32,
+      "vestige_name": "Cherub",
+      "vestige_description": "Mahluk magis yang membatasi pergerakan di arena.",
+      "vestige_effect": "Skill aktif: Memunculkan zona energi di tanah yang memberikan damage (DoT) perlahan pada musuh.",
+      "vestige_charge": 3
     }
   },
   "roles": {

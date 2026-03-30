@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://cmqw2pgdtngkh"]
+
+[ext_resource type="Script" uid="uid://dginhpvq3kqc5" path="res://scripts/enemies/enemy.gd" id="1_ft3t2"]
+[ext_resource type="Script" uid="uid://ds8816i0msfcp" path="res://scripts/systems/fsm/state_machine.gd" id="2_2io0d"]
+[ext_resource type="Texture2D" uid="uid://v3u5vabc6783" path="res://assets/Sprites/Enemies/Cherub.png" id="2_vl4sq"]
+[ext_resource type="Script" uid="uid://di35mrlycn4jx" path="res://scripts/enemies/states/enemy_idle_state.gd" id="3_vl4sq"]
+[ext_resource type="Script" uid="uid://h7bn6v3p4uc8" path="res://scripts/enemies/states/enemy_chase_state.gd" id="4_2c7ic"]
+[ext_resource type="Script" uid="uid://biq45bglgg5em" path="res://scripts/enemies/states/enemy_attack_state.gd" id="5_rsjnp"]
+[ext_resource type="Script" uid="uid://pq2sds4cwrmv" path="res://scripts/enemies/states/enemy_hit_stun_state.gd" id="6_qfnrx"]
+[ext_resource type="Script" uid="uid://dg4082i2hw3p8" path="res://scripts/enemies/states/enemy_dead_state.gd" id="7_6kwxw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2c7ic"]
+atlas = ExtResource("2_vl4sq")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rsjnp"]
+atlas = ExtResource("2_vl4sq")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfnrx"]
+atlas = ExtResource("2_vl4sq")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6kwxw"]
+atlas = ExtResource("2_vl4sq")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8yyk2"]
+atlas = ExtResource("2_vl4sq")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mqbj"]
+atlas = ExtResource("2_vl4sq")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ytdpa"]
+atlas = ExtResource("2_vl4sq")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ljlp"]
+atlas = ExtResource("2_vl4sq")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h0m4p"]
+animations = [{
+"frames": [],
+"loop": false,
+"name": &"attack",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"death",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2c7ic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rsjnp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfnrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6kwxw")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8yyk2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8mqbj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ytdpa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ljlp")
+}],
+"loop": true,
+"name": &"move",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_txv6m"]
+radius = 6.0
+
+[node name="Enemy" type="CharacterBody2D" unique_id=344969062]
+script = ExtResource("1_ft3t2")
+vestige_drop_chance = 1.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1052270600]
+sprite_frames = SubResource("SpriteFrames_h0m4p")
+animation = &"move"
+frame_progress = 0.3612135
+offset = Vector2(0, -2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1040526212]
+shape = SubResource("CircleShape2D_txv6m")
+
+[node name="StateMachine" type="Node" parent="." unique_id=1681590767]
+script = ExtResource("2_2io0d")
+initial_state = &"idle"
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=1276727480]
+script = ExtResource("3_vl4sq")
+state_name = &"idle"
+
+[node name="Chase" type="Node" parent="StateMachine" unique_id=1688621880]
+script = ExtResource("4_2c7ic")
+state_name = &"chase"
+
+[node name="Attack" type="Node" parent="StateMachine" unique_id=1990580563]
+script = ExtResource("5_rsjnp")
+state_name = &"attack"
+
+[node name="HitStun" type="Node" parent="StateMachine" unique_id=244136843]
+script = ExtResource("6_qfnrx")
+state_name = &"hit_stun"
+
+[node name="Dead" type="Node" parent="StateMachine" unique_id=739231180]
+script = ExtResource("7_6kwxw")
+state_name = &"dead"
